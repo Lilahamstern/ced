@@ -18,7 +18,7 @@ func (bc *BoltClient) QueryProject(projectId string) (model.Project, error) {
 			return fmt.Errorf("no project found for " + projectId)
 		}
 
-		json.Unmarshal(projectBytes, &project)
+		_ = json.Unmarshal(projectBytes, &project)
 
 		return nil
 	})

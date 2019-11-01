@@ -13,7 +13,7 @@ type Routes []Route
 
 var routes = Routes{
 	{
-		Name:        "Getproject",
+		Name:        "GetProject",
 		Method:      "GET",
 		Pattern:     "/projects/{projectId}",
 		HandlerFunc: GetProject,
