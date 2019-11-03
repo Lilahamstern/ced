@@ -18,4 +18,10 @@ var routes = Routes{
 		Pattern:     "/projects/{projectId}",
 		HandlerFunc: GetProject,
 	},
+	{
+		Name:        "HealthCheck",
+		Method:      "GET",
+		Pattern:     "/health",
+		HandlerFunc: HealthCheck,
+	},
 }

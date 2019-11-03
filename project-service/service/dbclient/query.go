@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"github.com/lilahamstern/bec/project-service/model"
+	"github.com/lilahamstern/bec-microservices/project-service/model"
 )
 
 func (bc *BoltClient) QueryProject(projectId string) (model.Project, error) {

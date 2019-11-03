@@ -1,4 +1,4 @@
-module github.com/lilahamstern/bec/project-service
+module github.com/lilahamstern/bec-microservices/project-service
 
 go 1.13
 

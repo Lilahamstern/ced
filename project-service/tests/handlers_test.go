@@ -3,9 +3,9 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lilahamstern/bec/project-service/model"
-	"github.com/lilahamstern/bec/project-service/service"
-	"github.com/lilahamstern/bec/project-service/service/dbclient"
+	"github.com/lilahamstern/bec-microservices/project-service/model"
+	"github.com/lilahamstern/bec-microservices/project-service/service"
+	"github.com/lilahamstern/bec-microservices/project-service/service/dbclient"
 	. "github.com/smartystreets/goconvey/convey"
 	"net/http/httptest"
 	"testing"

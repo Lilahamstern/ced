@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/lilahamstern/bec/project-service/service"
-	"github.com/lilahamstern/bec/project-service/service/dbclient"
+	"github.com/lilahamstern/bec-microservices/project-service/service"
+	"github.com/lilahamstern/bec-microservices/project-service/service/dbclient"
 )
 
 var appName = "project-service"
