@@ -1,5 +1,19 @@
 
-FROM iron/base
+FROM golang:latest
+
+LABEL maintainer="Leo Ronnebro <leo.ronnebro@gmail.com>"
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o main .
+
+
 EXPOSE 5050
-ADD projectservice-linux-amd64 /
-ENTRYPOINT ["./projectservice-linux-amd64"]
+
+CMD ["./main"]
