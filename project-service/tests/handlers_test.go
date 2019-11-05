@@ -3,9 +3,10 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lilahamstern/bec-microservices/project-service/model"
-	"github.com/lilahamstern/bec-microservices/project-service/service"
-	"github.com/lilahamstern/bec-microservices/project-service/service/dbclient"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/handlers"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/model"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/service"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/service/dbclient"
 	. "github.com/smartystreets/goconvey/convey"
 	"net/http/httptest"
 	"testing"
@@ -27,7 +28,7 @@ func TestGetProjectWrongPath(t *testing.T) {
 }
 
 func TestGetProject(t *testing.T) {
-	mockRepo := &dbclient.MockBoltClient{}
+	mockRepo := &dbclient.MockMongoClient{}
 
 	mockRepo.On("QueryProject", "123").Return(model.Project{
 		Id:   "123",
@@ -36,7 +37,7 @@ func TestGetProject(t *testing.T) {
 
 	mockRepo.On("QueryProject", "456").Return(model.Project{}, fmt.Errorf("could not find project: 456"))
 
-	service.DBClient = mockRepo
+	handlers.DBClient = mockRepo
 
 	Convey("Given a HTTP request for /projects/123", t, func() {
 		req := httptest.NewRequest("GET", "/projects/123", nil)

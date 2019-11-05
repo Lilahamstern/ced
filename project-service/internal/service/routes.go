@@ -1,6 +1,9 @@
 package service
 
-import "net/http"
+import (
+	"github.com/lilahamstern/bec-microservices/project-service/internal/handlers"
+	"net/http"
+)
 
 type Route struct {
 	Name        string
@@ -16,12 +19,18 @@ var routes = Routes{
 		Name:        "GetProject",
 		Method:      "GET",
 		Pattern:     "/projects/{projectId}",
-		HandlerFunc: GetProject,
+		HandlerFunc: handlers.GetProject,
+	},
+	{
+		Name:        "CreateProject",
+		Method:      "POST",
+		Pattern:     "/projects/",
+		HandlerFunc: handlers.CreateProject,
 	},
 	{
 		Name:        "HealthCheck",
 		Method:      "GET",
 		Pattern:     "/health",
-		HandlerFunc: HealthCheck,
+		HandlerFunc: handlers.HealthCheck,
 	},
 }

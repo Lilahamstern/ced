@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  bec-service-project:
+    command: /bin/bash -c "go run ./main.go"
+    container_name: bec.service.project
+    hostname: project
+    image: golang:1.12.6-stretch
+    volumes:
+      - ./project-service:/usr/project-service:rw
+    working_dir: /usr/project-service
+    ports:
+      - 5050:5050
+    environment:
+      DB_HOST: "mongodb:27017"
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+  mongoGUI:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: 'mongodb'
