@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "80", "port on localhost to service")
+	port := flag.String("port", "80", "port on localhost to server")
 	flag.Parse()
 
 	res, err := http.Get("http://localhost:" + *port + "/health")

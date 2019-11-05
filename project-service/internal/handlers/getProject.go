@@ -1,24 +1,27 @@
 package handlers
 
 import (
-	"encoding/json"
-	"github.com/gorilla/mux"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/database"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/utils"
 	"net/http"
 )
 
-func GetProject(w http.ResponseWriter, r *http.Request) {
+func GetProject(c *gin.Context) {
+	db := c.MustGet("db").(database.IClient)
 
-	var projectId = mux.Vars(r)["projectId"]
+	var projectId = c.Param("projectId")
 
-	project, err := DBClient.QueryProject(projectId)
+	project, err := db.QueryProject(projectId)
+
+	fmt.Println(err)
 
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
+		utils.WriteJsonMessage(c.Writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	data, _ := json.Marshal(project)
-
-	writeJsonResponse(w, http.StatusCreated, data)
+	utils.WriteJsonResponse(c.Writer, http.StatusCreated, project)
 
 }

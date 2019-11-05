@@ -1,34 +1,30 @@
-package service
+package router
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/bec-microservices/project-service/internal/handlers"
-	"net/http"
 )
 
 type Route struct {
-	Name        string
 	Method      string
 	Pattern     string
-	HandlerFunc http.HandlerFunc
+	HandlerFunc gin.HandlerFunc
 }
 
 type Routes []Route
 
 var routes = Routes{
 	{
-		Name:        "GetProject",
 		Method:      "GET",
-		Pattern:     "/projects/{projectId}",
+		Pattern:     "/projects/:projectId",
 		HandlerFunc: handlers.GetProject,
 	},
 	{
-		Name:        "CreateProject",
 		Method:      "POST",
-		Pattern:     "/projects/",
+		Pattern:     "/projects",
 		HandlerFunc: handlers.CreateProject,
 	},
 	{
-		Name:        "HealthCheck",
 		Method:      "GET",
 		Pattern:     "/health",
 		HandlerFunc: handlers.HealthCheck,

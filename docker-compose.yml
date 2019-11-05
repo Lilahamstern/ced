@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  bec-service-project:
+  bec.service.project:
     command: /bin/bash -c "go run ./main.go"
     container_name: bec.service.project
     hostname: project
@@ -12,14 +12,39 @@ services:
     ports:
       - 5050:5050
     environment:
-      DB_HOST: "mongodb:27017"
-  mongodb:
-    image: mongo
+      - DB_CONFIG=postgresql://postgres:postgres@database/bec?sslmode=disable
+      - DB_CLEAN_START=false
+    networks:
+      - services
+  database.gui:
+    image: fenglc/pgadmin4
     ports:
-      - 27017:27017
-  mongoGUI:
-    image: mongo-express
-    ports:
-      - 8081:8081
+      - 8081:5050
     environment:
-      ME_CONFIG_MONGODB_SERVER: 'mongodb'
+      - DEFAULT_USER=postgres
+      - DEFAULT_PASSWORD=postgres
+    networks:
+      - services
+  database:
+    container_name: bec.database
+    hostname: db
+    image: postgres:11
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=bec
+      - POSTGRES_INITDB_ARGS="--data-checksums"
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - services
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  services:

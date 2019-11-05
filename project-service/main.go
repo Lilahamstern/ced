@@ -2,21 +2,26 @@ package main
 
 import (
 	"fmt"
-	"github.com/lilahamstern/bec-microservices/project-service/internal/handlers"
-	"github.com/lilahamstern/bec-microservices/project-service/internal/service"
-	"github.com/lilahamstern/bec-microservices/project-service/internal/service/dbclient"
+	"github.com/gin-contrib/cors"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/database"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/router"
+	"github.com/lilahamstern/bec-microservices/project-service/internal/server"
 )
 
-var appName = "project-service"
+var appName = "project-server"
+var dbClient database.IClient
 
 func main() {
 	fmt.Printf("Starting %v\n", appName)
 
-	initializeMongoClient()
-	service.StartWebService("5050")
-}
+	dbClient = &database.Client{}
+	dbClient.OpenDb()
+	dbClient.Migrate()
 
-func initializeMongoClient() {
-	handlers.DBClient = &dbclient.MongoClient{}
-	handlers.DBClient.OpenMongoDb()
+	app := router.NewRouter()
+	app.Use(dbClient.Inject())
+	app.Use(cors.Default())
+	router.SetupRouter(app)
+
+	server.StartWebService("5050", app)
 }
