@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"github.com/lilahamstern/bec-microservices/project-service/internal/model"
 )
 
@@ -44,4 +45,27 @@ func (c *Client) QueryAllProjects() (model.Projects, error) {
 	}
 
 	return projects, nil
+}
+
+func (c *Client) ProjectExists(project model.Project) error {
+	var exists model.Project
+	var e error
+
+	e = c.db.Where("id = ?", project.Id).Find(&exists).Error
+	if e == nil {
+		return fmt.Errorf("id: %v, already exists", project.Id)
+	}
+	fmt.Println(e)
+
+	e = c.db.Where("name = ?", project.Name).Find(&exists).Error
+	if e == nil {
+		return fmt.Errorf("name: %v, already exists", project.Name)
+	}
+
+	e = c.db.Where("model = ?", project.Model).Find(&exists).Error
+	if e == nil {
+		return fmt.Errorf("model: %v, already exists", project.Model)
+	}
+
+	return nil
 }

@@ -17,6 +17,7 @@ type IClient interface {
 	QueryProject(projectId string) (model.Project, error)
 	QueryAllProjects() (model.Projects, error)
 	DeleteProject(projectId string) error
+	ProjectExists(project model.Project) error
 	Check() bool
 }
 
