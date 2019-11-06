@@ -20,9 +20,19 @@ var routes = Routes{
 		HandlerFunc: handlers.GetProject,
 	},
 	{
+		Method:      "GET",
+		Pattern:     "/projects",
+		HandlerFunc: handlers.GetAllProjects,
+	},
+	{
 		Method:      "POST",
 		Pattern:     "/projects",
 		HandlerFunc: handlers.CreateProject,
+	},
+	{
+		Method:      "DELETE",
+		Pattern:     "/projects/:projectId",
+		HandlerFunc: handlers.DeleteProject,
 	},
 	{
 		Method:      "GET",
