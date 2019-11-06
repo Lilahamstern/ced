@@ -7,19 +7,26 @@ import (
 	"strconv"
 )
 
-func WriteJsonResponse(w http.ResponseWriter, status int, res interface{}) {
-	data, _ := json.Marshal(res)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-	w.WriteHeader(status)
-	_, _ = w.Write(data)
+func WriteJsonResponse(w http.ResponseWriter, status int, data interface{}) {
+	res := model.Response{
+		Status: status,
+		Data:   data,
+	}
+	write(w, res)
 }
 
 func WriteJsonMessage(w http.ResponseWriter, status int, msg string) {
-	data, _ := json.Marshal(response.Message{Message: msg})
+	res := model.Response{
+		Status: status,
+		Data:   model.Message{Message: msg},
+	}
+	write(w, res)
+}
+
+func write(w http.ResponseWriter, res model.Response) {
+	data, _ := json.Marshal(res)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-	w.WriteHeader(status)
+	w.WriteHeader(res.Status)
 	_, _ = w.Write(data)
 }

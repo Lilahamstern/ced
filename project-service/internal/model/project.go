@@ -6,3 +6,5 @@ type Project struct {
 	Desc  string `json:"desc"`
 	Model string `json:"model"`
 }
+
+type Projects []Project

@@ -16,6 +16,21 @@ services:
       - DB_CLEAN_START=false
     networks:
       - services
+  bec.service.component:
+    command: /bin/bash -c "go run ./main.go"
+    container_name: bec.service.component
+    hostname: project
+    image: golang:1.12.6-stretch
+    volumes:
+      - ./component-service:/usr/component-service:rw
+    working_dir: /usr/component-service
+    ports:
+      - 5051:5051
+    environment:
+      - DB_CONFIG=postgresql://postgres:postgres@database/bec?sslmode=disable
+      - DB_CLEAN_START=false
+    networks:
+      - services
   database.gui:
     image: fenglc/pgadmin4
     ports:

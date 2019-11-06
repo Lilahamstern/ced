@@ -15,7 +15,7 @@ type IClient interface {
 	Inject() gin.HandlerFunc
 	CreateProject(project model.Project) (model.Project, error)
 	QueryProject(projectId string) (model.Project, error)
-	QueryAllProjects() ([]model.Project, error)
+	QueryAllProjects() (model.Projects, error)
 	DeleteProject(projectId string) error
 	Check() bool
 }

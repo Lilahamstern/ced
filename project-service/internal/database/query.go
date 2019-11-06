@@ -35,12 +35,12 @@ func (c *Client) DeleteProject(projectId string) error {
 	return nil
 }
 
-func (c *Client) QueryAllProjects() ([]model.Project, error) {
-	var projects []model.Project
+func (c *Client) QueryAllProjects() (model.Projects, error) {
+	var projects model.Projects
 	e := c.db.Find(&projects).Error
 
 	if e != nil {
-		return []model.Project{}, e
+		return projects, e
 	}
 
 	return projects, nil
