@@ -23,7 +23,7 @@ func GetProject(c *gin.Context) {
 		return
 	}
 
-	utils.WriteJsonResponse(c.Writer, http.StatusCreated, project)
+	utils.WriteJsonResponse(c.Writer, http.StatusOK, project)
 
 }
 
