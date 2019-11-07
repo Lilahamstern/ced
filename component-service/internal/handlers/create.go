@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/bec-microservices/component-service/internal/database"
 	"github.com/lilahamstern/bec-microservices/component-service/internal/model"
+	"github.com/lilahamstern/bec-microservices/component-service/internal/services"
 	"github.com/lilahamstern/bec-microservices/component-service/internal/utils"
 	"net/http"
 )
@@ -20,16 +21,24 @@ type requestCreate struct {
 func CreateComponents(c *gin.Context) {
 	db := c.MustGet("db").(database.IClient)
 
+	var projectId = c.Param("projectId")
+
+	if !services.CheckProjectExists(projectId) {
+		utils.WriteJsonMessage(c.Writer, http.StatusNotFound, "project not found")
+		return
+	}
+
 	var req []requestCreate
 
 	if e := c.BindJSON(&req); e != nil {
 		utils.WriteJsonMessage(c.Writer, http.StatusInternalServerError, e.Error())
+		return
 	}
 
 	for _, component := range req {
 		data := model.Component{
-			ProjectID: "1",
-			Id:        component.Id,
+			ProjectID: projectId,
+			OId:       component.Id,
 			Name:      component.Name,
 			Profile:   component.Profile,
 			Material:  component.Material,
