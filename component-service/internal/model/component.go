@@ -8,7 +8,7 @@ type Component struct {
 	Material  string  `json:"material"`
 	Class     string  `json:"class"`
 	Co2       float64 `json:"co_2"`
-	Version   int     `json:"version"`
+	Phase     string  `json:"version"`
 }
 
 type Components []Component

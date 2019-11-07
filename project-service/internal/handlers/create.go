@@ -18,14 +18,14 @@ func CreateProject(c *gin.Context) {
 	}
 
 	if exists := db.ProjectExists(req); exists != nil {
-		utils.WriteJsonMessage(c.Writer, http.StatusNotFound, exists.Error())
+		utils.WriteJsonMessage(c.Writer, http.StatusConflict, exists.Error())
 		return
 	}
 
 	project, err := db.CreateProject(req)
 
 	if err != nil {
-		utils.WriteJsonMessage(c.Writer, http.StatusNotFound, err.Error())
+		utils.WriteJsonMessage(c.Writer, http.StatusInternalServerError, err.Error())
 		return
 	}
 

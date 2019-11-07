@@ -16,6 +16,7 @@ type requestCreate struct {
 	Material string  `json:"material"`
 	Class    string  `json:"class"`
 	Co2      float64 `json:"co_2"`
+	Phase    string  `json:"version"`
 }
 
 func CreateComponents(c *gin.Context) {
@@ -44,13 +45,13 @@ func CreateComponents(c *gin.Context) {
 			Material:  component.Material,
 			Class:     component.Class,
 			Co2:       component.Co2,
-			Version:   1,
+			Phase:     component.Phase,
 		}
 
 		err := db.CreateComponent(data)
 
 		if err != nil {
-			utils.WriteJsonMessage(c.Writer, http.StatusNotFound, err.Error())
+			utils.WriteJsonMessage(c.Writer, http.StatusInternalServerError, err.Error())
 			return
 		}
 	}
