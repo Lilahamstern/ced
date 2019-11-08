@@ -1,8 +1,0 @@
-D:\Programming\WSP\bec-microservices\console-client\bin\Debug\console_client.exe
-D:\Programming\WSP\bec-microservices\console-client\bin\Debug\console_client.pdb
-D:\Programming\WSP\bec-microservices\console-client\bin\Debug\Newtonsoft.Json.dll
-D:\Programming\WSP\bec-microservices\console-client\bin\Debug\Newtonsoft.Json.xml
-D:\Programming\WSP\bec-microservices\console-client\obj\Debug\console-client.csprojAssemblyReference.cache
-D:\Programming\WSP\bec-microservices\console-client\obj\Debug\console-client.csproj.CopyComplete
-D:\Programming\WSP\bec-microservices\console-client\obj\Debug\console_client.exe
-D:\Programming\WSP\bec-microservices\console-client\obj\Debug\console_client.pdb
