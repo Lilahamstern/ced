@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gin-contrib/cors"
 	"github.com/lilahamstern/bec-microservices/project-service/internal/database"
 	"github.com/lilahamstern/bec-microservices/project-service/internal/router"

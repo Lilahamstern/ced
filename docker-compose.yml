@@ -16,6 +16,21 @@ services:
       - DB_CLEAN_START=false
     networks:
       - services
+  bec.service.healthcheck:
+    command: /bin/bash -c "go run ./main.go"
+    container_name: bec.service.healthcheck
+    hostname: healthcheck
+    image: golang:1.12.6-stretch
+    volumes:
+      - ./healthcheck:/usr/healthcheck:rw
+    working_dir: /usr/healthcheck
+    ports:
+      - 5050:5050
+    environment:
+      - DB_CONFIG=postgresql://postgres:postgres@database/bec?sslmode=disable
+      - DB_CLEAN_START=false
+    networks:
+      - services
   bec.service.component:
     command: /bin/bash -c "go run ./main.go"
     container_name: bec.service.component
@@ -57,9 +72,24 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - services
+  rabbitmq:
+    container_name: bec.rabbit
+    hostname: rabbit
+    image: rabbitmq:3.7.5-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq/mnesia/rabbit@app-rabbitmq:cached
+    environment:
+      RABBITMQ_ERLANG_COOKIE: 6085e2412b6fa88647466c6a81c0cea0
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: /
+    networks:
+      - services
 volumes:
   pgdata:
     driver: local
-
 networks:
   services:
