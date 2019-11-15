@@ -9,7 +9,7 @@
     <v-content>
     <Home></Home>
       <v-btn @click="increase()">
-        <span class="mr-2">Increase</span>
+        <span class="mr-2">{{loading}}</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
       <v-btn @click="decrease()">
@@ -29,15 +29,16 @@ export default {
   },
   methods: {
     increase() {
-      this.$store.state.projects.counter++;
+      this.$store.dispatch('projects/GET_PROJECTS');
     },
     decrease() {
       this.$store.state.projects.counter--;
     }
   },
-
-  data: () => ({
-    //
-  })
+  computed: {
+    loading() {
+      return this.$store.state.projects.loading
+    }
+  },
 };
 </script>
