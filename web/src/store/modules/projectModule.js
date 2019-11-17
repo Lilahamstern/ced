@@ -1,30 +1,45 @@
 const getters = {
   PROJECTS: state => {
     return state.projects;
+  },
+  GET_STATUS: state => {
+    return state.loading;
   }
-}
+};
+
+const actions = {
+  GET_PROJECTS: context => {
+    context.commit("GET_PROJECTS");
+  },
+  SEARCH_PROJECT: (context, payload) => {
+    context.commit("GET_PROJECTS", payload);
+  }
+};
+
 const mutations = {
-  GET_PROJECTS: (state) => {
+  // GET_PROJECTS: ({ state }) => {
+  //   // TODO: Fetch all projects.
+  // },
+  SEARCH_PROJECT: ({state}, payload) => {
     state.loading = true;
+    console.log(payload)
+    setTimeout(() => {
+      state.loading = false;
+    }, 5000)
   },
-  GET_PROJECTS_SUCCESS: (state, projects) => {
-    state.projects = projects;
-    state.loading = false;
-  },
-  GET_PROJECTS_FAIL: (state, error) => {
-    state.error = error;
-    state.loading = false;
+  SET_PROJECT: ({ state }, payload) => {
+    state.projects = payload;
   }
-}
+};
 
 export default {
   namespaced: true,
   state: {
-    projects: [],
+    projects: [{ name: "test" }, { name: "apa" }],
     loading: false,
-    error: null,
+    error: null
   },
   getters: getters,
   mutations: actions,
-  actions: mutations,
-}
+  actions: mutations
+};
