@@ -1,5 +1,5 @@
 <template>
-  <div>
+    <div>
     <v-row no-gutters align-content="center">
       <v-col sm="4">
         <v-text-field
@@ -21,24 +21,20 @@
     </v-row>
   </div>
 </template>
-
-<script>
-export default {
-  data: () => ({
-    model: "",
-    placeholder: "Search"
-  }),
-  methods: {
-    searchProject: function() {
-      this.$store.dispatch("projects/SEARCH_PROJECT", this.model);
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+    name: 'SearchProject' as string,
+    data() {
+        return {
+            model: "",
+            placeholder: "Search",
+        }
+    },
+    methods: {
+        searchProject: function() {
+            console.log(this.model);
+        }
     }
-  },
-  computed: {
-    loading() {
-      return this.$store.getters["projects/GET_STATUS"];
-    }
-  }
-};
+})
 </script>
-
-<style></style>

@@ -8,15 +8,13 @@
   </v-app>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: "App",
-  created() {
-    //this.$store.dispatch("projects/GET_PROJECTS");
-    // console.log(this.$store.state.projects)
-    // TODO: Fetch 10 latest projects
-  },
-  computed: {
-  }
-};
+  data: () => ({
+    //
+  })
+});
 </script>
