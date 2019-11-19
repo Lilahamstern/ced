@@ -1,7 +1,6 @@
 import { GetterTree } from 'vuex';
 import { ProjectState } from './types';
 import { RootState } from '../types';
-import { Project } from '@/types';
 
 export const getters: GetterTree<ProjectState, RootState> = {
     projectInfo(state): string {
