@@ -1,27 +1,22 @@
 <template>
   <div class="home">
-   <SearchProject></SearchProject>
-   <ProjectData :project="project"></ProjectData>
+   <Search></Search>
+   <ProjectView :project="project"></ProjectView>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import SearchProject from "@/components/projects/Search"
-import ProjectData from "@/components/projects/Project"
-import { Project } from '@/types/index'
+<script lang="ts">
+import { Vue, Component} from 'vue-property-decorator'
+import Search from '../components/projects/Search.vue';
+import ProjectView from '../components/projects/Project.vue';
+import { Project } from '../store/project/types';
 
-export default {
+@Component({
   name: "home",
-  components: {
-    SearchProject,
-    ProjectData
-  },
-  data() {
-    return {
-      project: Project
-    }
-  },
+})
+export default class Home extends Vue{
+    project: Project;
+
     mounted() {
     this.project = {
       id: 1,

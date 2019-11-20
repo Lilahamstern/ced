@@ -3,24 +3,16 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Project } from "@/types";
-export default Vue.extend({
-  name: "Project" as string,
-  data() {
-    return {
-    };
-  },
-  props: {
-project: {
-    type: Object as () => Project,
 
-}
-  },
-  computed: {
-    allInfo(): string {
+import { Project } from '../../store/project/types';
+import {  Vue, Component, Prop} from 'vue-property-decorator'
+
+@Component({name: "projectView"})
+export default class ProjectView extends Vue {
+    @Prop() readonly project: Project
+
+    get allInfo(): string {
       return `${this.project.name} - ${this.project.client} - ${this.project.sector}`;
     }
-  },
-});
+  };
 </script>

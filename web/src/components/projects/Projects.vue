@@ -1,21 +1,21 @@
 <template>
   <div>
-      <p>Full name: {{ fullName }}</p>
-  <p>Email: {{ email }}</p>
+      <p>Full name: {{ projectInfo }}</p>
+  <p>Email: {{ name }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { State, Action, Getter } from "vuex-class";
-import { Component, Vue } from "vue-property-decorator";
+import {  Vue, Component } from "vue-property-decorator";
 import { ProjectState, Project } from "../../store/project/types";
 const namespace: string = "projects";
 
-@Component
+@Component({name: "projetList"})
 export default class ProjectsList extends Vue {
-  @State("project") project: ProjectState;
+  @State("project") project!: ProjectState;
   @Action("fetchData", { namespace }) fetchData: any;
-  @Getter("projectInfo", { namespace }) projectInfo: string;
+  @Getter("projectInfo", { namespace }) projectInfo!: string;
 
   mounted() {
     // fetching data as soon as the component's been mounted
