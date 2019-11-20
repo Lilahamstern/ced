@@ -1,30 +1,18 @@
 <template>
   <div class="home">
-   <Search></Search>
-   <ProjectView :project="project"></ProjectView>
+    <img alt="Vue logo" src="../assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component} from 'vue-property-decorator'
-import Search from '../components/projects/Search.vue';
-import ProjectView from '../components/projects/Project.vue';
-import { Project } from '../store/project/types';
+<script>
+// @ is an alias to /src
+import HelloWorld from "@/components/HelloWorld.vue";
 
-@Component({
+export default {
   name: "home",
-})
-export default class Home extends Vue{
-    project: Project;
-
-    mounted() {
-    this.project = {
-      id: 1,
-      name: "Evakuerings byggnad",
-      client: "Vastrabyggnad",
-      sector: "Halso & Sjukvard",
-      co2: 1000
-    };
+  components: {
+    HelloWorld
   }
 };
 </script>
