@@ -1,6 +1,18 @@
 <template>
   <div class="home">
-    <ProjectView />
+    <b-jumbotron
+      header="WSP"
+      lead="Building enviorment checker"
+    >
+      <b-row>
+        <b-col cols=5>
+          <ProjectView />
+        </b-col>
+        <b-col>
+          <ProjectView />
+        </b-col>
+      </b-row>
+    </b-jumbotron>
   </div>
 </template>
 
