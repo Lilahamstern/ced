@@ -9,17 +9,6 @@ import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class App extends Vue {
-  data = "hej";
-
-  mounted() {
-    console.log("Mounted");
-  }
-  beforeUpdate() {
-    console.log("Before updated");
-  }
-  beforeDestroy() {
-    console.log("hey");
-  }
 }
 </script>
 
@@ -28,20 +17,6 @@ export default class App extends Vue {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  color: #da1111;
 }
 </style>

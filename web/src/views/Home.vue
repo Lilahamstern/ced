@@ -9,7 +9,6 @@
           <ProjectView />
         </b-col>
         <b-col>
-          <ProjectView />
         </b-col>
       </b-row>
     </b-jumbotron>

@@ -16,7 +16,7 @@ namespace console_client
             CreateProject(pd);
             GetProject(pd.Id);
 
-            {
+            var csd = new List<ComponentData>{
                 new ComponentData("1", "dunno", "4500*2431", "C#", "452", 3123, "Start"),
                 new ComponentData("2", "dunno", "4500*2431", "C#2", "452", 3123, "Start")
             };

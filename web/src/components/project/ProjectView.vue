@@ -8,17 +8,6 @@
       hover
       @row-clicked="click"
     >
-      <template v-slot:row-details="row">
-        <b-card>
-          <b-table :items="state.projects">
-
-          </b-table>
-          <b-button
-            size="sm"
-            @click="row.toggleDetails"
-          >Hide Details</b-button>
-        </b-card>
-      </template>
     </b-table>
   </div>
 </template>
