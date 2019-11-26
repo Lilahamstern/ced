@@ -3,9 +3,10 @@
     <b-jumbotron
       header="WSP"
       lead="Building enviorment checker"
+      fluid
     >
       <b-row>
-        <b-col cols=5>
+        <b-col cols=8>
           <ProjectView />
         </b-col>
         <b-col>

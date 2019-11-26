@@ -1,5 +1,16 @@
 <template>
   <div>
+    <b-row class="pb-2">
+      <b-col cols="10">
+        <b-form-input
+          v-model="search"
+          placeholder="Search"
+        ></b-form-input>
+      </b-col>
+      <b-col>
+        <b-button pill>Search</b-button>
+      </b-col>
+    </b-row>
     <b-table
       :items="state.projects"
       :fields="fields"
@@ -25,6 +36,7 @@ export default class ProjectView extends Vue {
   @Getter("projectInfo", { namespace }) projectInfo!: string;
 
   fields = ["id", "name", "client", "sector", "co2", "information"];
+  search: string = "";
 
   mounted() {
     console.log(this.state.projects);
