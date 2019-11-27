@@ -8,7 +8,7 @@
         ></b-form-input>
       </b-col>
       <b-col>
-        <b-button pill>Search</b-button>
+        <b-button>Search</b-button>
       </b-col>
     </b-row>
     <b-table
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { Getter, State } from "vuex-class";
+import { Getter, State, Action } from "vuex-class";
 import { Project, ProjectState } from "../../store/project/types";
 
 const namespace: string = "project";
@@ -33,9 +33,9 @@ const namespace: string = "project";
 @Component
 export default class ProjectView extends Vue {
   @State("project") state!: ProjectState;
-  @Getter("projectInfo", { namespace }) projectInfo!: string;
+  @Action("selectProject", { namespace }) selectProject!: any;
 
-  fields = ["id", "name", "client", "sector", "co2", "information"];
+  fields = ["id", "name", "client", "sector", "co2", "state"];
   search: string = "";
 
   mounted() {
@@ -43,8 +43,10 @@ export default class ProjectView extends Vue {
   }
 
   click(data: Project, index: number): void {
-    console.log(index);
-    console.log(data);
+    this.selectProject({ data });
   }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

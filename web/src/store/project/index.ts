@@ -7,7 +7,7 @@ import { mutations } from './mutations'
 
 export const state: ProjectState = {
   project: undefined,
-  projects: [{ id: 1234, "client": "Volvo", co2: 2312, name: "Evakuerings byggnad", sector: "Hälso och Sjukvård" }],
+  projects: [{ id: 1234, "client": "Volvo", co2: 2312, name: "Evakuerings byggnad", sector: "Hälso och Sjukvård", state: "Complete" }, { id: 1211, "client": "Volvos", co2: 2312, name: "Evakuerings byggnad", sector: "Hälso och Sjukvård", state: "In Progress" }],
   error: false,
 }
 

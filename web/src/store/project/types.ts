@@ -4,6 +4,7 @@ export interface Project {
   client: string,
   sector: string,
   co2: number,
+  state: string,
 }
 
 export interface ProjectState {

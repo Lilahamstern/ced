@@ -14,5 +14,8 @@ export const actions: ActionTree<ProjectState, RootState> = {
       console.log(error)
       commit("projectError")
     }
+  },
+  selectProject ({ commit }, payload: any): any {
+    commit("projectLoaded", payload.data)
   }
 }

@@ -9,5 +9,5 @@ export const mutations: MutationTree<ProjectState> = {
   projectError (state) {
     state.error = true;
     state.project = undefined;
-  }
+  },
 }
