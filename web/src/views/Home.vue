@@ -3,7 +3,9 @@
     <b-jumbotron
       header="WSP"
       lead="Building enviorment checker"
+      fluid
     >
+      <hr class="my-4">
       <b-row>
         <b-col cols=8>
           <ProjectView />
