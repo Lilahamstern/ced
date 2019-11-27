@@ -5,6 +5,7 @@ export interface Project {
   sector: string,
   co2: number,
   state: string,
+  desc: string,
 }
 
 export interface ProjectState {
