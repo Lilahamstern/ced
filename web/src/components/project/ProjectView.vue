@@ -34,12 +34,13 @@ const namespace: string = "project";
 export default class ProjectView extends Vue {
   @State("project") state!: ProjectState;
   @Action("selectProject", { namespace }) selectProject!: any;
+  @Getter("projects", { namespace }) projects!: Project[];
 
   fields = ["id", "name", "client", "sector", "co2", "state"];
   search: string = "";
 
   mounted() {
-    console.log(this.state.projects);
+    console.log(this.projects);
   }
 
   click(data: Project, index: number): void {
