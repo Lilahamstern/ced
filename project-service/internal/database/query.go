@@ -38,7 +38,7 @@ func (c *Client) DeleteProject(projectId string) error {
 
 func (c *Client) QueryAllProjects() (model.Projects, error) {
 	var projects model.Projects
-	e := c.db.Find(&projects).Error
+	e := c.db.Find(&projects).Limit(30).Error
 
 	if e != nil {
 		return projects, e

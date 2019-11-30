@@ -24,7 +24,6 @@ func GetProject(c *gin.Context) {
 	}
 
 	utils.WriteJsonResponse(c.Writer, http.StatusOK, project)
-
 }
 
 func GetAllProjects(c *gin.Context) {

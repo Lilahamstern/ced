@@ -27,18 +27,18 @@ func write(w http.ResponseWriter, res model.Response, status int) {
 	data, _ := json.Marshal(res)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-	w.WriteHeader(status)
 	_, _ = w.Write(data)
+	w.WriteHeader(status)
 }
 
 func getStatus(status int) string {
 
 	if status >= 500 {
-		return "I just fucked it up"
+		return "Internal Server Error"
 	}
 
 	if status >= 400 {
-		return "You just fucked something up"
+		return "Not found"
 	}
 
 	if status >= 300 {
@@ -46,11 +46,11 @@ func getStatus(status int) string {
 	}
 
 	if status >= 200 {
-		return "Succeed to serve your fucking data"
+		return "Success"
 	}
 
 	if status >= 100 {
-		return "Can you wait a bit."
+		return "Wait"
 	}
 
 	return ""

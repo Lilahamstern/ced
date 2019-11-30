@@ -21,7 +21,11 @@ func main() {
 
 	app := router.NewRouter()
 	app.Use(dbClient.Inject())
-	app.Use(cors.Default())
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true;
+
+	app.Use(cors.New(config))
 	router.SetupRouter(app)
 
 	server.StartWebService("5050", app)
