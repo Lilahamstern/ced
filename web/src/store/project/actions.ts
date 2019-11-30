@@ -10,7 +10,7 @@ export const actions: ActionTree<ProjectState, RootState> = {
     }).then(res => {
       const payload: Project = res && res.data
       console.log(res.status)
-      if (res.status != "200") {
+      if (res.status != 200) {
         console.log("heyyy")
       }
       console.log(res.data.data.message)
