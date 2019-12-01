@@ -44,7 +44,7 @@ export default class ProjectView extends Vue {
   }
 
   click(data: Project, index: number): void {
-    this.selectProject({ data });
+    this.selectProject({ index });
   }
 }
 </script>

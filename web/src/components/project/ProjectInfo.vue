@@ -45,6 +45,7 @@ export default class ProjectInfo extends Vue {
   @Getter("projectInfo", { namespace }) projectInfo!: Project;
 
   get getProjectInfo() {
+    console.log(this.projectInfo)
     if (!this.projectInfo) {
       return undefined;
     }

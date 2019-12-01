@@ -8,19 +8,19 @@ export const actions: ActionTree<ProjectState, RootState> = {
     axios({
       url: "http://localhost:5050/projects"
     }).then(res => {
-      const payload: Project = res && res.data
+      const payload: Project = res && res.data.data
       console.log(res.status)
       if (res.status != 200) {
         console.log("heyyy")
       }
-      console.log(res.data.data.message)
       commit("projectLoaded", payload)
     }).catch(error => {
       console.log(error)
       commit("projectError")
     })
   },
-  selectProject ({ commit }, payload: any): any {
-    commit("projectLoaded", payload.data)
+  selectProject ({ commit, state}, payload: any): any {
+    if (!state.projects) return
+    commit("selectProject", state.projects[payload.index])
   }
 }

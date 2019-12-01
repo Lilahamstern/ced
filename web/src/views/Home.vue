@@ -37,7 +37,6 @@ export default class Home extends Vue {
   @Action("fetchProjects", { namespace }) fetchProjects!: any;
 
   mounted() {
-    console.log(this.fetchProjects());
     this.fetchProjects();
   }
 }
