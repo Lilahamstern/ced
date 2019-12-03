@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/lilahamstern/bec-microservices/project-service/internal/model/response"
 	"net/http"
 	"strconv"
@@ -24,11 +25,15 @@ func WriteJsonMessage(w http.ResponseWriter, status int, msg string) {
 }
 
 func write(w http.ResponseWriter, res model.Response, status int) {
+	fmt.Println(222)
 	data, _ := json.Marshal(res)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
-	_, _ = w.Write(data)
 	w.WriteHeader(status)
+	_, err := w.Write(data)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func getStatus(status int) string {

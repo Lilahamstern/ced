@@ -10,7 +10,7 @@ services:
       - ./project-service:/usr/project-service:rw
     working_dir: /usr/project-service
     ports:
-      - 5052:5050
+      - 5050:5050
     environment:
       - DB_CONFIG=postgresql://postgres:postgres@database/bec?sslmode=disable
       - DB_CLEAN_START=false
@@ -25,7 +25,7 @@ services:
       - ./healthcheck:/usr/healthcheck:rw
     working_dir: /usr/healthcheck
     ports:
-      - 5050:5050
+      - 5060:5050
     environment:
       - DB_CONFIG=postgresql://postgres:postgres@database/bec?sslmode=disable
       - DB_CLEAN_START=false

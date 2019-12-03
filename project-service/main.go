@@ -23,7 +23,7 @@ func main() {
 	app.Use(dbClient.Inject())
 
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true;
+	config.AllowAllOrigins = true
 
 	app.Use(cors.New(config))
 	router.SetupRouter(app)
