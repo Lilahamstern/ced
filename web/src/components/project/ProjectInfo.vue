@@ -11,9 +11,9 @@
           card-header
           tabs
         >
-          <b-nav-item active>Ekonomi</b-nav-item>
-          <b-nav-item>Nagot</b-nav-item>
-          <b-nav-item>Leverans</b-nav-item>
+          <b-nav-item active>Start</b-nav-item>
+          <b-nav-item disabled>Nagot</b-nav-item>
+          <b-nav-item disabled>Leverans</b-nav-item>
         </b-nav>
       </b-card-header>
 
@@ -25,18 +25,16 @@
         >
         </b-card-sub-title>
         <b-card-text>
-          <p>{{ projectInfo.desc }}</p>
+          <p>{{ getProjectInfo.desc }}</p>
         </b-card-text>
         <hr class="my-2" />
         <div class="text-left">
-          <span>Client: {{ projectInfo.client }}</span>
+          <span>Client: {{ getProjectInfo.client }}</span>
           <hr class="my-2" />
-          <span>Sector: {{ projectInfo.sector }}</span>
+          <span>Sector: {{ getProjectInfo.sector }}</span>
           <hr class="my-2" />
-          <span>Co2/ekv: {{ projectInfo.id }}</span>
-          <hr class="my-2" />
-          <span>Status: {{ projectInfo.state }}</span>
-          <hr class="my-2" />
+          <span>Co2/ekv: {{ getProjectInfo.co2 }}</span>
+          <hr class="mb-4" />
           <b-button>More details</b-button>
         </div>
       </b-card-body>
@@ -57,11 +55,9 @@ export default class ProjectInfo extends Vue {
   @Getter("projectInfo", { namespace }) projectInfo!: Project;
 
   get getProjectInfo() {
-    console.log(this.projectInfo);
     if (!this.projectInfo) {
       return undefined;
     }
-    console.log(this.projectInfo.client);
     return this.projectInfo;
   }
 }

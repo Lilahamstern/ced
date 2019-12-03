@@ -3,16 +3,17 @@
     <b-row class="pb-2">
       <b-col cols="10">
         <b-form-input
-          v-model="search"
+          v-model="searchData"
           placeholder="Search"
+          loading="true"
         ></b-form-input>
       </b-col>
       <b-col>
-        <b-button>Search</b-button>
+        <b-button @click="search">Search</b-button>
       </b-col>
     </b-row>
     <b-table
-      :items="state.projects"
+      :items="getProjects"
       :fields="fields"
       striped
       responsive="sm"
@@ -20,6 +21,7 @@
       @row-clicked="click"
     >
     </b-table>
+    <b-alert variant="danger" :show="getProjects.length < 1">Projects not found!</b-alert>
   </div>
 </template>
 
@@ -34,17 +36,25 @@ const namespace: string = "project";
 export default class ProjectView extends Vue {
   @State("project") state!: ProjectState;
   @Action("selectProject", { namespace }) selectProject!: any;
+  @Action("fetchProjects", { namespace }) fetchProjects!: any;
   @Getter("projects", { namespace }) projects!: Project[];
 
   fields = ["id", "name", "client", "sector", "co2", "state"];
-  search: string = "";
-
-  mounted() {
-    console.log(this.projects);
-  }
+  searchData: string = "";
 
   click(data: Project, index: number): void {
     this.selectProject({ index });
+  }
+
+  search() {
+    if (this.searchData.length == 0) {
+      this.fetchProjects()
+      return
+    }
+  }
+
+  get getProjects() {
+    return this.projects
   }
 }
 </script>

@@ -1,14 +1,14 @@
-import { MutationTree } from 'vuex';
-import { ProjectState, Project } from './types';
+import {MutationTree} from 'vuex';
+import {Project, ProjectState} from './types';
 
 export const mutations: MutationTree<ProjectState> = {
-  projectLoaded (state, payload: Project[]) {
+    projectsLoaded(state, payload: Project[]) {
     state.error = false;
     state.projects = payload;
   },
-  projectError (state) {
+    projectsError(state) {
     state.error = true;
-    state.project = undefined;
+        state.projects = [];
   },
   selectProject(state, payload: Project) {
     state.error = false;
