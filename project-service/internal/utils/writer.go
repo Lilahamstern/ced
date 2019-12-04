@@ -25,7 +25,6 @@ func WriteJsonMessage(w http.ResponseWriter, status int, msg string) {
 }
 
 func write(w http.ResponseWriter, res model.Response, status int) {
-	fmt.Println(222)
 	data, _ := json.Marshal(res)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
