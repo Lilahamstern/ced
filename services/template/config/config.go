@@ -19,6 +19,7 @@ type Service struct {
 	Port        string `json:"port"`
 	Realase     bool   `json:"release"`
 	Description string `json:"description"`
+	Clean       bool   `json:"clean"`
 }
 
 // Database struct
