@@ -13,9 +13,10 @@ export const actions: ActionTree<ProjectState, RootState> = {
         commit("projectsError")
     }
   },
-    async searchProjects({commit},) {
+    async searchProjects({commit}, payload: string) {
+        const url = "http://localhost:5050/projects?search=" + payload;
         try {
-            var res = await axios.get("http://localhost:5050/projects?search=");
+            var res = await axios.get(url);
             const payload: Project[] = res && res.data.data
             commit("projectsLoaded", payload)
     } catch (err) {

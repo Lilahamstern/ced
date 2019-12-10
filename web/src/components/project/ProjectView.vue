@@ -6,6 +6,7 @@
           v-model="searchData"
           placeholder="Search"
           loading="true"
+          v-on:keyup.enter="search"
         ></b-form-input>
       </b-col>
       <b-col>
@@ -21,7 +22,10 @@
       @row-clicked="click"
     >
     </b-table>
-    <b-alert variant="danger" :show="getProjects.length < 1">Projects not found!</b-alert>
+    <b-alert
+      variant="danger"
+      :show="getProjects.length < 1"
+    >Projects not found!</b-alert>
   </div>
 </template>
 
@@ -37,6 +41,7 @@ export default class ProjectView extends Vue {
   @State("project") state!: ProjectState;
   @Action("selectProject", { namespace }) selectProject!: any;
   @Action("fetchProjects", { namespace }) fetchProjects!: any;
+  @Action("searchProjects", { namespace }) searchProjects!: any;
   @Getter("projects", { namespace }) projects!: Project[];
 
   fields = ["id", "name", "client", "sector", "co2", "state"];
@@ -48,13 +53,15 @@ export default class ProjectView extends Vue {
 
   search() {
     if (this.searchData.length == 0) {
-      this.fetchProjects()
-      return
+      this.fetchProjects();
+      return;
     }
+
+    this.searchProjects(this.searchData.toLowerCase());
   }
 
   get getProjects() {
-    return this.projects
+    return this.projects;
   }
 }
 </script>

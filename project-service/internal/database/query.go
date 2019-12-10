@@ -69,3 +69,14 @@ func (c *Client) ProjectExists(project model.Project) error {
 
 	return nil
 }
+
+func (c *Client) SearchProjects(search string) (model.Projects, error) {
+	var projects model.Projects
+	e := c.db.Where("lower(id) like ? OR lower(client) like ?", "%"+search+"%", "%"+search+"%").Find(&projects).Error
+
+	if e != nil {
+		return projects, e
+	}
+
+	return projects, nil
+}
