@@ -1,0 +1,15 @@
+{
+  "service": {
+    "release": false,
+    "name": "Template",
+    "version": "0.0.1",
+    "port": "5050"
+  },
+  "database": {
+    "port": "5432",
+    "host": "database",
+    "user": "postgres",
+    "password": "postgres",
+    "name": "bec"
+  }
+}
