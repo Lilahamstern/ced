@@ -4,6 +4,7 @@ import (
 	"log"
 	"template/config"
 	"template/database"
+	"template/handlers"
 	"template/route"
 	"template/server"
 )
@@ -15,6 +16,7 @@ func init() {
 }
 
 func main() {
+	handlers.SetupHandler()
 	log.Println("Starting service:", cfg.Service.Name)
 
 	app := route.NewRouter(cfg, database.OpenDB(cfg.Database))

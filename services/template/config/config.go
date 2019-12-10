@@ -14,10 +14,11 @@ type Config struct {
 
 // Service struct
 type Service struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	Port    string `json:"port"`
-	Realase bool   `json:"release"`
+	Name        string `json:"name"`
+	Version     string `json:"version"`
+	Port        string `json:"port"`
+	Realase     bool   `json:"release"`
+	Description string `json:"description"`
 }
 
 // Database struct

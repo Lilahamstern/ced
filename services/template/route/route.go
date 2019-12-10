@@ -27,19 +27,23 @@ func NewRouter(cfg config.Config, db database.DBClient) *gin.Engine {
 
 	router := gin.Default()
 
-	router.Use(inject("cfg", cfg))
-	router.Use(inject("db", db))
+	router.Use(inject(cfg.Service, db))
 
 	conf := cors.DefaultConfig()
 	conf.AllowAllOrigins = true
 	router.Use(cors.New(conf))
 
+	for _, route := range routes {
+		router.Handle(route.Method, route.Path, route.Handler)
+	}
+
 	return router
 }
 
-func inject(name string, c ...interface{}) gin.HandlerFunc {
+func inject(cfg config.Service, db database.DBClient) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.Set(name, c)
+		ctx.Set("cfg", cfg)
+		ctx.Set("db", db)
 		ctx.Next()
 	}
 }
@@ -50,7 +54,11 @@ func (r Route) Add() Route {
 	return r
 }
 
-// AddHandler to engine
-func AddHandler(method string, path string, handler gin.HandlerFunc) {
-
+// NewEndpoint getting added to the engine
+func NewEndpoint(method string, path string, handler gin.HandlerFunc) Route {
+	return Route{
+		Method:  method,
+		Path:    path,
+		Handler: handler,
+	}
 }

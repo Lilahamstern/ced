@@ -1,4 +1,4 @@
-GET https://jsonplaceholder.typicode.com/posts
+GET http://localhost:5050/info
 
 ###
 
