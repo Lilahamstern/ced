@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"project/config"
-	"project/models"
 
 	"github.com/jinzhu/gorm"
 )
@@ -26,12 +25,21 @@ func OpenDB(cfg config.Database) DBClient {
 
 	dc.db.LogMode(false)
 
-	dc.db.AutoMigrate(&models.AccountData{}, &models.AccountEvent{})
-
 	return dc
 }
 
 // Check database status
 func (dc *DBClient) Check() bool {
 	return dc.db != nil
+}
+
+// addExtensions adds provided exts
+func (dc *DBClient) addExtensions(exts []string) {
+	for _, v := range exts {
+		query := fmt.Sprintf(`CREATE EXTENSION IF NOT EXISTS "%s" WITH SCHEMA public;`, v)
+		if err := dc.db.Exec(query).Error; err != nil {
+			log.Println(err)
+		}
+		log.Printf("[DB] Added extention %s", v)
+	}
 }

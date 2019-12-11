@@ -1,1 +1,20 @@
 GET http://localhost:5050/info
+
+###
+
+POST http://localhost:5050/
+content-type: application/json
+
+{
+  "id": "testing",
+  "client": "SSAB",
+  "sector": "Foretag",
+  "name": "SKit",
+  "desc": "En liten test byggnad"
+}
+
+###
+
+GET http://localhost:5050/?limit=1
+
+###

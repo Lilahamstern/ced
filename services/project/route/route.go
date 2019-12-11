@@ -1,9 +1,9 @@
 package route
 
 import (
-	"strings"
 	"project/config"
 	"project/database"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +11,7 @@ import (
 
 // Route struct
 type Route struct {
+	Name    string
 	Method  string
 	Path    string
 	Handler gin.HandlerFunc
@@ -50,13 +51,14 @@ func inject(cfg config.Service, db database.DBClient) gin.HandlerFunc {
 
 // Add route to endpoint
 func (r Route) Add() Route {
-	routes[strings.ToLower(r.Path)] = r
+	routes[strings.ToLower(r.Name)] = r
 	return r
 }
 
 // NewEndpoint getting added to the engine
-func NewEndpoint(method string, path string, handler gin.HandlerFunc) Route {
+func NewEndpoint(name string, method string, path string, handler gin.HandlerFunc) Route {
 	return Route{
+		Name:    name,
 		Method:  method,
 		Path:    path,
 		Handler: handler,

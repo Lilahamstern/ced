@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	route.NewEndpoint("GET", "/info", info).Add()
+	route.NewEndpoint("Info", "GET", "/info", info).Add()
 }
 
 type infoResponse struct {
