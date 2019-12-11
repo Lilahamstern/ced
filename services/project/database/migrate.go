@@ -2,7 +2,7 @@ package database
 
 import (
 	"log"
-	"template/config"
+	"project/config"
 )
 
 // Migrate structs into database

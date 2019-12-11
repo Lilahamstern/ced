@@ -1,0 +1,17 @@
+{
+  "service": {
+    "release": false,
+    "clean": true,
+    "name": "Project",
+    "version": "0.0.1",
+    "port": "5050",
+    "description": "A project service"
+  },
+  "database": {
+    "port": "26257",
+    "host": "database",
+    "user": "project_admin",
+    "password": "supersecret",
+    "name": "project"
+  }
+}
