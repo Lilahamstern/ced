@@ -23,7 +23,7 @@ func main() {
 	log.Println("Starting service:", cfg.Service.Name)
 
 	db := database.OpenDB(cfg.Database)
-	db.Migrate(cfg.Service, &models.AccountData{}, &models.AccountEvent{})
+	db.Migrate(cfg.Service, &models.Project{})
 
 	app := route.NewRouter(cfg, db)
 	server.StartHTTPServer(cfg.Service.Port, app)
