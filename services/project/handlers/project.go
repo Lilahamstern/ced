@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"net/http"
 	"project/database"
 	"project/models"
 	"project/route"
@@ -36,10 +37,30 @@ func create(c *gin.Context) {
 func getAll(c *gin.Context) {
 	db := c.MustGet("db").(database.DBClient)
 
-	projects, err := db.QueryAllProjects(c.Query("limit"))
-	if err != nil {
-		fmt.Println(err)
-		return
+	var projects []models.Project
+	var err error
+
+	limit := c.Query("limit")
+	searchQuery := c.Query("search")
+
+	if len(searchQuery) > 1 {
+		if len(searchQuery) < 3 {
+			c.JSON(http.StatusBadRequest, "Search length need to be atleast 3")
+			return
+		}
+		projects, err = db.SearchProjects(searchQuery, limit)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	if searchQuery == "" {
+		projects, err = db.QueryAllProjects(limit)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 
 	c.JSON(200, projects)

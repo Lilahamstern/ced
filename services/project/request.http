@@ -6,15 +6,15 @@ POST http://localhost:5050/
 content-type: application/json
 
 {
-  "id": "testing",
+  "id": "4123",
   "client": "SSAB",
   "sector": "Foretag",
   "name": "SKit",
   "desc": "En liten test byggnad"
 }
 
-###
+###s
 
-GET http://localhost:5050/?limit=1
+GET http://localhost:5050/?limit=10&search=12
 
 ###

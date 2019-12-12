@@ -23,3 +23,15 @@ func (dc *DBClient) QueryAllProjects(limit interface{}) ([]models.Project, error
 
 	return projects, nil
 }
+
+// SearchProjects searching projects from database
+func (dc *DBClient) SearchProjects(search string, limit interface{}) ([]models.Project, error) {
+	var projects []models.Project
+	err := dc.db.Limit(limit).Where("lower(id) like ? OR lower(name) like ?", "%"+search+"%", "%"+search+"%").Find(&projects).Error
+
+	if err != nil {
+		return projects, err
+	}
+
+	return projects, nil
+}
