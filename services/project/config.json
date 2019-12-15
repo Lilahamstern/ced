@@ -8,10 +8,10 @@
     "description": "A project service"
   },
   "database": {
-    "port": "26257",
+    "port": "5432",
     "host": "database",
-    "user": "project_admin",
-    "password": "supersecret",
-    "name": "project"
+    "user": "postgres",
+    "password": "postgres",
+    "name": "postgres"
   }
 }

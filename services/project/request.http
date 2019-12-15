@@ -1,8 +1,8 @@
-GET http://localhost:5050/info
+GET http://localhost/api/projects/info
 
 ###
 
-POST http://localhost:5050/
+POST http://localhost/api/projects
 content-type: application/json
 
 {
@@ -15,6 +15,5 @@ content-type: application/json
 
 ###s
 
-GET http://localhost:5050/?limit=10&search=12
-
+GET http://localhost/api/projects
 ###

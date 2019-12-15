@@ -9,3 +9,8 @@ type Project struct {
 	Desc   string `json:"desc"`
 	Base
 }
+
+// TableName set database table name
+func (Project) TableName() string {
+	return "Projects"
+}

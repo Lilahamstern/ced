@@ -9,13 +9,13 @@ import (
 
 // Base model struct
 type Base struct {
-	UUID      uuid.UUID `json:"uuid" gorm:"primary_key"`
+	UID       uuid.UUID `json:"uid" gorm:"primary_key"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 // BeforeCreate of data
 func (base *Base) BeforeCreate(scope *gorm.Scope) error {
-	scope.SetColumn("UUID", uuid.New())
+	scope.SetColumn("UID", uuid.New())
 	return nil
 }

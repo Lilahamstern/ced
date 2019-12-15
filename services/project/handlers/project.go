@@ -38,7 +38,7 @@ func getAll(c *gin.Context) {
 	db := c.MustGet("db").(database.DBClient)
 
 	var projects []models.Project
-	var err error
+	var err []error
 
 	limit := c.Query("limit")
 	searchQuery := c.Query("search")

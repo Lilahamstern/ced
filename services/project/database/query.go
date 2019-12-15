@@ -1,6 +1,9 @@
 package database
 
-import "project/models"
+import (
+	"fmt"
+	"project/models"
+)
 
 // CreateProject stores project data in db
 func (dc *DBClient) CreateProject(project models.Project) (models.Project, error) {
@@ -14,23 +17,30 @@ func (dc *DBClient) CreateProject(project models.Project) (models.Project, error
 }
 
 // QueryAllProjects will return a list of all projects
-func (dc *DBClient) QueryAllProjects(limit interface{}) ([]models.Project, error) {
+func (dc *DBClient) QueryAllProjects(limit interface{}) ([]models.Project, []error) {
 	var projects []models.Project
-	err := dc.db.Limit(limit).Find(&projects).Error
-	if err != nil {
-		return projects, err
+	errs := dc.db.Limit(limit).Find(&projects).GetErrors()
+	fmt.Println("Skit")
+	if len(errs) >= 1 {
+		for _, err := range errs {
+			fmt.Println(err)
+		}
+		return projects, errs
 	}
 
 	return projects, nil
 }
 
 // SearchProjects searching projects from database
-func (dc *DBClient) SearchProjects(search string, limit interface{}) ([]models.Project, error) {
+func (dc *DBClient) SearchProjects(search string, limit interface{}) ([]models.Project, []error) {
 	var projects []models.Project
-	err := dc.db.Limit(limit).Where("lower(id) like ? OR lower(name) like ?", "%"+search+"%", "%"+search+"%").Find(&projects).Error
+	errs := dc.db.Limit(limit).Where("lower(id) like ? OR lower(name) like ?", "%"+search+"%", "%"+search+"%").Find(&projects).GetErrors()
 
-	if err != nil {
-		return projects, err
+	if len(errs) > 1 {
+		for _, err := range errs {
+			fmt.Println(err)
+		}
+		return projects, errs
 	}
 
 	return projects, nil
