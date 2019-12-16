@@ -1,0 +1,21 @@
+GET http://localhost:8080/api/components/info
+
+
+###
+
+POST http://localhost:8080/api/components/
+content-type: application/json
+
+{
+    "pid": "3141",
+    "area": 31231,
+    "comp": [
+      {
+        "name": "Anka",
+        "profil": "312314",
+        "material": "Co3213",
+        "co": 5134212.31234,
+        "type": "Hejsan"
+      }
+    ]
+}
