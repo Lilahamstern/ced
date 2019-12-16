@@ -2,11 +2,13 @@ package models
 
 // Project struct
 type Project struct {
-	ID     string `json:"id"`
+	PID    string `json:"pid"`
+	UID    string `json:"uid"`
 	Client string `json:"client"`
 	Sector string `json:"sector"`
 	Name   string `json:"name"`
 	Desc   string `json:"desc"`
+	UA     string `json:"ua"`
 	Base
 }
 

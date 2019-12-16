@@ -1,19 +1,21 @@
-GET http://localhost/api/projects/info
+GET http://localhost:8080/api/projects/info
 
 ###
 
-POST http://localhost/api/projects
+POST http://localhost:8080/api/projects
 content-type: application/json
 
 {
-  "id": "4123",
-  "client": "SSAB",
-  "sector": "Foretag",
-  "name": "SKit",
-  "desc": "En liten test byggnad"
+    "pid": "41ssa2332dwa",
+    "uid": "3812934731sa2da",
+    "name": "SKitdaw",
+    "client": "SSAB3123",
+    "sector": "Foretag3123",
+    "ua": "byggarebob123",
+    "desc": "En liten t123est byggnad"
 }
 
 ###s
 
-GET http://localhost/api/projects
+GET http://localhost:8080/api/projects
 ###

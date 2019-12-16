@@ -36,8 +36,8 @@ const namespace: string = "project";
 export default class Home extends Vue {
   @Action("fetchProjects", { namespace }) fetchProjects!: any;
 
-  mounted() {
-    this.fetchProjects();
-  }
+  // mounted() {
+  //   this.fetchProjects();
+  // }
 }
 </script>
