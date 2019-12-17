@@ -21,16 +21,16 @@ func create(c *gin.Context) {
 	var req models.Project
 
 	if err := c.BindJSON(&req); err != nil {
-		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, models.MessageResponse{Status: "Error", Message: "Error while fetching data: " + err.Error()})
 	}
 
 	project, err := db.CreateProject(req)
 	if err != nil {
-		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, models.MessageResponse{Status: "Error", Message: "Error while creating project: " + err.Error()})
 		return
 	}
 
-	c.JSON(200, project)
+	c.JSON(200, models.DataResponse{Status: "Success", Data: project})
 
 }
 
@@ -38,19 +38,19 @@ func getAll(c *gin.Context) {
 	db := c.MustGet("db").(database.DBClient)
 
 	var projects []models.Project
-	var err []error
+	var err error
 
 	limit := c.Query("limit")
 	searchQuery := c.Query("search")
 
 	if len(searchQuery) > 1 {
 		if len(searchQuery) < 3 {
-			c.JSON(http.StatusBadRequest, "Search length need to be atleast 3")
+			c.JSON(http.StatusInternalServerError, models.MessageResponse{Status: "Error", Message: "Search query needs a length of 3."})
 			return
 		}
 		projects, err = db.SearchProjects(searchQuery, limit)
 		if err != nil {
-			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, models.MessageResponse{Status: "Error", Messages: "Error while searching project: " + err.Error()})
 			return
 		}
 	}
