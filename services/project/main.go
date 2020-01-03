@@ -3,13 +3,11 @@ package main
 import (
 	"log"
 	"project/config"
-	"project/database"
 	"project/handlers"
-	"project/models"
 	"project/route"
 	"project/server"
 
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/lib/pq"
 )
 
 var cfg config.Config
@@ -22,9 +20,6 @@ func main() {
 	handlers.SetupHandler()
 	log.Println("Starting service:", cfg.Service.Name)
 
-	db := database.OpenDB(cfg.Database)
-	db.Migrate(cfg.Service, &models.Project{})
-
-	app := route.NewRouter(cfg, db)
+	app := route.NewRouter(cfg)
 	server.StartHTTPServer(cfg.Service.Port, app)
 }

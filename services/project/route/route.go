@@ -2,7 +2,6 @@ package route
 
 import (
 	"project/config"
-	"project/database"
 	"strings"
 
 	"github.com/gin-contrib/cors"
@@ -21,14 +20,15 @@ type Route struct {
 var routes = make(map[string]Route)
 
 // NewRouter creates new router instance and initilizing the router context
-func NewRouter(cfg config.Config, db database.DBClient) *gin.Engine {
+func NewRouter(cfg config.Config) *gin.Engine {
 	if cfg.Service.Realase {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	router := gin.Default()
 
-	router.Use(inject(cfg.Service, db))
+	router.Use(inject(cfg.Service))
+	router.Use(gin.Recovery())
 
 	conf := cors.DefaultConfig()
 	conf.AllowAllOrigins = true
@@ -41,10 +41,9 @@ func NewRouter(cfg config.Config, db database.DBClient) *gin.Engine {
 	return router
 }
 
-func inject(cfg config.Service, db database.DBClient) gin.HandlerFunc {
+func inject(cfg config.Service) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Set("cfg", cfg)
-		ctx.Set("db", db)
 		ctx.Next()
 	}
 }

@@ -10,8 +10,8 @@
   "database": {
     "port": "5432",
     "host": "database",
-    "user": "postgres",
-    "password": "postgres",
-    "name": "postgres"
+    "user": "bec_admin ",
+    "password": "jw8s0F4",
+    "name": "bec"
   }
 }

@@ -1,3 +1,4 @@
+
 GET http://localhost:8080/api/projects/info
 
 ###
@@ -7,12 +8,12 @@ content-type: application/json
 
 {
     "pid": "41ssa2332dwa",
-    "uid": "3812934731sa2da",
-    "name": "SKitdaw",
+    "oid": "3812934731sa2da",
+    "name": "Uppdatering",
     "client": "SSAB3123",
     "sector": "Foretag3123",
-    "ua": "byggarebob123",
-    "desc": "En liten t123est byggnad"
+    "manager": "byggarebob123",
+    "description": "En liten t123est byggnad"
 }
 
 ###s

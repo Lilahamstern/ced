@@ -2,14 +2,9 @@ package handlers
 
 import (
 	"project/config"
-	"project/route"
 
 	"github.com/gin-gonic/gin"
 )
-
-func init() {
-	route.NewEndpoint("Info", "GET", "/info", info).Add()
-}
 
 type infoResponse struct {
 	General generalInfo    `json:"general"`
@@ -25,10 +20,10 @@ func info(c *gin.Context) {
 	cfg := c.MustGet("cfg").(config.Service)
 	res := infoResponse{
 		General: generalInfo{
-			IP:        "10.0.0.1",
-			Endpoints: len(c.HandlerNames()) - 4,
+			IP:        c.ClientIP(),
+			Endpoints: len(c.HandlerNames()),
 		},
 		Service: cfg,
 	}
-	c.JSON(200, res)
+	writeData(c, 200, res)
 }

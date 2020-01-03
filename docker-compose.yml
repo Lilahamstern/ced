@@ -4,7 +4,7 @@ services:
   project:
     container_name: project
     hostname: project
-    command: /bin/bash -c "go run ./main.go"
+    command: /bin/bash -c "go run ./main.go -mod=vendor"
     image: golang:1.13-stretch
     volumes:
       - ./services/project:/usr/service:rw
@@ -12,12 +12,26 @@ services:
     restart: always
     networks:
       - services
-      - pgnet
+      - database
+
+  # database:
+  #   container_name: database
+  #   hostname: database
+  #   image: postgres:12.1
+  #   restart: on-failure
+  #   environment:
+  #     - POSTGRES_PASSWORD=supersecret
+  #     - POSTGRES_USER=admin
+  #     - POSTGRES_DB=bec
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   networks:
+  #     - pgnet
 
   component:
     container_name: component
     hostname: component
-    command: /bin/bash -c "go run ./main.go"
+    command: /bin/bash -c "go run ./main.go -mod=vendor"
     image: golang:1.13-stretch
     volumes:
       - ./services/component:/usr/service:rw
@@ -25,37 +39,11 @@ services:
     restart: always
     networks:
       - services
-      - pgnet
-
-  database:
-    container_name: database
-    hostname: database
-    image: postgres:12.1
-    restart: on-failure
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - pgnet
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4:4.16
-    restart: always
-    ports:
-      - 3030:80
-    logging:
-      driver: none
-    networks:
-      - services
-      - pgnet
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=test@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=1234
-    depends_on:
       - database
 
   proxy:
     image: nginx:1.17.6
+    container_name: proxy
     ports:
       - "8080:80"
     volumes:
@@ -63,11 +51,11 @@ services:
     networks:
       - services
 
-volumes:
-  pgdata:
-    driver: local
+# volumes:
+#   pgdata:
+#     driver: local
 
 networks:
   services:
-  pgnet:
-    driver: bridge
+  database:
+    external: true
