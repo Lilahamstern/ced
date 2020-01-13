@@ -24,10 +24,10 @@ namespace Api.Services
             var created = await _dataContext.SaveChangesAsync();
             return created > 0;
         }
-
-        public async Task<Project> GetProjectByIdAsync(Guid projectId)
+        
+        public async Task<Project> GetProjectByIdAsync(string projectId)
         {
-            return await _dataContext.Projects.SingleOrDefaultAsync(x => x.Id == projectId);
+            return await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
         }
 
         public async Task<List<Project>> GetProjectsAsync()
@@ -42,7 +42,7 @@ namespace Api.Services
             return updated > 0;
         }
 
-        public async Task<bool> DeleteProjectAsync(Guid projectId)
+        public async Task<bool> DeleteProjectAsync(string projectId)
         {
             var project = await GetProjectByIdAsync(projectId);
             _dataContext.Projects.Remove(project);
@@ -50,19 +50,14 @@ namespace Api.Services
             return deleted > 0;
         }
 
-        public async Task<bool> UserOwnProjectAsync(Guid projectId, string userId)
+        public async Task<bool> UserOwnProjectAsync(string projectId, string userId)
         {
-            Project project = await _dataContext.Projects.AsNoTracking().SingleOrDefaultAsync(x => x.Id == projectId);
+            Project project = await _dataContext.Projects.AsNoTracking().SingleOrDefaultAsync(x => x.PId == projectId);
 
             if (project == null)
             {
                 return false;
             }
-
-            if (project.UserId != userId)
-            {
-                return false;
-            };
 
             return true;
         }

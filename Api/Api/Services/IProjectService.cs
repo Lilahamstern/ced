@@ -1,7 +1,6 @@
-﻿using Api.Domain;
-using System;
+﻿using Api.Contracts.V1.Responses;
+using Api.Domain;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Services
@@ -13,12 +12,12 @@ namespace Api.Services
         Task<bool> CreateProjectAsync(Project project);
         Task<List<Project>> GetProjectsAsync();
 
-        Task<Project> GetProjectByIdAsync(Guid projectId);
+        Task<Project> GetProjectByIdAsync(string projectId);
 
         Task<bool> UpdateProjectAsync(Project projectToUpdate);
 
-        Task<bool> DeleteProjectAsync(Guid projectId);
+        Task<bool> DeleteProjectAsync(string projectId);
 
-        Task<bool> UserOwnProjectAsync(Guid projectId, string userId);
+        Task<bool> UserOwnProjectAsync(string projectId, string userId);
     }
 }

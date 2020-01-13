@@ -12,13 +12,19 @@ namespace Api.Domain
     public class Project
     {
         [Key]
-        public Guid Id { get; set; }
+        public string PId { get; set; }
+
+        public string OId {get; set;}
         
         public string Name { get; set; }
 
-        public string UserId { get; set; }
+        public string Description { get; set; }
 
-        [ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public string Manager { get; set; }
+
+        public string Client { get; set; }
+
+        public string Sector { get; set; }
+
     }
 }

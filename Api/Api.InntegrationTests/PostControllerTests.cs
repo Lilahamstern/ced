@@ -39,7 +39,7 @@ namespace Api.IntegrationTest
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var returnedProject = await response.Content.ReadAsAsync<Project>();
-            returnedProject.Id.Should().Be(createdProject.Id);
+            returnedProject.PId.Should().Be(createdProject.Id);
             returnedProject.Name.Should().Be("Test Project");
         }
     }

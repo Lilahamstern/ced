@@ -19,7 +19,6 @@ namespace Api.Contracts.V1
             public const string Update = Base + "/projects/{projectId}";
             public const string Delete = Base + "/projects/{projectId}";
             public const string Create = Base + "/projects";
-            //public static readonly string Get = $"{Base}/projects{projectId}";
         }
 
         public static class Identity
@@ -27,6 +26,7 @@ namespace Api.Contracts.V1
             public const string Login = Base + "/identity/login";
             public const string Register = Base + "/identity/register";
             public const string Refresh = Base + "/identity/refresh";
+            public const string GetAll = Base + "/identity";
         }
     }
 }

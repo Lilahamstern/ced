@@ -1,12 +1,15 @@
 ﻿using Api.Controllers.V1.Requests;
 using Api.Controllers.V1.Responses;
 using Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Contracts.V1
 {
+
+    [Produces("application/json")]
     public class IdentityController : Controller
     {
         private readonly IIdentityService _identityService;
@@ -15,16 +18,15 @@ namespace Api.Contracts.V1
             _identityService = identityService;
         }
 
+        /// <summary>
+        /// Register user account
+        /// </summary>
+        /// <param name="request"></param>
+        
         [HttpPost(ApiRoutes.Identity.Register)]
+        [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new AuthFailResponse
-                {
-                    Errors = ModelState.Values.SelectMany(x => x.Errors.Select(xx => xx.ErrorMessage))
-                });
-            }
 
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
 
@@ -35,6 +37,7 @@ namespace Api.Contracts.V1
                     Errors = authResponse.Errors
                 });
             }
+
             return Ok(new AuthSuccessResponse
             {
                 Token = authResponse.Token,
@@ -81,6 +84,13 @@ namespace Api.Contracts.V1
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken
             });
+        }
+
+        [HttpGet(ApiRoutes.Identity.GetAll)]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _identityService.GetIdentityUsersAsync());
         }
     }
 }

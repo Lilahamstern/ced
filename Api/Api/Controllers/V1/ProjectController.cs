@@ -1,4 +1,5 @@
 ﻿using Api.Contracts.V1;
+using Api.Contracts.V1.Responses;
 using Api.Controllers.V1.Requests;
 using Api.Controllers.V1.Responses;
 using Api.Domain;
@@ -8,11 +9,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Api.Controllers.V1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProjectController : Controller
     {
 
@@ -23,26 +24,55 @@ namespace Api.Controllers.V1
             _projectService = projectService;
         }
 
+        /// <summary>
+        /// Create project endpoint
+        /// </summary>
+        /// <param name="request"> Wuts this</param>
+
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpPost(ApiRoutes.Projects.Create)]
+        [ProducesResponseType(typeof(ProjectResponse), 201)]
         public async Task<IActionResult> Create([FromBody] CreateProjectRequest request)
         {
             var project = new Project { 
-                Name = request.Name, 
-                UserId = HttpContext.GetUserId()
+                PId = request.ProjectId,
+                OId = request.OrderId,
+                Name = request.Name,
+                Description = request.Description,
+                Client = request.Client,
+                Manager = request.Manager,
+                Sector = request.Sector,  
             };
+
+            var projectCheck = await _projectService.GetProjectByIdAsync(project.PId);
+            if (projectCheck != null)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "ProjectId",
+                            Message= "Project ID already exists",
+                        }
+                    }
+                });
+            }
 
             await _projectService.CreateProjectAsync(project);
 
+
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Projects.Get.Replace("{projectId}", project.Id.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Projects.Get.Replace("{projectId}", project.PId.ToString());
 
-            var response = new ProjectResponse { Id = project.Id };
+            var response = new ProjectResponse { PId = project.PId };
 
-            return Created(location, project);
+            return Created(location, response);
         }
 
         [HttpGet(ApiRoutes.Projects.Get)]
-        public async Task<IActionResult> Get([FromRoute] Guid projectId)
+        public async Task<IActionResult> Get([FromRoute] string projectId)
         {
             var project = await _projectService.GetProjectByIdAsync(projectId);
 
@@ -61,29 +91,39 @@ namespace Api.Controllers.V1
         }
 
         [HttpPut(ApiRoutes.Projects.Update)]
-        public async Task<IActionResult> Update([FromRoute] Guid projectId, [FromBody] UpdateProjectRequest request)
+        public async Task<IActionResult> Update([FromRoute] string projectId, [FromBody] UpdateProjectRequest request)
         {
 
-            var userOwn = await _projectService.UserOwnProjectAsync(projectId, HttpContext.GetUserId());
-
-            if (!userOwn)
+            var project = await _projectService.GetProjectByIdAsync(projectId);
+            if (project == null)
             {
-                return BadRequest("You do not own this project");
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "ProjectId",
+                            Message= "Project could not be found",
+                        }
+                    }
+                });
             }
 
-            var project = await _projectService.GetProjectByIdAsync(projectId);
             project.Name = request.Name;
 
             var updated = await _projectService.UpdateProjectAsync(project);
 
-            if (updated)
-                return Ok(project);
+            if (!updated)
+                return NotFound();
 
-            return NotFound();
+
+            return Ok(project);
         }
 
         [HttpDelete(ApiRoutes.Projects.Delete)]
-        public async Task<IActionResult> Delete([FromRoute] Guid projectId)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public async Task<IActionResult> Delete([FromRoute] string projectId)
         {
             var userOwn = await _projectService.UserOwnProjectAsync(projectId, HttpContext.GetUserId());
 
@@ -99,5 +139,6 @@ namespace Api.Controllers.V1
 
             return NotFound();
         }
+
     }
 }

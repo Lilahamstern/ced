@@ -1,6 +1,8 @@
-﻿using Api.Options;
+﻿using Api.Authorization;
+using Api.Options;
 using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using Api.Filters;
 
 namespace Api.Installers
 {
@@ -26,7 +30,13 @@ namespace Api.Installers
 
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddMvc(o => { o.EnableEndpointRouting = false; }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services
+                .AddMvc(o => { 
+                    o.EnableEndpointRouting = false;
+                    o.Filters.Add<ValidationFilter>();
+                })
+                .AddFluentValidation(conf => conf.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -53,31 +63,16 @@ namespace Api.Installers
                 x.TokenValidationParameters = tokenValidationParameters;
             });
 
-            services.AddSwaggerGen(x =>
-            {
-                x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "BEC API", Version = "1" });
-
-                x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            services.AddAuthorization(o => {
+                o.AddPolicy("MustWorkForCompany", p =>
                 {
-                    In = ParameterLocation.Header,
-                    Description = "JWT Auth in header",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
+                    p.AddRequirements(new CompanyEmailRequirement("wsp.com"));
                 });
-                x.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                   {
-                     new OpenApiSecurityScheme
-                     {
-                       Reference = new OpenApiReference
-                       {
-                         Type = ReferenceType.SecurityScheme,
-                         Id = "Bearer"
-                       }
-                      },
-                      new List<string>()
-                    }
-                  });
             });
+
+            services.AddSingleton<IAuthorizationHandler, CompanyEmailHandler>();
+
+            
         }
     }
 }

@@ -7,6 +7,6 @@ namespace Api.Controllers.V1.Responses
 {
     public class ProjectResponse
     {
-        public Guid Id { get; set; }
+        public string PId { get; set; }
     }
 }
