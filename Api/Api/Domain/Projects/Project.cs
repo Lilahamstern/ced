@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Api.Controllers.V1.Requests;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,5 +27,14 @@ namespace Api.Domain
 
         public string Sector { get; set; }
 
+        public void UpdateAgianstUpdateRequest(UpdateProjectRequest request)
+        { 
+            if (!String.IsNullOrEmpty(request.Name)) this.Name = request.Name;
+            if (!String.IsNullOrEmpty(request.OrderId)) this.OId = request.OrderId;
+            if (!String.IsNullOrEmpty(request.Client)) this.Client = request.Client;
+            if (!String.IsNullOrEmpty(request.Manager)) this.Manager = request.Manager;
+            if (!String.IsNullOrEmpty(request.Description)) this.Description = request.Description;
+            if (!String.IsNullOrEmpty(request.Sector)) this.Sector = request.Sector;
+        }
     }
 }

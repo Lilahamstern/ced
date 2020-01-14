@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Api.Services
 {
-    public class IdentityService : IIdentityService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -23,7 +23,7 @@ namespace Api.Services
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _context;
 
-        public IdentityService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, DataContext context, RoleManager<IdentityRole> roleManager)
+        public AuthService(UserManager<IdentityUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, DataContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;

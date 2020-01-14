@@ -10,10 +10,10 @@ namespace Api.Contracts.V1
 {
 
     [Produces("application/json")]
-    public class IdentityController : Controller
+    public class AuthController : Controller
     {
-        private readonly IIdentityService _identityService;
-        public IdentityController (IIdentityService identityService)
+        private readonly IAuthService _identityService;
+        public AuthController (IAuthService identityService)
         {
             _identityService = identityService;
         }
@@ -23,7 +23,7 @@ namespace Api.Contracts.V1
         /// </summary>
         /// <param name="request"></param>
         
-        [HttpPost(ApiRoutes.Identity.Register)]
+        [HttpPost(ApiRoutes.Auth.Register)]
         [ProducesResponseType(typeof(AuthSuccessResponse), 200)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
@@ -45,7 +45,7 @@ namespace Api.Contracts.V1
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Login)]
+        [HttpPost(ApiRoutes.Auth.Login)]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
 
@@ -66,7 +66,7 @@ namespace Api.Contracts.V1
         }
 
 
-        [HttpPost(ApiRoutes.Identity.Refresh)]
+        [HttpPost(ApiRoutes.Auth.Refresh)]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
 
@@ -84,13 +84,6 @@ namespace Api.Contracts.V1
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken
             });
-        }
-
-        [HttpGet(ApiRoutes.Identity.GetAll)]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _identityService.GetIdentityUsersAsync());
         }
     }
 }

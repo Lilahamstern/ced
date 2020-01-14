@@ -23,4 +23,21 @@ namespace Api.SwaggerExample.Request
             };
         }
     }
+
+    public class UpdateProjectRequestExample : IExamplesProvider<UpdateProjectRequest>
+    {
+        public UpdateProjectRequest GetExamples()
+        {
+            return new UpdateProjectRequest
+            {
+                OrderId = "20137132",
+                Client = "",
+                Name = "House without roof",
+                Manager = "Updated John Doe",
+                Description = "",
+                Sector = "",
+            };
+        }
+
+    }
 }

@@ -21,12 +21,11 @@ namespace Api.Contracts.V1
             public const string Create = Base + "/projects";
         }
 
-        public static class Identity
+        public static class Auth
         {
-            public const string Login = Base + "/identity/login";
-            public const string Register = Base + "/identity/register";
-            public const string Refresh = Base + "/identity/refresh";
-            public const string GetAll = Base + "/identity";
+            public const string Login = Base + "/auth/login";
+            public const string Register = Base + "/auth/register";
+            public const string Refresh = Base + "/auth/refresh";
         }
     }
 }
