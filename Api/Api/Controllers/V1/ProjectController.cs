@@ -113,12 +113,24 @@ namespace Api.Controllers.V1
 
         /// <summary>
         /// Returns all projects if no project is found 404 will be retunred s
-        /// </summary>  s
+        /// </summary>
+        /// <param name="search">Provide search query of ProjectID, Name, OrderID, Client and Manager</param>
+        /// <param name="limit">if limit is less or equals to 0 all projects will be returned</param> 
         [HttpGet(ApiRoutes.Projects.GetAll)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string search, [FromQuery] int limit)
         {
+            List<Project> projects;
+            if (limit <= 0)
+                    limit = 10000;
 
-            var projects = await _projectService.GetProjectsAsync();
+            if (!string.IsNullOrEmpty(search))
+            {
+                projects = await _projectService.GetProjectsAsync(limit, search);
+            } else
+            {
+                projects = await _projectService.GetProjectsAsync(limit);
+            }
+
             if (projects.Count ==  0)
             {
                 return NotFound(new ErrorResponse

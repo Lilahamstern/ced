@@ -1,7 +1,6 @@
 ﻿using Api.Data;
 using Api.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,9 +29,20 @@ namespace Api.Services
             return await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
         }
 
-        public async Task<List<Project>> GetProjectsAsync()
+        public async Task<List<Project>> GetProjectsAsync(int limit)
         {
-            return await _dataContext.Projects.ToListAsync();
+            return await _dataContext.Projects.Take(limit).ToListAsync();
+        }
+
+        public async Task<List<Project>> GetProjectsAsync(int limit, string search)
+        {
+            var projects = await _dataContext.Projects.ToListAsync();
+            var filterd = projects.Take(limit).Where(p => p.OId.Contains(search) || 
+            p.PId.Contains(search) || 
+            p.Client.Contains(search) ||
+            p.Name.Contains(search) ||
+            p.Manager.Contains(search)).ToList();
+            return filterd;
         }
 
         public async Task<bool> UpdateProjectAsync(Project projectToUpdate)
@@ -48,18 +58,6 @@ namespace Api.Services
             _dataContext.Projects.Remove(project);
             var deleted = await _dataContext.SaveChangesAsync();
             return deleted > 0;
-        }
-
-        public async Task<bool> UserOwnProjectAsync(string projectId, string userId)
-        {
-            Project project = await _dataContext.Projects.AsNoTracking().SingleOrDefaultAsync(x => x.PId == projectId);
-
-            if (project == null)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

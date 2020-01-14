@@ -10,7 +10,9 @@ namespace Api.Services
 
 
         Task<bool> CreateProjectAsync(Project project);
-        Task<List<Project>> GetProjectsAsync();
+        Task<List<Project>> GetProjectsAsync(int limit);
+
+        Task<List<Project>> GetProjectsAsync(int limit, string search);
 
         Task<Project> GetProjectByIdAsync(string projectId);
 
@@ -18,6 +20,5 @@ namespace Api.Services
 
         Task<bool> DeleteProjectAsync(string projectId);
 
-        Task<bool> UserOwnProjectAsync(string projectId, string userId);
     }
 }
