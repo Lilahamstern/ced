@@ -24,7 +24,11 @@ namespace Api
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
 
-                await dbContext.Database.MigrateAsync();
+                if (await dbContext.Database.CanConnectAsync())
+                {
+                    await dbContext.Database.MigrateAsync();
+                    Console.WriteLine("Migrated database");
+                }
 
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 if (!await roleManager.RoleExistsAsync("Admin"))

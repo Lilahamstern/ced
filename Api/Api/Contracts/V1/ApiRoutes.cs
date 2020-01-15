@@ -21,6 +21,14 @@ namespace Api.Contracts.V1
             public const string Create = Base + "/projects";
         }
 
+        public static class Components
+        {
+            public const string GetVersions = Base + "/components/versions/{projectId}";
+            public const string GetAll = Base + "/components/{projectId}";
+            public const string Create = Base + "/components/{projectId}";
+            public const string Delete = Base + "/components/{projectId}";
+        }
+
         public static class Auth
         {
             public const string Login = Base + "/auth/login";

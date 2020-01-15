@@ -17,7 +17,7 @@ namespace Api.Installers
         {
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "WSP Bec API", Version = "V1" });
+                x.SwaggerDoc("v1", new OpenApiInfo { Title = "WSP Bec API", Version = "V1" });
 
                 x.ExampleFilters();
 
@@ -45,7 +45,6 @@ namespace Api.Installers
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 x.IncludeXmlComments(xmlPath);
-
                      
             });
 
