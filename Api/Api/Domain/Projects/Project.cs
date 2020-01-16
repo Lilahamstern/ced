@@ -14,18 +14,14 @@ namespace Api.Domain
     {
         [Key]
         public string PId { get; set; }
-
         public string OId {get; set;}
-        
         public string Name { get; set; }
-
         public string Description { get; set; }
-
         public string Manager { get; set; }
-
         public string Client { get; set; }
-
         public string Sector { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime CreatedAt { get; set; }
 
         public void UpdateAgianstUpdateRequest(UpdateProjectRequest request)
         { 

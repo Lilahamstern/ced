@@ -56,7 +56,7 @@ namespace Api.IntegrationTest
         {
 
 
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new UserRegistrationRequest
+            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Auth.Register, new UserRegistrationRequest
             {
                 Email = "test@gmail.com",
                 Password = "12345AbC!"

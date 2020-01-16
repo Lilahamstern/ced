@@ -24,6 +24,7 @@ namespace Api.Installers
 
 
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IComponentService, ComponentService>();
         }
     }
 }

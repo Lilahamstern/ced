@@ -34,12 +34,12 @@ namespace Api.IntegrationTest
             var createdProject = await CreateProjectAsync(new CreateProjectRequest { Name = "Test Project" });
 
             // act
-            var response = await TestClient.GetAsync(ApiRoutes.Projects.Get.Replace("{projectId}", createdProject.Id.ToString()));
+            var response = await TestClient.GetAsync(ApiRoutes.Projects.Get.Replace("{projectId}", createdProject.PId.ToString()));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var returnedProject = await response.Content.ReadAsAsync<Project>();
-            returnedProject.PId.Should().Be(createdProject.Id);
+            returnedProject.PId.Should().Be(createdProject.PId);
             returnedProject.Name.Should().Be("Test Project");
         }
     }
