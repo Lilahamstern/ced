@@ -19,6 +19,47 @@ namespace Api.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Api.Domain.Components.Component", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Co")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Material")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Profile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PId");
+
+                    b.ToTable("Components");
+                });
+
             modelBuilder.Entity("Api.Domain.Project", b =>
                 {
                     b.Property<string>("PId")
@@ -280,6 +321,13 @@ namespace Api.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Api.Domain.Components.Component", b =>
+                {
+                    b.HasOne("Api.Domain.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("PId");
                 });
 
             modelBuilder.Entity("Api.Domain.RefreshToken", b =>

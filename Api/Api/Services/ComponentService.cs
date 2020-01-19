@@ -1,4 +1,5 @@
 ﻿using Api.Data;
+using Api.Domain.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,13 @@ namespace Api.Services
         public ComponentService(DataContext dataContext)
         {
             _datacontext = dataContext;
+        }
+
+        public async Task<Tuple<bool, int>> CreateComponents(List<Component> components)
+        {
+            _datacontext.Components.AddRange(components);
+            var created = await _datacontext.SaveChangesAsync();
+            return new Tuple<bool, int>(created > 0, created);
         }
     }
 }

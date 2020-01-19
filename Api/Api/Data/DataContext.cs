@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using Api.Domain;
+using Api.Domain.Components;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +14,8 @@ namespace Api.Data
         }
 
         public DbSet<Project> Projects { get; set; }
+
+        public DbSet<Component> Components { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,8 +8,11 @@ using System.Threading.Tasks;
 namespace Api.Domain.Components
 {
     [Table("Components")]
-    public class Components
+    public class Component
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
         public string PId { get; set; }
         public int CId { get; set; }
         public string Name { get; set; }

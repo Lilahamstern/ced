@@ -29,6 +29,8 @@ namespace Api.Installers
             services.AddSingleton(jwtSettings);
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IComponentService, ComponentService>();
 
             services
                 .AddMvc(o => { 
