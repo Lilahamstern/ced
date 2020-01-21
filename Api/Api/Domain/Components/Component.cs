@@ -10,6 +10,11 @@ namespace Api.Domain.Components
     [Table("Components")]
     public class Component
     {
+        public Component()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
@@ -21,11 +26,9 @@ namespace Api.Domain.Components
         public string Co { get; set; }
         public string Type { get; set; }
         public int Version { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; }
-
+        public DateTime CreatedAt { get; set; } 
         [ForeignKey(nameof(PId))]
         public Project Project { get; set; }
+
     }
 }

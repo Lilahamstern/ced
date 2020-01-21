@@ -31,10 +31,6 @@ namespace Api.Data.Migrations
                     b.Property<string>("Co")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
 

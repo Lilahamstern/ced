@@ -8,6 +8,6 @@ namespace Api.Services
 {
     public interface IComponentService
     {
-        Task<Tuple<bool, int>> CreateComponents(List<Component> components);
+        Task<bool> CreateComponents(List<Component> components);
     }
 }

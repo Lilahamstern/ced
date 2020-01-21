@@ -16,11 +16,11 @@ namespace Api.Services
             _datacontext = dataContext;
         }
 
-        public async Task<Tuple<bool, int>> CreateComponents(List<Component> components)
+        public async Task<bool> CreateComponents(List<Component> components)
         {
             _datacontext.Components.AddRange(components);
             var created = await _datacontext.SaveChangesAsync();
-            return new Tuple<bool, int>(created > 0, created);
+            return created > 0;
         }
     }
 }
