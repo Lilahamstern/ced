@@ -26,7 +26,7 @@ namespace Api.Controllers.V1
         /// <summary>
         /// Create components and add to specified project
         /// </summary>
-        /// <param name="projectId">ProjectID to what project components are gonna be added too/param>
+        /// <param name="projectId">ProjectID to what project components are gonna be added too</param>
         /// <param name="request">A list of components see model below</param>
         [HttpPost(ApiRoutes.Components.Create)]
         public async Task<IActionResult> Create([FromRoute] string projectId, [FromBody] List<CreateComponentRequest> request)
