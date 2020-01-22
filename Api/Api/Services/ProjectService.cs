@@ -24,7 +24,7 @@ namespace Api.Services
             return created > 0;
         }
         
-        public async Task<Project> GetProjectByIdAsync(string projectId)
+        public async Task<Project> GetProjectByIdAsync(int projectId)
         {
             return await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
         }
@@ -37,8 +37,9 @@ namespace Api.Services
         public async Task<List<Project>> GetProjectsAsync(int limit, string search)
         {
             var projects = await _dataContext.Projects.ToListAsync();
-            var filterd = projects.Take(limit).Where(p => p.OId.Contains(search) || 
-            p.PId.Contains(search) || 
+            var filterd = projects.Take(limit).Where(p => 
+            //p.OId.Contains(search) || 
+            //p.PId.Contains(search) || 
             p.Client.Contains(search) ||
             p.Name.Contains(search) ||
             p.Manager.Contains(search)).ToList();
@@ -52,7 +53,7 @@ namespace Api.Services
             return updated > 0;
         }
 
-        public async Task<bool> DeleteProjectAsync(string projectId)
+        public async Task<bool> DeleteProjectAsync(int projectId)
         {
             var project = await GetProjectByIdAsync(projectId);
             _dataContext.Projects.Remove(project);

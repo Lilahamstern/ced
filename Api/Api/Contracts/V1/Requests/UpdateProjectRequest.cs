@@ -7,7 +7,7 @@ namespace Api.Controllers.V1.Requests
 {
     public class UpdateProjectRequest
     {
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
 
         public string Name { get; set; }
 

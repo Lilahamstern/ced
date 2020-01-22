@@ -13,24 +13,15 @@ namespace Api.Domain
     public class Project
     {
         [Key]
-        public string PId { get; set; }
-        public string OId {get; set;}
+        public int PId { get; set; }    
+        public int OId {get; set;}
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public string Manager { get; set; }
         public string Client { get; set; }
         public string Sector { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
-
-        public void UpdateAgianstUpdateRequest(UpdateProjectRequest request)
-        { 
-            if (!String.IsNullOrEmpty(request.Name)) this.Name = request.Name;
-            if (!String.IsNullOrEmpty(request.OrderId)) this.OId = request.OrderId;
-            if (!String.IsNullOrEmpty(request.Client)) this.Client = request.Client;
-            if (!String.IsNullOrEmpty(request.Manager)) this.Manager = request.Manager;
-            if (!String.IsNullOrEmpty(request.Description)) this.Description = request.Description;
-            if (!String.IsNullOrEmpty(request.Sector)) this.Sector = request.Sector;
-        }
     }
 }

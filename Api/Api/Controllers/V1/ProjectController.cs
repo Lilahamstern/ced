@@ -74,10 +74,10 @@ namespace Api.Controllers.V1
         /// </summary>
         /// <param name="projectId">Requierd if not provided 400 will be returned</param>
         [HttpGet(ApiRoutes.Projects.Get)]
-        public async Task<IActionResult> Get([FromRoute] string projectId)
+        public async Task<IActionResult> Get([FromRoute] int projectId)
         {
 
-            if ( !String.IsNullOrEmpty(projectId))
+            if (projectId != 0)
             {
                 return BadRequest(new ErrorResponse
                 {
@@ -152,7 +152,7 @@ namespace Api.Controllers.V1
         /// <param name="projectId">Requierd to update project, if it dosent exists error will be returned</param>
         /// <param name="request">Request body check example, if field are not provided it wont be updated</param>  s
         [HttpPut(ApiRoutes.Projects.Update)]
-        public async Task<IActionResult> Update([FromRoute] string projectId, [FromBody] UpdateProjectRequest request)
+        public async Task<IActionResult> Update([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
 
             var project = await _projectService.GetProjectByIdAsync(projectId);
@@ -171,8 +171,6 @@ namespace Api.Controllers.V1
                 });
             }
 
-            project.UpdateAgianstUpdateRequest(request);
-
             var updated = await _projectService.UpdateProjectAsync(project);
 
             if (!updated)
@@ -187,9 +185,9 @@ namespace Api.Controllers.V1
         /// <param name="projectId">Is requierd if not provided 400 will be returned</param>    s
         [HttpDelete(ApiRoutes.Projects.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-        public async Task<IActionResult> Delete([FromRoute] string projectId)
+        public async Task<IActionResult> Delete([FromRoute] int projectId)
         {
-            if (!String.IsNullOrEmpty(projectId))
+            if (!String.IsNullOrEmpty(projectId.ToString()))
             {
                 return BadRequest(new ErrorResponse
                 {

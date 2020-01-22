@@ -18,7 +18,7 @@ namespace Api.Domain.Components
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public string PId { get; set; }
+        public int PId { get; set; }
         public int CId { get; set; }
         public string Name { get; set; }
         public string Profile { get; set; }

@@ -7,9 +7,9 @@ namespace Api.Controllers.V1.Requests
 {
     public class CreateProjectRequest
     {
-        public string ProjectId { get; set; }
+        public int ProjectId { get; set; }
 
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
 
         public string Name { get; set; }
 

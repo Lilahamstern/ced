@@ -14,11 +14,11 @@ namespace Api.Services
 
         Task<List<Project>> GetProjectsAsync(int limit, string search);
 
-        Task<Project> GetProjectByIdAsync(string projectId);
+        Task<Project> GetProjectByIdAsync(int projectId);
 
         Task<bool> UpdateProjectAsync(Project projectToUpdate);
 
-        Task<bool> DeleteProjectAsync(string projectId);
+        Task<bool> DeleteProjectAsync(int projectId);
 
     }
 }
