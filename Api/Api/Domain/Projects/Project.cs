@@ -18,6 +18,7 @@ namespace Api.Domain
     {
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int PId { get; set; }    
         public int OId {get; set;}
         public string Name { get; set; }

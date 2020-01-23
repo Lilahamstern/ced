@@ -34,7 +34,7 @@ namespace Api.Controllers.V1
         public async Task<IActionResult> Create([FromBody] CreateProjectRequest request)
         {
             var project = new Project { 
-                //PId = request.ProjectId,
+                PId = request.ProjectId,
                 OId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,

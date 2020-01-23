@@ -11,8 +11,7 @@ namespace Api.Data.Migrations
                 name: "Project",
                 columns: table => new
                 {
-                    PId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PId = table.Column<int>(nullable: false),
                     OId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -57,7 +56,7 @@ namespace Api.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
                     Version = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,7 +78,7 @@ namespace Api.Data.Migrations
                     PId = table.Column<int>(nullable: false),
                     Property = table.Column<string>(nullable: true),
                     Data = table.Column<string>(nullable: true),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                    UpdatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -15,7 +15,7 @@ namespace Api.Data
 
         public DbSet<Project> Projects { get; set; }
 
-        public DbSet<ProjectHistory> projectHistories { get; set; }
+        public DbSet<ProjectHistory> ProjectHistories { get; set; }
 
         public DbSet<Component> Components { get; set; }
 
