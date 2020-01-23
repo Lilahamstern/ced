@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace Api.Domain.Components
@@ -15,8 +16,8 @@ namespace Api.Domain.Components
         [ForeignKey("Project")]
         public int PId { get; set; }
         public string Version { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime CreatedAt { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
+        public DateTime? CreatedAt { get; set; }
         public Project Project { get; set; }
         public ICollection<ComponentData> ComponentDatas { get; set; }
     }

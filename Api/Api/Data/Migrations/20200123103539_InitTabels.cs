@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api.Data.Migrations
 {
-    public partial class AddedTabels : Migration
+    public partial class InitTabels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +19,7 @@ namespace Api.Data.Migrations
                     Manager = table.Column<string>(nullable: true),
                     Client = table.Column<string>(nullable: true),
                     Sector = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false)
+                    CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,7 @@ namespace Api.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     Profile = table.Column<string>(nullable: true),
                     Material = table.Column<string>(nullable: true),
                     Co = table.Column<float>(nullable: false),

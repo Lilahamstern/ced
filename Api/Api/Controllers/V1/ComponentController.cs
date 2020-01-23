@@ -55,14 +55,7 @@ namespace Api.Controllers.V1
                 components.Add(
                     new Component
                     {
-                        PId = projectId,
-                        CId = component.CId,
-                        Material = component.Material,
-                        Name = component.Name,
-                        Profile = component.Profile,
-                        Type = component.Type,
-                        Version = 1,
-                        Co = component.Co,
+
                     });
             }
 
