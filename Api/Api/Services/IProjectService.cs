@@ -16,7 +16,7 @@ namespace Api.Services
 
         Task<Project> GetProjectByIdAsync(int projectId);
 
-        Task<bool> UpdateProjectAsync(Project projectToUpdate);
+        Task<bool> UpdateProjectAsync(int projectId, Project projectToUpdate);
 
         Task<bool> DeleteProjectAsync(int projectId);
 

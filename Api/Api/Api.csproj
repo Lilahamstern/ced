@@ -35,4 +35,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="wwwroot\SwaggerUI\Custom.css" />
+    <None Include="wwwroot\SwaggerUI\Custom.js" />
+  </ItemGroup>
+
 </Project>

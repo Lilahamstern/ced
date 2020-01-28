@@ -49,14 +49,17 @@ namespace Api
             var swaggerOptions = new options.SwaggerOptions();
             Configuration.GetSection(nameof(swaggerOptions)).Bind(swaggerOptions);
 
-            app.UseSwagger(options =>
+            app.UseSwagger(o =>
             {
-                options.RouteTemplate = swaggerOptions.JsonRoute;
+                o.RouteTemplate = swaggerOptions.JsonRoute;
             });
 
-            app.UseSwaggerUI(options =>
+            app.UseSwaggerUI(o =>
             {
-                options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
+                o.InjectStylesheet("/SwaggerUI/Custom.css");
+                o.InjectJavascript("/SwaggerUI/Custom.js");
+                o.RoutePrefix = "docs";
+                o.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
             });
 
             app.UseRouting();

@@ -46,21 +46,21 @@ namespace Api.Services
             return filterd;
         }
 
-        public async Task<bool> UpdateProjectAsync(Project projectToUpdate)
+        public async Task<bool> UpdateProjectAsync(int projectId, Project projectToUpdate)
         {
-            var project = await GetProjectByIdAsync(projectToUpdate.PId);
-
-            project.PId = projectToUpdate.PId;
-            project.OId = projectToUpdate.OId;
-            project.Name = projectToUpdate.Name;
-            project.Description = projectToUpdate.Description;
-            project.Sector = projectToUpdate.Sector;
-            project.Client = projectToUpdate.Client;
-            project.Manager = projectToUpdate.Manager;
-
-            _dataContext.Projects.Update(project);
-            var updated = await _dataContext.SaveChangesAsync();
-            return updated > 0;
+            var result = await _dataContext.Projects.SingleOrDefaultAsync(p => p.PId == projectId);
+            if (result != null)
+            {
+                result.OId = projectToUpdate.OId;
+                result.Name = projectToUpdate.Name;
+                result.Description = projectToUpdate.Description;
+                result.Manager = projectToUpdate.Manager;
+                result.Client = projectToUpdate.Client;
+                result.Sector = projectToUpdate.Sector;
+                var updated = await _dataContext.SaveChangesAsync();
+                return updated > 0;
+            }
+            return false;
         }
 
         public async Task<bool> DeleteProjectAsync(int projectId)

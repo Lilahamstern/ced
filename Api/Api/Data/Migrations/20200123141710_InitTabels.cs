@@ -13,11 +13,11 @@ namespace Api.Data.Migrations
                 {
                     PId = table.Column<int>(nullable: false),
                     OId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Manager = table.Column<string>(nullable: true),
-                    Client = table.Column<string>(nullable: true),
-                    Sector = table.Column<string>(nullable: true),
+                    Manager = table.Column<string>(nullable: false),
+                    Client = table.Column<string>(nullable: false),
+                    Sector = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -55,7 +55,7 @@ namespace Api.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
-                    Version = table.Column<string>(nullable: true),
+                    Version = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -76,8 +76,8 @@ namespace Api.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
-                    Property = table.Column<string>(nullable: true),
-                    Data = table.Column<string>(nullable: true),
+                    Property = table.Column<string>(nullable: false),
+                    Data = table.Column<string>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -98,11 +98,11 @@ namespace Api.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Profile = table.Column<string>(nullable: true),
-                    Material = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Profile = table.Column<string>(nullable: false),
+                    Material = table.Column<string>(nullable: false),
                     Co = table.Column<float>(nullable: false),
-                    Type = table.Column<string>(nullable: true)
+                    Type = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

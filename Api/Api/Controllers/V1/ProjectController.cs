@@ -171,8 +171,7 @@ namespace Api.Controllers.V1
             }
 
             var project = new Project
-            {
-                PId = projectId,
+            { 
                 OId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,
@@ -181,7 +180,7 @@ namespace Api.Controllers.V1
                 Sector = request.Sector,
             };
 
-            var updated = await _projectService.UpdateProjectAsync(project);
+            var updated = await _projectService.UpdateProjectAsync(projectId, project);
 
             if (!updated)
                 return NotFound();
