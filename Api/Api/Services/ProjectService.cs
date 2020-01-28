@@ -38,8 +38,8 @@ namespace Api.Services
         {
             var projects = await _dataContext.Projects.ToListAsync();
             var filterd = projects.Take(limit).Where(p => 
-            //p.OId.Contains(search) || 
-            //p.PId.Contains(search) || 
+            p.OId.ToString().Contains(search) || 
+            p.PId.ToString().Contains(search) || 
             p.Client.Contains(search) ||
             p.Name.Contains(search) ||
             p.Manager.Contains(search)).ToList();
@@ -48,7 +48,17 @@ namespace Api.Services
 
         public async Task<bool> UpdateProjectAsync(Project projectToUpdate)
         {
-            _dataContext.Projects.Update(projectToUpdate);
+            var project = await GetProjectByIdAsync(projectToUpdate.PId);
+
+            project.PId = projectToUpdate.PId;
+            project.OId = projectToUpdate.OId;
+            project.Name = projectToUpdate.Name;
+            project.Description = projectToUpdate.Description;
+            project.Sector = projectToUpdate.Sector;
+            project.Client = projectToUpdate.Client;
+            project.Manager = projectToUpdate.Manager;
+
+            _dataContext.Projects.Update(project);
             var updated = await _dataContext.SaveChangesAsync();
             return updated > 0;
         }

@@ -37,6 +37,10 @@ namespace Api.Installers
                     o.EnableEndpointRouting = false;
                     o.Filters.Add<ValidationFilter>();
                 })
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                })
                 .AddFluentValidation(conf => conf.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllersWithViews();

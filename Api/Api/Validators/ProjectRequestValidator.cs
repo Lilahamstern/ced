@@ -25,7 +25,7 @@ namespace Api.Validators
                 .NotEmpty()
                 .Matches("^[a-zA-Z0-9 -]*$"); 
             RuleFor(x => x.Description)
-                .NotEmpty()
+                .NotNull()
                 .Matches("^[a-zA-Z0-9 -]*$")
                 .MaximumLength(200);
         }

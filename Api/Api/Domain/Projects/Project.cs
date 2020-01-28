@@ -17,6 +17,11 @@ namespace Api.Domain
     public class Project
     {
 
+        public Project()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int PId { get; set; }    
@@ -28,8 +33,8 @@ namespace Api.Domain
         public string Sector { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; private set; }
-        public ICollection<ProjectHistory> ProjectHistory { get; set; }
-        public ICollection<Component> Component { get; set; }
+        public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
+        public virtual ICollection<Component> Component { get; set; }
     }
 
     [Table("ProjectHistory")]

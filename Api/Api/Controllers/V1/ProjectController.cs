@@ -76,8 +76,7 @@ namespace Api.Controllers.V1
         [HttpGet(ApiRoutes.Projects.Get)]
         public async Task<IActionResult> Get([FromRoute] int projectId)
         {
-
-            if (projectId != 0)
+            if (projectId == 0)
             {
                 return BadRequest(new ErrorResponse
                 {
@@ -155,8 +154,8 @@ namespace Api.Controllers.V1
         public async Task<IActionResult> Update([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
 
-            var project = await _projectService.GetProjectByIdAsync(projectId);
-            if (project == null)
+            var projecChecj = await _projectService.GetProjectByIdAsync(projectId);
+            if (projecChecj == null)
             {
                 return NotFound(new ErrorResponse
                 {
@@ -171,6 +170,17 @@ namespace Api.Controllers.V1
                 });
             }
 
+            var project = new Project
+            {
+                PId = projectId,
+                OId = request.OrderId,
+                Name = request.Name,
+                Description = request.Description,
+                Manager = request.Manager,
+                Client = request.Client,
+                Sector = request.Sector,
+            };
+
             var updated = await _projectService.UpdateProjectAsync(project);
 
             if (!updated)
@@ -180,14 +190,14 @@ namespace Api.Controllers.V1
             return Ok(project);
         }
         /// <summary>
-        /// Deleted specifed project Auth is requierd.
+        /// Deleted specifed project.
         /// </summary>
-        /// <param name="projectId">Is requierd if not provided 400 will be returned</param>    s
+        /// <param name="projectId">Project id of project that should be deleted</param>
         [HttpDelete(ApiRoutes.Projects.Delete)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete([FromRoute] int projectId)
         {
-            if (!String.IsNullOrEmpty(projectId.ToString()))
+            if (!string.IsNullOrEmpty(projectId.ToString()))
             {
                 return BadRequest(new ErrorResponse
                 {

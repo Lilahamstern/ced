@@ -36,12 +36,6 @@ namespace Api
                     var adminRole = new IdentityRole("Admin");
                     await roleManager.CreateAsync(adminRole);
                 }
-
-                if (!await roleManager.RoleExistsAsync("Default"))
-                {
-                    var adminRole = new IdentityRole("Default");
-                    await roleManager.CreateAsync(adminRole);
-                }
             }
 
             await host.RunAsync();
