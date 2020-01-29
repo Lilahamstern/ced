@@ -153,23 +153,6 @@ namespace Api.Controllers.V1
         [HttpPut(ApiRoutes.Projects.Update)]
         public async Task<IActionResult> Update([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
-
-            var projecChecj = await _projectService.GetProjectByIdAsync(projectId);
-            if (projecChecj == null)
-            {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "ProjectId",
-                            Message= "Project could not be found",
-                        }
-                    }
-                });
-            }
-
             var project = new Project
             { 
                 OId = request.OrderId,
@@ -183,17 +166,26 @@ namespace Api.Controllers.V1
             var updated = await _projectService.UpdateProjectAsync(projectId, project);
 
             if (!updated)
-                return NotFound();
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "ProjectId",
+                            Message= "Project could not be found",
+                        }
+                    }
+                });
 
-
-            return Ok(project);
+            return Ok(new ProjectResponse { PId = projectId});
         }
         /// <summary>
         /// Deleted specifed project.
         /// </summary>
         /// <param name="projectId">Project id of project that should be deleted</param>
         [HttpDelete(ApiRoutes.Projects.Delete)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,*/ Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int projectId)
         {
             if (!string.IsNullOrEmpty(projectId.ToString()))
