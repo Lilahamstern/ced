@@ -7,6 +7,13 @@ namespace Api.Contracts.V1.Requests
 {
     public class CreateComponentRequest
     {
+        public string Version { get; set; }
+        public string Description { get; set; }
+        public List<CreateComponentDataRequest> Components { get; set; }
+    }
+
+    public class CreateComponentDataRequest
+    {
         public int CId { get; set; }
         public string Name { get; set; }
         public string Profile { get; set; }

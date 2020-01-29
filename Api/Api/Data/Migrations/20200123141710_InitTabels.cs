@@ -56,6 +56,7 @@ namespace Api.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
                     Version = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -67,7 +68,7 @@ namespace Api.Data.Migrations
                         principalTable: "Project",
                         principalColumn: "PId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                }); ;
 
             migrationBuilder.CreateTable(
                 name: "ProjectHistory",

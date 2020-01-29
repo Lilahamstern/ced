@@ -16,6 +16,7 @@ namespace Api.Domain.Components
         [ForeignKey("Project")]
         public int PId { get; set; }
         public string Version { get; set; }
+        public string Description { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; set; }
         public Project Project { get; set; }
