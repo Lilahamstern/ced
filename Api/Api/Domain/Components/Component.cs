@@ -11,6 +11,11 @@ namespace Api.Domain.Components
     [Table("Component")]
     public class Component
     {
+        public Component()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
         [Key]
         public int Id { get; set; }
         [ForeignKey("Project")]
