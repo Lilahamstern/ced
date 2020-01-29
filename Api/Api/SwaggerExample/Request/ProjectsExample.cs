@@ -30,10 +30,10 @@ namespace Api.SwaggerExample.Request
         {
             return new UpdateProjectRequest
             {
-                OrderId = 32,
-                Client = "NameChangedOnClient",
+                OrderId = 3223810,
+                Client = "Toys R rush",
                 Name = "House without roof",
-                Manager = "Updated John Doe",
+                Manager = "John Doe",
                 Description = "A house with roof to volvo AB",
                 Sector = "Houses",
             };
