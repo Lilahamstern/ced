@@ -4,6 +4,6 @@
 
     var logoImg = document.getElementsByClassName('logo__img')[0];
     logoImg.alt = "WSP";
-    logoImg.src = "/SwaggerUI/logo-wsp.png";
+    logoImg.src = "/docs/logo-wsp.png";
     ogoImg.width = 496;
 })();

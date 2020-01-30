@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace Api.Domain.Components
 {
     [Table("Component")]
-    public class Component
+    public class ComponentInformation
     {
-        public Component()
+        public ComponentInformation()
         {
             CreatedAt = DateTime.UtcNow;
         }
@@ -24,8 +24,8 @@ namespace Api.Domain.Components
         public string Description { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; set; }
-        public Project Project { get; set; }
-        public ICollection<ComponentData> ComponentDatas { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual ICollection<ComponentData> ComponentDatas { get; set; }
     }
 
 
@@ -34,13 +34,14 @@ namespace Api.Domain.Components
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("Component")]
+        [ForeignKey("ComponentInformation")]
         public int CId { get; set; }
         public string Name { get; set; }
         public string Profile { get; set; }
         public string Material { get; set; }
         public float Co { get; set; }
+        public int Level { get; set; }
         public string Type { get; set; }
-        public Component Component { get; set; }
+        public virtual ComponentInformation Component { get; set; }
     }
 }

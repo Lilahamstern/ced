@@ -23,6 +23,27 @@ namespace Api.Controllers.V1
             _projectService = projectService;
         }
 
+        [HttpGet(ApiRoutes.Components.GetVersions)]
+        public async Task<IActionResult> GetVersions([FromRoute] int projectId)
+        {
+            var componentInformation = await _componentService.GetComponentInformationsAsync(projectId);
+            if (componentInformation == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            Message= "Component versions could not be found",
+                        }
+                    }
+                });
+            }
+
+            return Ok(componentInformation);
+        }
+
         /// <summary>
         /// Create components and add to specified project
         /// </summary>
@@ -32,7 +53,7 @@ namespace Api.Controllers.V1
         public async Task<IActionResult> Create([FromRoute] int projectId, [FromBody] CreateComponentRequest request)
         {
 
-            var components = new List<Component>();
+            var components = new List<ComponentInformation>();
 
             var project = await _projectService.GetProjectByIdAsync(projectId);
             if (project == null)
@@ -50,17 +71,34 @@ namespace Api.Controllers.V1
                 });
             }
 
-            var componentResult = await _componentService.CreateComponentVersionAsync(projectId, request.Information);
-
-            var result = await _componentService.CreateComponentsAsync(components);
-            
-            // Needs to be checked over.
-            if (!result)
+            var versionInformation = await _componentService.GetComponentInformationByVersionAsync(projectId, request.Information.Version);
+            Console.WriteLine(versionInformation);
+            if (versionInformation != null)
             {
-               return Problem("Failed to create components", "Internal server errror", (int)HttpStatusCode.InternalServerError, "Internal server error", "Testing");
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "Version",
+                            Message= "Component version already exists",
+                        }
+                    }
+                });
             }
 
-            return Ok(new SuccessResponse{ Message = "Created components" });
+            var componentResult = await _componentService.CreateComponentVersionAsync(projectId, request.Information);
+
+            //var result = await _componentService.CreateComponentsAsync(components);
+            
+            // Needs to be checked over.
+            //if (!result)
+            //{
+            //   return Problem("Failed to create components", "Internal server errror", (int)HttpStatusCode.InternalServerError, "Internal server error", "Testing");
+            //}
+
+            return Ok(new SuccessResponse{ Message = componentResult.ToString() });
         }
         
     }

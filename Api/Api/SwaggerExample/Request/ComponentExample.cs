@@ -12,29 +12,31 @@ namespace Api.SwaggerExample.Request
         public CreateComponentRequest GetExamples()
         {
             return new CreateComponentRequest {
-                Information = new ComponentInformation
+                Information = new ComponentInformationRequest
                 {
                     Description = "Version description, is not requierd",
                     Version = "Economy shit",
                 },
-                Components = new List<ComponentData>
+                Components = new List<ComponentDataRequest>
                 {
-                   new ComponentData
+                   new ComponentDataRequest
                    {
                       ComponentId = 3126312,
                       Co = 341.32,
                       Name = "Wall 1",
                       Profile = "500x500",
                       Material = "Betong",
+                      Level = 0,
                       Type = "Vägg",
                    },
-                   new ComponentData
+                   new ComponentDataRequest
                    {
                       ComponentId = 3122321,
                       Co = 521.32,
                       Name = "Golv",
                       Profile = "500x5000",
                       Material = "Betong",
+                      Level = 0,
                       Type = "Golv",
                    }
                 }

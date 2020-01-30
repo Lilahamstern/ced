@@ -9,8 +9,10 @@ namespace Api.Services
 {
     public interface IComponentService
     {
-        Task<bool> CreateComponentsAsync(List<Component> components);
+        Task<bool> CreateComponentsAsync(List<ComponentData> components);
 
-        Task<int> CreateComponentVersionAsync(int projectId, ComponentInformation information);
+        Task<List<ComponentInformation>> GetComponentInformationsAsync(int projectId);
+        Task<ComponentInformation> GetComponentInformationByVersionAsync(int projectId, string version);
+        Task<int> CreateComponentVersionAsync(int projectId, ComponentInformationRequest information);
     }
 }

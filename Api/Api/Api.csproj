@@ -37,8 +37,8 @@
 
 
   <ItemGroup>
-    <None Include="wwwroot\docs\Custom.css" />
-    <None Include="wwwroot\docs\Custom.js" />
+    <None Include="wwwroot\docs\custom.css" />
+    <None Include="wwwroot\docs\custom.js" />
   </ItemGroup>
 
 </Project>

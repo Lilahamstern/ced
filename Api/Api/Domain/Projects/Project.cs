@@ -34,7 +34,7 @@ namespace Api.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; private set; }
         public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
-        public virtual ICollection<Component> Component { get; set; }
+        public virtual ICollection<ComponentInformation> Component { get; set; }
     }
 
     [Table("ProjectHistory")]

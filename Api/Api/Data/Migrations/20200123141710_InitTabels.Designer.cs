@@ -21,7 +21,7 @@ namespace Api.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Api.Domain.Components.Component", b =>
+            modelBuilder.Entity("Api.Domain.Components.ComponentInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace Api.Data.Migrations
 
                     b.HasIndex("PId");
 
-                    b.ToTable("Component");
+                    b.ToTable("ComponentInformation");
                 });
 
             modelBuilder.Entity("Api.Domain.Components.ComponentData", b =>
@@ -367,10 +367,10 @@ namespace Api.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Api.Domain.Components.Component", b =>
+            modelBuilder.Entity("Api.Domain.Components.ComponentInformation", b =>
                 {
                     b.HasOne("Api.Domain.Project", "Project")
-                        .WithMany("Component")
+                        .WithMany("ComponentInformation")
                         .HasForeignKey("PId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -378,7 +378,7 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Domain.Components.ComponentData", b =>
                 {
-                    b.HasOne("Api.Domain.Components.Component", "Component")
+                    b.HasOne("Api.Domain.Components.ComponentInformation", "ComponentInformation")
                         .WithMany("ComponentDatas")
                         .HasForeignKey("CId")
                         .OnDelete(DeleteBehavior.Cascade)
