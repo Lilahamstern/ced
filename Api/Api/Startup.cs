@@ -46,6 +46,11 @@ namespace Api
                 app.UseHsts();
             }
 
+            app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseAuthorization();
+
             var swaggerOptions = new options.SwaggerOptions();
             Configuration.GetSection(nameof(swaggerOptions)).Bind(swaggerOptions);
 
@@ -56,16 +61,11 @@ namespace Api
 
             app.UseSwaggerUI(o =>
             {
-                o.InjectStylesheet("/SwaggerUI/Custom.css");
-                o.InjectJavascript("/SwaggerUI/Custom.js");
+                o.InjectStylesheet("/docs/Custom.css");
+                o.InjectJavascript("/docs/Custom.js");
                 o.RoutePrefix = "docs";
                 o.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description);
             });
-
-            app.UseRouting();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

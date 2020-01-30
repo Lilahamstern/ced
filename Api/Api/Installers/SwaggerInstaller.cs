@@ -17,7 +17,17 @@ namespace Api.Installers
         {
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "WSP Bec API", Version = "V1" });
+                x.SwaggerDoc("v1", new OpenApiInfo {
+                    Title = "WSP Bec API",
+                    Version = "V1",
+                    Description = "Rest api for BEC",
+                    Contact = new OpenApiContact
+                    {
+                        Email = "support@domain.com",
+                        Name = "Tech support",
+                        Url = new Uri("http://google.com")
+                    }
+                });
 
                 x.ExampleFilters();
 
