@@ -1,6 +1,7 @@
 ﻿using Api.Contracts.V1.Requests;
 using Api.Data;
 using Api.Domain.Components;
+using Api.Domain.Projects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,36 +19,36 @@ namespace Api.Services
             _datacontext = dataContext;
         }
 
-        public async Task<bool> CreateComponentsAsync(List<ComponentData> components)
+        public async Task<bool> CreateComponentsAsync(List<Component> components)
         {
-            _datacontext.ComponentDatas.AddRange(components);
+            _datacontext.Components.AddRange(components);
             var created = await _datacontext.SaveChangesAsync();
             return created > 0;
         }
-        public async Task<int> CreateComponentVersionAsync(int projectId, ComponentInformationRequest information)
+        public async Task<int> CreateProjectVersionAsync(int projectId, ComponentInformationRequest information)
         {
 
-            var component = new ComponentInformation
+            var projectVersion = new ProjectVersion
             {
                 PId = projectId,
                 Version = information.Version,
                 Description = information.Description,
             };
-            await _datacontext.Components.AddAsync(component);
+            await _datacontext.ProjectVersions.AddAsync(projectVersion);
 
             await _datacontext.SaveChangesAsync();
 
-            return component.Id;
+            return projectVersion.Id;
         }
 
-        public async Task<ComponentInformation> GetComponentInformationByVersionAsync(int projectId, string version)
+        public async Task<ProjectVersion> GetProjectVersionByVersionAsync(int projectId, string version)
         {
-            return await _datacontext.Components.SingleOrDefaultAsync(x => x.PId == projectId && x.Version == version);
+            return await _datacontext.ProjectVersions.SingleOrDefaultAsync(x => x.PId == projectId && x.Version == version);
         }
 
-        public async Task<List<ComponentInformation>> GetComponentInformationsAsync(int projectId)
+        public async Task<List<ProjectVersion>> GetProjectVersionsByProjectAsync(int projectId)
         {
-            var list = await _datacontext.Components.ToListAsync();
+            var list = await _datacontext.ProjectVersions.ToListAsync();
             return list.Where(x => x.PId == projectId).ToList();
         }
     }

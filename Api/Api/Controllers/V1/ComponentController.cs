@@ -22,11 +22,14 @@ namespace Api.Controllers.V1
             _componentService = componentService;
             _projectService = projectService;
         }
-
+        /// <summary>
+        /// Get project versions
+        /// </summary>
+        /// <param name="projectId">Is requierd</param>
         [HttpGet(ApiRoutes.Components.GetVersions)]
-        public async Task<IActionResult> GetVersions([FromRoute] int projectId)
+        public async Task<IActionResult> GetVersions([FromRoute] int projectId, [FromQuery] string version)
         {
-            var componentInformation = await _componentService.GetComponentInformationsAsync(projectId);
+            var componentInformation = await _componentService.GetProjectVersionsByProjectAsync(projectId);
             if (componentInformation == null)
             {
                 return NotFound(new ErrorResponse
@@ -53,7 +56,7 @@ namespace Api.Controllers.V1
         public async Task<IActionResult> Create([FromRoute] int projectId, [FromBody] CreateComponentRequest request)
         {
 
-            var components = new List<ComponentInformation>();
+            var components = new List<Component>();
 
             var project = await _projectService.GetProjectByIdAsync(projectId);
             if (project == null)
@@ -71,8 +74,7 @@ namespace Api.Controllers.V1
                 });
             }
 
-            var versionInformation = await _componentService.GetComponentInformationByVersionAsync(projectId, request.Information.Version);
-            Console.WriteLine(versionInformation);
+            var versionInformation = await _componentService.GetProjectVersionByVersionAsync(projectId, request.Information.Version);
             if (versionInformation != null)
             {
                 return NotFound(new ErrorResponse
@@ -88,17 +90,39 @@ namespace Api.Controllers.V1
                 });
             }
 
-            var componentResult = await _componentService.CreateComponentVersionAsync(projectId, request.Information);
-
-            //var result = await _componentService.CreateComponentsAsync(components);
+            var projectVersion = await _componentService.CreateProjectVersionAsync(projectId, request.Information);
             
-            // Needs to be checked over.
-            //if (!result)
-            //{
-            //   return Problem("Failed to create components", "Internal server errror", (int)HttpStatusCode.InternalServerError, "Internal server error", "Testing");
-            //}
+            foreach(var component in request.Components)
+            {
+                var cd = new Component
+                {
+                    PvId = projectVersion,
+                    CId = component.ComponentId,
+                    Name = component.Name,
+                    Type = component.Type,
+                    Co = component.Co,
+                    Level = component.Level,
+                    Material = component.Material,
+                    Profile = component.Profile,
+                };
 
-            return Ok(new SuccessResponse{ Message = componentResult.ToString() });
+                components.Add(cd);
+            }
+
+            var componentResult = await _componentService.CreateComponentsAsync(components);
+
+
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var location = baseUrl + "/" + ApiRoutes.Components.GetVersions.Replace("{projectId}", projectId.ToString());
+
+            var response = new SuccessResponse { Message = componentResult.ToString() };
+            return Created(location, response);
+        }
+
+        [HttpDelete(ApiRoutes.Components.Delete)]
+        public async Task<IActionResult> DeleteVersion([FromRoute] int versionId)
+        {
+            return Ok();
         }
         
     }
