@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200123141710_InitTabels")]
+    [Migration("20200131133244_InitTabels")]
     partial class InitTabels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,31 +21,7 @@ namespace Api.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Api.Domain.Components.ComponentInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PId");
-
-                    b.ToTable("ComponentInformation");
-                });
-
-            modelBuilder.Entity("Api.Domain.Components.ComponentData", b =>
+            modelBuilder.Entity("Api.Domain.Components.Component", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,8 +31,11 @@ namespace Api.Data.Migrations
                     b.Property<int>("CId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Co")
-                        .HasColumnType("real");
+                    b.Property<double>("Co")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(max)");
@@ -67,14 +46,17 @@ namespace Api.Data.Migrations
                     b.Property<string>("Profile")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PvId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CId");
+                    b.HasIndex("PvId");
 
-                    b.ToTable("ComponentData");
+                    b.ToTable("Component");
                 });
 
             modelBuilder.Entity("Api.Domain.Project", b =>
@@ -109,7 +91,7 @@ namespace Api.Data.Migrations
                     b.ToTable("Project");
                 });
 
-            modelBuilder.Entity("Api.Domain.ProjectHistory", b =>
+            modelBuilder.Entity("Api.Domain.Projects.ProjectHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,6 +116,33 @@ namespace Api.Data.Migrations
                     b.HasIndex("PId");
 
                     b.ToTable("ProjectHistory");
+                });
+
+            modelBuilder.Entity("Api.Domain.Projects.ProjectVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Version")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PId");
+
+                    b.ToTable("ProjectVersion");
                 });
 
             modelBuilder.Entity("Api.Domain.RefreshToken", b =>
@@ -367,28 +376,28 @@ namespace Api.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Api.Domain.Components.ComponentInformation", b =>
+            modelBuilder.Entity("Api.Domain.Components.Component", b =>
+                {
+                    b.HasOne("Api.Domain.Projects.ProjectVersion", "ProjectVersion")
+                        .WithMany("Components")
+                        .HasForeignKey("PvId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Api.Domain.Projects.ProjectHistory", b =>
                 {
                     b.HasOne("Api.Domain.Project", "Project")
-                        .WithMany("ComponentInformation")
+                        .WithMany("ProjectHistory")
                         .HasForeignKey("PId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.Components.ComponentData", b =>
-                {
-                    b.HasOne("Api.Domain.Components.ComponentInformation", "ComponentInformation")
-                        .WithMany("ComponentDatas")
-                        .HasForeignKey("CId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Api.Domain.ProjectHistory", b =>
+            modelBuilder.Entity("Api.Domain.Projects.ProjectVersion", b =>
                 {
                     b.HasOne("Api.Domain.Project", "Project")
-                        .WithMany("ProjectHistory")
+                        .WithMany("Component")
                         .HasForeignKey("PId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

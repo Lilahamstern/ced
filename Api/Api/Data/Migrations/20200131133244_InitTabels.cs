@@ -13,11 +13,11 @@ namespace Api.Data.Migrations
                 {
                     PId = table.Column<int>(nullable: false),
                     OId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Manager = table.Column<string>(nullable: false),
-                    Client = table.Column<string>(nullable: false),
-                    Sector = table.Column<string>(nullable: false),
+                    Manager = table.Column<string>(nullable: true),
+                    Client = table.Column<string>(nullable: true),
+                    Sector = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -49,36 +49,14 @@ namespace Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComponentInformation",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PId = table.Column<int>(nullable: false),
-                    Version = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Component", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Component_Project_PId",
-                        column: x => x.PId,
-                        principalTable: "Project",
-                        principalColumn: "PId",
-                        onDelete: ReferentialAction.Cascade);
-                }); ;
-
-            migrationBuilder.CreateTable(
                 name: "ProjectHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
-                    Property = table.Column<string>(nullable: false),
-                    Data = table.Column<string>(nullable: false),
+                    Property = table.Column<string>(nullable: true),
+                    Data = table.Column<string>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -93,42 +71,66 @@ namespace Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComponentData",
+                name: "ProjectVersion",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CId = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Profile = table.Column<string>(nullable: false),
-                    Material = table.Column<string>(nullable: false),
-                    Co = table.Column<float>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
+                    PId = table.Column<int>(nullable: false),
+                    Version = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComponentData", x => x.Id);
+                    table.PrimaryKey("PK_ProjectVersion", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ComponentData_Component_CId",
-                        column: x => x.CId,
-                        principalTable: "ComponentInformation",
+                        name: "FK_ProjectVersion_Project_PId",
+                        column: x => x.PId,
+                        principalTable: "Project",
+                        principalColumn: "PId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Component",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PvId = table.Column<int>(nullable: false),
+                    CId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Profile = table.Column<string>(nullable: true),
+                    Material = table.Column<string>(nullable: true),
+                    Co = table.Column<double>(nullable: false),
+                    Level = table.Column<int>(nullable: false),
+                    Type = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Component", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Component_ProjectVersion_PvId",
+                        column: x => x.PvId,
+                        principalTable: "ProjectVersion",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Component_PId",
-                table: "ComponentInformation",
-                column: "PId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ComponentData_CId",
-                table: "ComponentData",
-                column: "CId");
+                name: "IX_Component_PvId",
+                table: "Component",
+                column: "PvId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectHistory_PId",
                 table: "ProjectHistory",
+                column: "PId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectVersion_PId",
+                table: "ProjectVersion",
                 column: "PId");
 
             migrationBuilder.CreateIndex(
@@ -140,7 +142,7 @@ namespace Api.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ComponentData");
+                name: "Component");
 
             migrationBuilder.DropTable(
                 name: "ProjectHistory");
@@ -149,7 +151,7 @@ namespace Api.Data.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "ComponentInformation");
+                name: "ProjectVersion");
 
             migrationBuilder.DropTable(
                 name: "Project");

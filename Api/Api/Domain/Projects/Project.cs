@@ -34,20 +34,6 @@ namespace Api.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; private set; }
         public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
-        public virtual ICollection<ComponentInformation> Component { get; set; }
-    }
-
-    [Table("ProjectHistory")]
-    public class ProjectHistory
-    {
-        [Key]
-        public int Id { get; set; }
-        [ForeignKey("Project")]
-        public int PId { get; set; }
-        public string Property { get; set; }
-        public string Data { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
-        public DateTime? UpdatedAt { get; set; }
-        public Project Project { get; set; }
+        public virtual ICollection<ProjectVersion> Component { get; set; }
     }
 }
