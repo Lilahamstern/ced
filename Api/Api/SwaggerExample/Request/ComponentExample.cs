@@ -1,4 +1,4 @@
-﻿using Api.Contracts.V1.Requests;
+﻿using Api.Contracts.V1.Requests.Component;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
@@ -12,11 +12,6 @@ namespace Api.SwaggerExample.Request
         public CreateComponentRequest GetExamples()
         {
             return new CreateComponentRequest {
-                Information = new ComponentInformationRequest
-                {
-                    Description = "Version description, is not requierd",
-                    Version = "Economy shit",
-                },
                 Components = new List<ComponentDataRequest>
                 {
                    new ComponentDataRequest

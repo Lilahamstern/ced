@@ -29,6 +29,8 @@ namespace Api.Installers
                     }
                 });
 
+                x.EnableAnnotations(true);
+
                 x.ExampleFilters();
 
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
