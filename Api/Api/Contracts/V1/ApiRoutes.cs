@@ -8,25 +8,29 @@ namespace Api.Contracts.V1
     public static class ApiRoutes
     {
 
-        public const string Root = "api";
-        public const string Version = "v1";
-        public const string Base = Root + "/" + Version;
+        private const string _Root = "api";
+        private const string _Version = "v1";
+        public const string Base = _Root + "/" + _Version;
 
-        public static class Projects
+        public static class Project
         {
-            public const string GetAll = Base + "/projects";
-            public const string Get = Base + "/projects/{projectId}";
-            public const string Update = Base + "/projects/{projectId}";
-            public const string Delete = Base + "/projects/{projectId}";
-            public const string Create = Base + "/projects";
+            public const string GetAll = Base + "/project";
+            public const string Get = Base + "/project/{projectId}";
+            public const string Update = Base + "/project/{projectId}";
+            public const string Delete = Base + "/project/{projectId}";
+            public const string Create = Base + "/project";
         }
 
-        public static class Components
+        public static class Component
         {
-            public const string GetVersions = Base + "/components/versions/{projectId}";
-            public const string GetAll = Base + "/components/{projectId}";
-            public const string Create = Base + "/components/{projectId}";
-            public const string Delete = Base + "/components/{versionId}";
+            public const string Create = Base + "/component/{versionId}";
+        }
+
+        public static class Version
+        {
+            public const string Get = Base + "/version/{projectId}";
+            public const string Create = Base + "/version/{projectId}";
+            public const string Delete = Base + "/version/{versionId}";
         }
 
         public static class Auth
