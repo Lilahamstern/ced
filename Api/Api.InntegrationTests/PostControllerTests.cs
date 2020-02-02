@@ -20,7 +20,7 @@ namespace Api.IntegrationTest
             // Arrage
             await AuthenticateAsync();
             // Act
-            var response = await TestClient.GetAsync(ApiRoutes.Projects.GetAll);
+            var response = await TestClient.GetAsync(ApiRoutes.Project.GetAll);
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             (await response.Content.ReadAsAsync<List<Project>>()).Should().BeEmpty();
@@ -34,7 +34,7 @@ namespace Api.IntegrationTest
             var createdProject = await CreateProjectAsync(new CreateProjectRequest { Name = "Test Project" });
 
             // act
-            var response = await TestClient.GetAsync(ApiRoutes.Projects.Get.Replace("{projectId}", createdProject.PId.ToString()));
+            var response = await TestClient.GetAsync(ApiRoutes.Project.Get.Replace("{projectId}", createdProject.PId.ToString()));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);

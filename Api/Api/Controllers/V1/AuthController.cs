@@ -1,4 +1,4 @@
-﻿using Api.Controllers.V1.Requests;
+﻿using Api.Controllers.V1.Requests.User;
 using Api.Controllers.V1.Responses;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;

@@ -48,7 +48,7 @@ namespace Api.IntegrationTest
 
         protected async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest request)
         {
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Projects.Create, request);
+            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Project.Create, request);
             return await response.Content.ReadAsAsync<ProjectResponse>();
         }
 

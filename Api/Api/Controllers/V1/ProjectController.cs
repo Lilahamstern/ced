@@ -1,6 +1,6 @@
 ﻿using Api.Contracts.V1;
 using Api.Contracts.V1.Responses;
-using Api.Controllers.V1.Requests;
+using Api.Controllers.V1.Requests.Project;
 using Api.Controllers.V1.Responses;
 using Api.Domain;
 using Api.Extentions;
@@ -8,12 +8,14 @@ using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Api.Controllers.V1
 {
+    [SwaggerTag("Project requests")]
     [Produces("application/json")]
     public class ProjectController : Controller
     {
@@ -28,8 +30,8 @@ namespace Api.Controllers.V1
         /// <summary>
         /// Create project endpoint
         /// </summary>
-        /// <param name="request"> Wuts this</param>
-        [HttpPost(ApiRoutes.Projects.Create)]
+        /// <param name="request"> Example request body to create project</param>
+        [HttpPost(ApiRoutes.Project.Create)]
         [ProducesResponseType(typeof(ProjectResponse), 201)]
         public async Task<IActionResult> Create([FromBody] CreateProjectRequest request)
         {
@@ -63,7 +65,7 @@ namespace Api.Controllers.V1
 
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Projects.Get.Replace("{projectId}", project.PId.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Project.Get.Replace("{projectId}", project.PId.ToString());
 
             var response = new ProjectResponse { PId = project.PId };
 
@@ -72,8 +74,8 @@ namespace Api.Controllers.V1
         /// <summary>
         /// Get specifed project by ID.
         /// </summary>
-        /// <param name="projectId">Requierd if not provided 400 will be returned</param>
-        [HttpGet(ApiRoutes.Projects.Get)]
+        /// <param name="projectId">ProjectId to specifed project</param>
+        [HttpGet(ApiRoutes.Project.Get)]
         public async Task<IActionResult> Get([FromRoute] int projectId)
         {
             if (projectId == 0)
@@ -114,8 +116,8 @@ namespace Api.Controllers.V1
         /// Returns all projects if no project is found 404 will be retunred s
         /// </summary>
         /// <param name="search">Provide search query of ProjectID, Name, OrderID, Client and Manager</param>
-        /// <param name="limit">if limit is less or equals to 0 all projects will be returned</param> 
-        [HttpGet(ApiRoutes.Projects.GetAll)]
+        /// <param name="limit">Set a limit of results you want</param> 
+        [HttpGet(ApiRoutes.Project.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery] string search, [FromQuery] int limit)
         {
             List<Project> projects;
@@ -146,11 +148,11 @@ namespace Api.Controllers.V1
             return Ok(projects);
         }
         /// <summary>
-        /// Update project endpoint
+        /// Update specified project
         /// </summary>
-        /// <param name="projectId">Requierd to update project, if it dosent exists error will be returned</param>
-        /// <param name="request">Request body check example, if field are not provided it wont be updated</param>  s
-        [HttpPut(ApiRoutes.Projects.Update)]
+        /// <param name="projectId">ProjectId to project</param>
+        /// <param name="request">Example body to update project</param>
+        [HttpPut(ApiRoutes.Project.Update)]
         public async Task<IActionResult> Update([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
             var project = new Project
@@ -183,8 +185,8 @@ namespace Api.Controllers.V1
         /// <summary>
         /// Deleted specifed project.
         /// </summary>
-        /// <param name="projectId">Project id of project that should be deleted</param>
-        [HttpDelete(ApiRoutes.Projects.Delete)]
+        /// <param name="projectId">ProjectId to project</param>
+        [HttpDelete(ApiRoutes.Project.Delete)]
         [Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,*/ Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int projectId)
         {
