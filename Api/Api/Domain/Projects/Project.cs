@@ -1,15 +1,10 @@
-﻿using Api.Controllers.V1.Requests;
-using Api.Domain.Components;
-using Api.Domain.Projects;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Api.Domain.Projects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
+using Version = Api.Domain.Versions.Version;
 
 namespace Api.Domain
 {
@@ -32,8 +27,8 @@ namespace Api.Domain
         public string Client { get; set; }
         public string Sector { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
-        public DateTime? CreatedAt { get; private set; }
+        public System.DateTime? CreatedAt { get; private set; }
         public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
-        public virtual ICollection<ProjectVersion> Component { get; set; }
+        public virtual ICollection<Version> Component { get; set; }
     }
 }

@@ -1,11 +1,7 @@
-﻿using Api.Domain.Projects;
-using System;
-using System.Collections.Generic;
+﻿using Api.Domain.Versions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
+
 
 namespace Api.Domain.Components
 { 
@@ -15,7 +11,7 @@ namespace Api.Domain.Components
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("ProjectVersion")]
+        [ForeignKey("Version")]
         public int PvId { get; set; }
         public int CId { get; set; }
         public string Name { get; set; }
@@ -24,6 +20,6 @@ namespace Api.Domain.Components
         public double Co { get; set; }
         public int Level { get; set; }
         public string Type { get; set; }
-        public virtual ProjectVersion ProjectVersion  { get; set; }
+        public virtual Version Version  { get; set; }
     }
 }

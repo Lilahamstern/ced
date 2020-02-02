@@ -7,12 +7,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace Api.Domain.Projects
+namespace Api.Domain.Versions
 {
-    [Table("ProjectVersion")]
-    public class ProjectVersion
+    [Table("Version")]
+    public class Version
     {
-        public ProjectVersion()
+        public Version()
         {
             CreatedAt = DateTime.UtcNow;
         }
@@ -21,7 +21,7 @@ namespace Api.Domain.Projects
         public int Id { get; set; }
         [ForeignKey("Project")]
         public int PId { get; set; }
-        public string Version { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; set; }
