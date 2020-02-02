@@ -116,33 +116,6 @@ namespace Api.Data.Migrations
                     b.ToTable("ProjectHistory");
                 });
 
-            modelBuilder.Entity("Api.Domain.Projects.ProjectVersion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PId");
-
-                    b.ToTable("ProjectVersion");
-                });
-
             modelBuilder.Entity("Api.Domain.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
@@ -172,6 +145,33 @@ namespace Api.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Api.Domain.Versions.Version", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PId");
+
+                    b.ToTable("Version");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -376,7 +376,7 @@ namespace Api.Data.Migrations
 
             modelBuilder.Entity("Api.Domain.Components.Component", b =>
                 {
-                    b.HasOne("Api.Domain.Projects.ProjectVersion", "ProjectVersion")
+                    b.HasOne("Api.Domain.Versions.Version", "Version")
                         .WithMany("Components")
                         .HasForeignKey("PvId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -392,20 +392,20 @@ namespace Api.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Api.Domain.Projects.ProjectVersion", b =>
+            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Api.Domain.Versions.Version", b =>
                 {
                     b.HasOne("Api.Domain.Project", "Project")
                         .WithMany("Component")
                         .HasForeignKey("PId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Api.Domain.RefreshToken", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

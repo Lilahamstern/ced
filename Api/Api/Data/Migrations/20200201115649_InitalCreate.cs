@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api.Data.Migrations
 {
-    public partial class InitTabels : Migration
+    public partial class InitalCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -71,21 +71,21 @@ namespace Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectVersion",
+                name: "Version",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PId = table.Column<int>(nullable: false),
-                    Version = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectVersion", x => x.Id);
+                    table.PrimaryKey("PK_Version", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProjectVersion_Project_PId",
+                        name: "FK_Version_Project_PId",
                         column: x => x.PId,
                         principalTable: "Project",
                         principalColumn: "PId",
@@ -111,9 +111,9 @@ namespace Api.Data.Migrations
                 {
                     table.PrimaryKey("PK_Component", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Component_ProjectVersion_PvId",
+                        name: "FK_Component_Version_PvId",
                         column: x => x.PvId,
-                        principalTable: "ProjectVersion",
+                        principalTable: "Version",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -129,14 +129,14 @@ namespace Api.Data.Migrations
                 column: "PId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectVersion_PId",
-                table: "ProjectVersion",
-                column: "PId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Version_PId",
+                table: "Version",
+                column: "PId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -151,7 +151,7 @@ namespace Api.Data.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "ProjectVersion");
+                name: "Version");
 
             migrationBuilder.DropTable(
                 name: "Project");
