@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Controllers.V1.Requests
+namespace Api.Controllers.V1.Requests.User
 {
-    public class UserRegistrationRequest
+    public class UserLoginRequest
     {
-
         [EmailAddress]
         public string Email { get; set; }
         public string Password { get; set; }

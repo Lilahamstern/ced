@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Controllers.V1.Requests
+namespace Api.Controllers.V1.Requests.Project
 {
-    public class UpdateProjectRequest
+    public class CreateProjectRequest
     {
+        public int ProjectId { get; set; }
+
         public int OrderId { get; set; }
 
         public string Name { get; set; }

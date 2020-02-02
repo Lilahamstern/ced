@@ -3,18 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Contracts.V1.Requests
+namespace Api.Contracts.V1.Requests.Component
 {
     public class CreateComponentRequest
     {
-        public ComponentInformationRequest Information {get; set; }
         public List<ComponentDataRequest> Components { get; set; }
-    }
-
-    public class ComponentInformationRequest
-    {
-        public string Version { get; set; }
-        public string Description { get; set; }
     }
 
     public class ComponentDataRequest

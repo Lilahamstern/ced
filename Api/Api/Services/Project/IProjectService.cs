@@ -7,8 +7,6 @@ namespace Api.Services
 {
     public interface IProjectService
     {
-
-
         Task<bool> CreateProjectAsync(Project project);
         Task<List<Project>> GetProjectsAsync(int limit);
 
