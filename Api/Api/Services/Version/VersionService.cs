@@ -1,10 +1,9 @@
 ﻿using Api.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Version = Api.Domain.Versions.Version;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace Api.Services
 {
@@ -26,24 +25,33 @@ namespace Api.Services
 
         }
 
-        public Task<bool> DeleteVersionAsync(int versionId)
+        public async Task<bool> DeleteVersionAsync(int projectId, int versionId)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public async Task<Version> GetVersionByIdAsync(int versionId)
+        public async Task<Version> GetVersionByTitleAsync(int projectId, string title)
         {
-            return await _dataContext.Versions.Where(x => x.Id == versionId).FirstOrDefaultAsync();
+           return await (from v in _dataContext.Versions
+                         where v.Title == title && v.PId == projectId
+                         select v).FirstOrDefaultAsync();
         }
 
-        public async Task<Version> GetVersionByTitleAsync(string title)
+        public async Task<Version> GetVersionByIdAsync(int projectId, int versionId)
         {
-            return await _dataContext.Versions.SingleOrDefaultAsync(x => x.Title == title);
+            return await (from v in _dataContext.Versions
+                         where v.Id == versionId && v.PId == projectId
+                         select v).SingleOrDefaultAsync();
         }
 
-        public Task<List<Version>> GetVersionsAsync(int projectId)
+        public async Task<List<Version>> GetVersionsAsync(int projectId)
         {
-            throw new NotImplementedException();
+            var versions = await (from v in _dataContext.Versions
+                          where v.PId == projectId
+                          select v).ToListAsync();
+
+            versions.ForEach((version) => version.Project = null);
+            return versions;
         }
     }
 }
