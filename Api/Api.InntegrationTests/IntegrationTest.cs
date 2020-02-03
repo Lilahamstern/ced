@@ -1,7 +1,7 @@
 
 using Api.Contracts.V1;
-using Api.Controllers.V1.Requests;
-using Api.Controllers.V1.Responses;
+using Api.Contracts.V1.Requests;
+using Api.Contracts.V1.Responses;
 using Api.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +48,7 @@ namespace Api.IntegrationTest
 
         protected async Task<ProjectResponse> CreateProjectAsync(CreateProjectRequest request)
         {
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Project.Create, request);
+            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Project.CreateProject, request);
             return await response.Content.ReadAsAsync<ProjectResponse>();
         }
 

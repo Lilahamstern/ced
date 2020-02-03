@@ -1,10 +1,6 @@
 ﻿using Api.Contracts.V1.Responses;
-using Api.Controllers.V1.Responses;
 using Swashbuckle.AspNetCore.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Api.SwaggerExample.Response
 {

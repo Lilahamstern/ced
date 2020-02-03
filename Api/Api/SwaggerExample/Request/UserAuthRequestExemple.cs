@@ -1,4 +1,4 @@
-﻿using Api.Controllers.V1.Requests.User;
+﻿using Api.Contracts.V1.Requests.User;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using Api.Contracts.V1;
-using Api.Controllers.V1.Requests;
+using Api.Contracts.V1.Requests;
 using Api.Domain;
 using FluentAssertions;
 using System;
@@ -20,7 +20,7 @@ namespace Api.IntegrationTest
             // Arrage
             await AuthenticateAsync();
             // Act
-            var response = await TestClient.GetAsync(ApiRoutes.Project.GetAll);
+            var response = await TestClient.GetAsync(ApiRoutes.Project.GetProjects);
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             (await response.Content.ReadAsAsync<List<Project>>()).Should().BeEmpty();
@@ -34,7 +34,7 @@ namespace Api.IntegrationTest
             var createdProject = await CreateProjectAsync(new CreateProjectRequest { Name = "Test Project" });
 
             // act
-            var response = await TestClient.GetAsync(ApiRoutes.Project.Get.Replace("{projectId}", createdProject.PId.ToString()));
+            var response = await TestClient.GetAsync(ApiRoutes.Project.GetProject.Replace("{projectId}", createdProject.PId.ToString()));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
