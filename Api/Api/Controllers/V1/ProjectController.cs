@@ -1,7 +1,6 @@
 ﻿using Api.Contracts.V1;
 using Api.Contracts.V1.Responses;
-using Api.Controllers.V1.Requests.Project;
-using Api.Controllers.V1.Responses;
+using Api.Contracts.V1.Requests.Project;
 using Api.Domain;
 using Api.Extentions;
 using Api.Services;
@@ -9,11 +8,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Version = Api.Domain.Versions.Version;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Api.Controllers.V1
+namespace Api.Contracts.V1
 {
     [SwaggerTag("Project requests")]
     [Produces("application/json")]
@@ -21,28 +21,33 @@ namespace Api.Controllers.V1
     {
 
         private readonly IProjectService _projectService;
+        private readonly IVersionService _versionService;
 
-        public ProjectController(IProjectService projectService)
+        public ProjectController(IProjectService projectService, IVersionService versionService)
         {
             _projectService = projectService;
+            _versionService = versionService;
         }
+
+        #region Project endpoints
+
 
         /// <summary>
         /// Create project endpoint
         /// </summary>
         /// <param name="request"> Example request body to create project</param>
-        [HttpPost(ApiRoutes.Project.Create)]
+        [HttpPost(ApiRoutes.Project.CreateProject)]
         [ProducesResponseType(typeof(ProjectResponse), 201)]
-        public async Task<IActionResult> Create([FromBody] CreateProjectRequest request)
+        public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
         {
-            var project = new Project { 
+            var project = new Project {
                 PId = request.ProjectId,
                 OId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,
                 Client = request.Client,
                 Manager = request.Manager,
-                Sector = request.Sector,  
+                Sector = request.Sector,
             };
 
             var projectCheck = await _projectService.GetProjectByIdAsync(project.PId);
@@ -54,7 +59,7 @@ namespace Api.Controllers.V1
                     {
                         new ErrorModel
                         {
-                            FieldName = "ProjectId",
+                            FieldName = "projectId",
                             Message= "Project ID already exists",
                         }
                     }
@@ -65,7 +70,7 @@ namespace Api.Controllers.V1
 
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Project.Get.Replace("{projectId}", project.PId.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Project.GetProject.Replace("{projectId}", project.PId.ToString());
 
             var response = new ProjectResponse { ProjectId = project.PId };
 
@@ -75,8 +80,8 @@ namespace Api.Controllers.V1
         /// Get specifed project by ID.
         /// </summary>
         /// <param name="projectId">ProjectId to specifed project</param>
-        [HttpGet(ApiRoutes.Project.Get)]
-        public async Task<IActionResult> Get([FromRoute] int projectId)
+        [HttpGet(ApiRoutes.Project.GetProject)]
+        public async Task<IActionResult> GetProject([FromRoute] int projectId)
         {
             if (projectId == 0)
             {
@@ -117,12 +122,12 @@ namespace Api.Controllers.V1
         /// </summary>
         /// <param name="search">Provide search query of ProjectID, Name, OrderID, Client and Manager</param>
         /// <param name="limit">Set a limit of results you want</param> 
-        [HttpGet(ApiRoutes.Project.GetAll)]
-        public async Task<IActionResult> GetAll([FromQuery] string search, [FromQuery] int limit)
+        [HttpGet(ApiRoutes.Project.GetProjects)]
+        public async Task<IActionResult> GetProjects([FromQuery] string search, [FromQuery] int limit)
         {
             List<Project> projects;
             if (limit <= 0)
-                    limit = 10000;
+                limit = 10000;
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -132,7 +137,7 @@ namespace Api.Controllers.V1
                 projects = await _projectService.GetProjectsAsync(limit);
             }
 
-            if (projects.Count ==  0)
+            if (projects.Count == 0)
             {
                 return NotFound(new ErrorResponse
                 {
@@ -147,16 +152,17 @@ namespace Api.Controllers.V1
             }
             return Ok(projects);
         }
+
         /// <summary>
         /// Update specified project
         /// </summary>
         /// <param name="projectId">ProjectId to project</param>
         /// <param name="request">Example body to update project</param>
-        [HttpPut(ApiRoutes.Project.Update)]
-        public async Task<IActionResult> Update([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
+        [HttpPut(ApiRoutes.Project.UpdateProject)]
+        public async Task<IActionResult> UpdateProject([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
             var project = new Project
-            { 
+            {
                 OId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,
@@ -180,15 +186,15 @@ namespace Api.Controllers.V1
                     }
                 });
 
-            return Ok(new ProjectResponse { ProjectId = projectId});
+            return Ok(new ProjectResponse { ProjectId = projectId });
         }
         /// <summary>
         /// Deleted specifed project.
         /// </summary>
         /// <param name="projectId">ProjectId to project</param>
-        [HttpDelete(ApiRoutes.Project.Delete)]
+        [HttpDelete(ApiRoutes.Project.DeleteProject)]
         [Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,*/ Roles = "Admin")]
-        public async Task<IActionResult> Delete([FromRoute] int projectId)
+        public async Task<IActionResult> DeleteProject([FromRoute] int projectId)
         {
             if (!string.IsNullOrEmpty(projectId.ToString()))
             {
@@ -223,5 +229,135 @@ namespace Api.Controllers.V1
                 });
         }
 
+        #endregion
+
+        #region Project Version endpoints
+
+        /// <summary>
+        /// Create a version.
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        /// <param name="request">Request body</param>
+        [HttpPost(ApiRoutes.Project.CreateVersion)]
+        public async Task<IActionResult> CreateVersion([FromRoute] int projectId, [FromBody] CreateVersionRequest request)
+        {
+            var projectExists = await _projectService.GetProjectByIdAsync(projectId);
+            if (projectExists == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "projectId",
+                            Message = "Project not found.",
+                        }
+                    }
+                });
+            }
+
+            var versionExists = await _versionService.GetVersionByTitleAsync(projectId, request.Title);
+            if (versionExists != null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "title",
+                            Message = "Version already exists",
+                        }
+                    }
+                });
+            };
+
+            var version = new Version
+            {
+                PId = projectId,
+                Title = request.Title,
+                Description = request.Description
+            };
+
+            await _versionService.CreateVersionAsync(version);
+
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.Id.ToString()).Replace("{projectId}", projectId.ToString());
+
+            var response = new VersionResponse { VersionId = version.Id };
+
+            return Created(location, response);
+        }
+
+        /// <summary>
+        /// Get version by id
+        /// </summary>
+        /// <param name="versionId">Version id</param>
+        /// <param name="projectId">Project id</param>
+        [HttpGet(ApiRoutes.Project.GetVersion)]
+        public async Task<IActionResult> GetVersion([FromRoute] int projectId, [FromRoute] int versionId)
+        {
+            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            if (version == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "versionId",
+                            Message = "Version could not be found"
+                        }
+                    }
+                });
+            }
+
+            return Ok(version);
+        }
+
+        /// <summary>
+        /// Get versions on specifed project
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        [HttpGet(ApiRoutes.Project.GetVersions)]
+        public async Task<IActionResult> GetVersions([FromRoute] int projectId)
+        {
+            var projectExists = await _projectService.GetProjectByIdAsync(projectId);
+            if (projectExists == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "projectId",
+                            Message = "Project not found.",
+                        }
+                    }
+                });
+            }
+
+            var versions = await _versionService.GetVersionsAsync(projectId);
+            if (versions.Count <= 0)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            Message = "No versions found",
+                        }
+                    }
+                });
+            }
+
+            return Ok(versions);
+        }
+
+        #endregion
     }
 }
