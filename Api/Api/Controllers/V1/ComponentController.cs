@@ -10,7 +10,7 @@ using Api.Domain.Components;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers.V1
+namespace Api.Contracts.V1
 {
     [Produces("application/json")]
     public class ComponentController : Controller
@@ -32,35 +32,36 @@ namespace Api.Controllers.V1
         public async Task<IActionResult> Create([FromRoute] int projectId, [FromBody] CreateComponentRequest request)
         {
 
-            var components = new List<Component>(); 
-
-          
-            
-            foreach(var component in request.Components)
-            {
-                var cd = new Component
-                {
-                    PvId = projectId,
-                    CId = component.ComponentId,
-                    Name = component.Name,
-                    Type = component.Type,
-                    Co = component.Co,
-                    Level = component.Level,
-                    Material = component.Material,
-                    Profile = component.Profile,
-                };
-
-                components.Add(cd);
-            }
-
-            var componentResult = await _componentService.CreateComponentsAsync(components);
+            //var components = new List<Component>(); 
 
 
-            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Version.Get.Replace("{projectId}", projectId.ToString());
 
-            var response = new SuccessResponse { Message = componentResult.ToString() };
-            return Created(location, response);
+            //foreach(var component in request.Components)
+            //{
+            //    var cd = new Component
+            //    {
+            //        PvId = projectId,
+            //        CId = component.ComponentId,
+            //        Name = component.Name,
+            //        Type = component.Type,
+            //        Co = component.Co,
+            //        Level = component.Level,
+            //        Material = component.Material,
+            //        Profile = component.Profile,
+            //    };
+
+            //    components.Add(cd);
+            //}
+
+            //var componentResult = await _componentService.CreateComponentsAsync(components);
+
+
+            //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            //var location = baseUrl + "/" + ApiRoutes.Pro.Get.Replace("{projectId}", projectId.ToString());
+
+            //var response = new SuccessResponse { Message = componentResult.ToString() };
+            //return Created(location, response);
+            return NotFound();
         }      
     }
 }
