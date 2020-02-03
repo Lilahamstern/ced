@@ -34,17 +34,17 @@ namespace Api.Installers
             services.AddScoped<IComponentService, ComponentService>();
 
             services
-                .AddMvc(o => { 
+                .AddMvc(o => {
                     o.EnableEndpointRouting = false;
                     o.Filters.Add<ValidationFilter>();
                 })
-                .AddJsonOptions(o =>
-                {
-                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                .AddNewtonsoftJson(x => {
+                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    x.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 })
                 .AddFluentValidation(conf => conf.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddControllersWithViews();
             services.AddRazorPages();
 
             var tokenValidationParameters = new TokenValidationParameters
