@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Controllers.V1.Requests.Project
+namespace Api.Contracts.V1.Requests.Project
 {
     public class CreateProjectRequest
     {
