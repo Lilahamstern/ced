@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Contracts.V1.Requests.Version
+namespace Api.Contracts.V1.Requests.Project
 {
     public class CreateVersionRequest
     {
