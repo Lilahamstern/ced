@@ -33,7 +33,7 @@ namespace Api.Services
 
         public async Task<Version> GetVersionByIdAsync(int versionId)
         {
-            return await _dataContext.Versions.SingleOrDefaultAsync(x => x.Id == versionId);
+            return await _dataContext.Versions.Where(x => x.Id == versionId).FirstOrDefaultAsync();
         }
 
         public async Task<Version> GetVersionByTitleAsync(string title)

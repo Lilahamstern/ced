@@ -28,7 +28,7 @@ namespace Api.Contracts.V1
 
         public static class Version
         {
-            public const string Get = Base + "/version/{projectId}";
+            public const string Get = Base + "/version/{versionId}";
             public const string Create = Base + "/version/{projectId}";
             public const string Delete = Base + "/version/{versionId}";
         }

@@ -14,7 +14,7 @@ namespace Api.SwaggerExample.Response
         {
             return new ProjectResponse
             {
-                PId = 2301839,
+                ProjectId = 2301839,
             };
         }
     }

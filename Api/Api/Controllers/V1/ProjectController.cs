@@ -67,7 +67,7 @@ namespace Api.Controllers.V1
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var location = baseUrl + "/" + ApiRoutes.Project.Get.Replace("{projectId}", project.PId.ToString());
 
-            var response = new ProjectResponse { PId = project.PId };
+            var response = new ProjectResponse { ProjectId = project.PId };
 
             return Created(location, response);
         }
@@ -180,7 +180,7 @@ namespace Api.Controllers.V1
                     }
                 });
 
-            return Ok(new ProjectResponse { PId = projectId});
+            return Ok(new ProjectResponse { ProjectId = projectId});
         }
         /// <summary>
         /// Deleted specifed project.

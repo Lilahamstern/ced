@@ -30,6 +30,7 @@ namespace Api.Installers
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IVersionService, VersionService>();
             services.AddScoped<IComponentService, ComponentService>();
 
             services
