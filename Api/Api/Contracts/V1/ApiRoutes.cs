@@ -14,23 +14,22 @@ namespace Api.Contracts.V1
 
         public static class Project
         {
-            public const string GetAll = Base + "/project";
-            public const string Get = Base + "/project/{projectId}";
-            public const string Update = Base + "/project/{projectId}";
-            public const string Delete = Base + "/project/{projectId}";
-            public const string Create = Base + "/project";
+            public const string GetProjects = Base + "/project";
+            public const string GetProject = Base + "/project/{projectId}";
+            public const string UpdateProject = Base + "/project/{projectId}";
+            public const string DeleteProject = Base + "/project/{projectId}";
+            public const string CreateProject = Base + "/project";
+
+            public const string CreateVersion = Base + "/project/{projectId}/version";
+            public const string GetVersion = Base + "/project/{projectId}/version/{versionId}";
+            public const string GetVersions = Base + "/project/{projectId}/version";
+            public const string DeleteVersion = Base + "/project/{projectId}/version/{versionId}";
+
         }
 
         public static class Component
         {
             public const string Create = Base + "/component/{versionId}";
-        }
-
-        public static class Version
-        {
-            public const string Get = Base + "/version/{versionId}";
-            public const string Create = Base + "/version/{projectId}";
-            public const string Delete = Base + "/version/{versionId}";
         }
 
         public static class Auth
