@@ -27,31 +27,47 @@ namespace Api.Services
 
         public async Task<bool> DeleteVersionAsync(int projectId, int versionId)
         {
-            return true;
+            var version = await (from v in _dataContext.Versions
+                           where v.Id == versionId && v.PId == projectId
+                           select v).FirstOrDefaultAsync();
+
+            _dataContext.Versions.Remove(version);
+            var deleted = await _dataContext.SaveChangesAsync();
+            return deleted > 0;
         }
 
         public async Task<Version> GetVersionByTitleAsync(int projectId, string title)
         {
-           return await (from v in _dataContext.Versions
+           var version = await (from v in _dataContext.Versions
                          where v.Title == title && v.PId == projectId
                          select v).FirstOrDefaultAsync();
+           if (version == null)
+               return null;
+
+           version.Project = null;
+           return version;
         }
 
         public async Task<Version> GetVersionByIdAsync(int projectId, int versionId)
         {
-            return await (from v in _dataContext.Versions
+           var version = await (from v in _dataContext.Versions
                          where v.Id == versionId && v.PId == projectId
-                         select v).SingleOrDefaultAsync();
+                         select v).FirstOrDefaultAsync();
+           if (version == null)
+               return null;
+
+           version.Project = null;
+           return version;
         }
 
         public async Task<List<Version>> GetVersionsAsync(int projectId)
         {
-            var versions = await (from v in _dataContext.Versions
+           var versions = await (from v in _dataContext.Versions
                           where v.PId == projectId
                           select v).ToListAsync();
 
-            versions.ForEach((version) => version.Project = null);
-            return versions;
+           versions.ForEach((version) => version.Project = null);
+           return versions;
         }
     }
 }

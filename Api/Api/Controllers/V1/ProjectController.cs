@@ -1,15 +1,11 @@
-﻿using Api.Contracts.V1;
-using Api.Contracts.V1.Responses;
+﻿using Api.Contracts.V1.Responses;
 using Api.Contracts.V1.Requests.Project;
 using Api.Domain;
-using Api.Extentions;
 using Api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Version = Api.Domain.Versions.Version;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -251,7 +247,7 @@ namespace Api.Contracts.V1
                         new ErrorModel
                         {
                             FieldName = "projectId",
-                            Message = "Project not found.",
+                            Message = "Project not found",
                         }
                     }
                 });
@@ -267,7 +263,7 @@ namespace Api.Contracts.V1
                         new ErrorModel
                         {
                             FieldName = "title",
-                            Message = "Version already exists",
+                            Message = "Version already exists for this project",
                         }
                     }
                 });
@@ -298,6 +294,22 @@ namespace Api.Contracts.V1
         [HttpGet(ApiRoutes.Project.GetVersion)]
         public async Task<IActionResult> GetVersion([FromRoute] int projectId, [FromRoute] int versionId)
         {
+            var projectExists = await _projectService.GetProjectByIdAsync(projectId);
+            if (projectExists == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "projectId",
+                            Message = "Project not found",
+                        }
+                    }
+                });
+            }
+
             var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
             if (version == null)
             {
@@ -356,6 +368,44 @@ namespace Api.Contracts.V1
             }
 
             return Ok(versions);
+        }
+
+        [HttpDelete(ApiRoutes.Project.DeleteVersion)]
+        public async Task<IActionResult> DeleteVersion([FromRoute] int versionId, int projectId)
+        {
+            var projectExists = await _projectService.GetProjectByIdAsync(projectId);
+            if (projectExists == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "projectId",
+                            Message = "Project not found",
+                        }
+                    }
+                });
+            }
+
+            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            if (version == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "versionId",
+                            Message = "Version could not be found"
+                        }
+                    }
+                });
+            }
+            var deleted = await _versionService.DeleteVersionAsync(projectId, versionId);
+            return NoContent();
         }
 
         #endregion
