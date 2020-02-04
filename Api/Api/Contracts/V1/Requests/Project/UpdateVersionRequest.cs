@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Api.Contracts.V1.Requests.Project
 {
-    public class CreateVersionRequest
+    public class UpdateVersionRequest
     {
         [Required]
         public string Title { get; set; }
