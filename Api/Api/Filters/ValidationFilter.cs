@@ -28,7 +28,7 @@ namespace Api.Filters
                     {
                         var errorModel = new ErrorModel
                         {
-                            FieldName = error.Key,
+                            FieldName = error.Key.ToLower(),
                             Message = sub
                         };
 
