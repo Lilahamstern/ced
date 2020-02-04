@@ -18,4 +18,16 @@ namespace Api.SwaggerExample.Request
             };
         }
     }
+
+    public class UpdateVersionRequestExample : IExamplesProvider<UpdateVersionRequest>
+    {
+        public UpdateVersionRequest GetExamples()
+        {
+            return new UpdateVersionRequest
+            {
+                Title = "Updated title",
+                Description = "This is a new description"
+            };
+        }
+    }
 }

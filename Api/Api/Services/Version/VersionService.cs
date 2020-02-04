@@ -60,6 +60,19 @@ namespace Api.Services
            return version;
         }
 
+        public async Task<bool> UpdateVersionAsync(int versionId, Version versionToUpdate)
+        {
+            var result = await _dataContext.Versions.SingleOrDefaultAsync(x => x.Id == versionId);
+            if (result != null)
+            {
+                result.Title = versionToUpdate.Title;
+                result.Description = versionToUpdate.Description;
+                var updated = await _dataContext.SaveChangesAsync();
+                return updated > 0;
+            }
+            return false;
+        }
+
         public async Task<List<Version>> GetVersionsAsync(int projectId)
         {
            var versions = await (from v in _dataContext.Versions

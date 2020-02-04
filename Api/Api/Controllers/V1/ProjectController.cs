@@ -370,6 +370,55 @@ namespace Api.Contracts.V1
             return Ok(versions);
         }
 
+        /// <summary>
+        /// Update specifed version
+        /// </summary>
+        /// <param name="projectId">Project Id</param>
+        /// <param name="versionId">Version Id</param>
+        /// <param name="request">Request body</param>
+        [HttpPut(ApiRoutes.Project.UpdateVersion)]
+        public async Task<IActionResult> UpdateVersion([FromRoute] int projectId, [FromRoute] int versionId, [FromBody] UpdateVersionRequest request)
+        {
+            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            if (version == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "versionId",
+                            Message= "Version not found",
+                        }
+                    }
+                });
+            }
+
+            var project = await _projectService.GetProjectByIdAsync(projectId);
+            if (project == null)
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel
+                        {
+                            FieldName = "projectId",
+                            Message= "Project not found",
+                        }
+                    }
+                });
+            }
+
+            version.Title = request.Title;
+            version.Description = request.Description;
+
+            await _versionService.UpdateVersionAsync(versionId, version);
+
+            return Ok(new VersionResponse { VersionId = versionId });
+        }
+
         [HttpDelete(ApiRoutes.Project.DeleteVersion)]
         public async Task<IActionResult> DeleteVersion([FromRoute] int versionId, int projectId)
         {

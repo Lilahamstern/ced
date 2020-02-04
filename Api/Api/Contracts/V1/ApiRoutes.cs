@@ -23,6 +23,7 @@ namespace Api.Contracts.V1
             public const string CreateVersion = Base + "/project/{projectId}/version";
             public const string GetVersion = Base + "/project/{projectId}/version/{versionId}";
             public const string GetVersions = Base + "/project/{projectId}/version";
+            public const string UpdateVersion = Base + "/project/{projectId}/version/{versionId}";
             public const string DeleteVersion = Base + "/project/{projectId}/version/{versionId}";
 
         }
