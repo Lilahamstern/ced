@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace Api.Domain.Projects
         [Key]
         public int Id { get; set; }
         [ForeignKey("Project")]
+        [JsonProperty(PropertyName = "projectId")]
         public int PId { get; set; }
         public string Property { get; set; }
         public string Data { get; set; }

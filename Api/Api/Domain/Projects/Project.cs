@@ -1,4 +1,5 @@
 ﻿using Api.Domain.Projects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,9 @@ namespace Api.Domain
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int PId { get; set; }    
+        [JsonProperty(PropertyName = "projectId")]
+        public int PId { get; set; }
+        [JsonProperty(PropertyName = "orderId")]
         public int OId {get; set;}
         public string Name { get; set; }
         public string Description { get; set; }
@@ -29,6 +32,6 @@ namespace Api.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public System.DateTime? CreatedAt { get; private set; }
         public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
-        public virtual ICollection<Version> Component { get; set; }
+        public virtual ICollection<Version> Versions { get; set; }
     }
 }

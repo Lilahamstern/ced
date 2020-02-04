@@ -1,4 +1,5 @@
 ﻿using Api.Domain.Components;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,11 +21,13 @@ namespace Api.Domain.Versions
         [Key]
         public int Id { get; set; }
         [ForeignKey("Project")]
+        [JsonProperty(PropertyName = "projectId")]
         public int PId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity), DataMember]
         public DateTime? CreatedAt { get; set; }
+        [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public virtual Project Project { get; set; }
         public virtual ICollection<Component> Components { get; set; }
     }
