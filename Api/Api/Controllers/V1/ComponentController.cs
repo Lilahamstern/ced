@@ -16,20 +16,19 @@ namespace Api.Contracts.V1
     public class ComponentController : Controller
     {
         private readonly IComponentService _componentService;
-        private readonly IProjectService _projectService;
-        public ComponentController(IComponentService componentService, IProjectService projectService)
+        private readonly IVersionService _versionService;
+        public ComponentController(IComponentService componentService, IVersionService versionService)
         {
             _componentService = componentService;
-            _projectService = projectService;
+            _versionService = versionService;
         }
 
         /// <summary>
         /// Create components and add to specified project
         /// </summary>
-        /// <param name="projectId">ProjectID to what project components are gonna be added too</param>
         /// <param name="request">A list of components see model below</param>
         [HttpPost(ApiRoutes.Component.Create)]
-        public async Task<IActionResult> Create([FromRoute] int projectId, [FromBody] CreateComponentRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateComponentRequest request)
         {
 
             //var components = new List<Component>(); 

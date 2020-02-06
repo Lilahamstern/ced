@@ -12,9 +12,10 @@ namespace Api.SwaggerExample.Request
         public CreateComponentRequest GetExamples()
         {
             return new CreateComponentRequest {
-                Components = new List<ComponentDataRequest>
+                VersionId = 1,
+                Components = new List<ComponentRequest>
                 {
-                   new ComponentDataRequest
+                   new ComponentRequest
                    {
                       ComponentId = 3126312,
                       Co = 341.32,
@@ -24,7 +25,7 @@ namespace Api.SwaggerExample.Request
                       Level = 0,
                       Type = "Vägg",
                    },
-                   new ComponentDataRequest
+                   new ComponentRequest
                    {
                       ComponentId = 3122321,
                       Co = 521.32,

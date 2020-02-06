@@ -189,23 +189,10 @@ namespace Api.Contracts.V1
         /// </summary>
         /// <param name="projectId">ProjectId to project</param>
         [HttpDelete(ApiRoutes.Project.DeleteProject)]
-        [Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,*/ Roles = "Admin")]
+        //[Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,*/ Roles = "Admin")]
         public async Task<IActionResult> DeleteProject([FromRoute] int projectId)
         {
-            if (!string.IsNullOrEmpty(projectId.ToString()))
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project id is requierd",
-                        }
-                    }
-                });
-            }
+            
 
             var deleted = await _projectService.DeleteProjectAsync(projectId);
 

@@ -7,10 +7,11 @@ namespace Api.Contracts.V1.Requests.Component
 {
     public class CreateComponentRequest
     {
-        public List<ComponentDataRequest> Components { get; set; }
+        public int VersionId { get; set; }
+        public List<ComponentRequest> Components { get; set; }
     }
 
-    public class ComponentDataRequest
+    public class ComponentRequest
     {
         public int ComponentId { get; set; }
         public string Name { get; set; }

@@ -30,7 +30,7 @@ namespace Api.Contracts.V1
 
         public static class Component
         {
-            public const string Create = Base + "/component/{versionId}";
+            public const string Create = Base + "/component";
         }
 
         public static class Auth
