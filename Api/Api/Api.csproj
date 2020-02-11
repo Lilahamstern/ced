@@ -50,4 +50,9 @@
     <None Include="wwwroot\docs\custom.js" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Contracts\V1\Responses\Component\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,7 @@
 ﻿using Api.Contracts.V1.Responses;
+using Api.Contracts.V1.Responses.Project;
 using Api.Domain;
+using Api.Domain.Projects;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

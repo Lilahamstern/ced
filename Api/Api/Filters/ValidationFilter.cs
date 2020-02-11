@@ -1,4 +1,5 @@
 ﻿using Api.Contracts.V1.Responses;
+using Api.Contracts.V1.Responses.General;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -19,24 +20,21 @@ namespace Api.Filters
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors
                     .Select(x => x.ErrorMessage))
                     .ToArray();
-
-                var errResponse = new ErrorResponse();
+                List<ErrorModel> errorModel = new List<ErrorModel>();
 
                 foreach (var error in errors)
                 {
                     foreach(var sub in error.Value)
                     {
-                        var errorModel = new ErrorModel
-                        {
-                            FieldName = error.Key.ToLower(),
-                            Message = sub
-                        };
-
-                        errResponse.Errors.Add(errorModel);
+                        errorModel.Add( new ErrorModel
+                        (
+                            error.Key.ToLower(),
+                            sub
+                        ));
                     }
                 }
 
-                context.Result = new BadRequestObjectResult(errResponse);
+                context.Result = new BadRequestObjectResult(new ErrorResponse(errorModel));
                 return;
             }
 

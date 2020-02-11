@@ -8,6 +8,11 @@ using Swashbuckle.AspNetCore.Annotations;
 using Version = Api.Domain.Versions.Version;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Api.Contracts.V1.Responses.General;
+using Api.Contracts.V1.Responses.Project;
+using Api.Contracts.V1.Responses.Version;
+using Api.Domain.Projects;
+using System;
 
 namespace Api.Contracts.V1
 {
@@ -49,17 +54,9 @@ namespace Api.Contracts.V1
             var projectCheck = await _projectService.GetProjectByIdAsync(project.PId);
             if (projectCheck != null)
             {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message= "Project ID already exists",
-                        }
-                    }
-                });
+                return BadRequest(new ErrorResponse(
+                    new ErrorModel("projectId", "Project ID already exists")
+                    ));
             }
 
             await _projectService.CreateProjectAsync(project);
@@ -68,7 +65,7 @@ namespace Api.Contracts.V1
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var location = baseUrl + "/" + ApiRoutes.Project.GetProject.Replace("{projectId}", project.PId.ToString());
 
-            var response = new ProjectResponse { ProjectId = project.PId };
+            var response = new ProjectResponse(project.PId);
 
             return Created(location, response);
         }
@@ -79,38 +76,24 @@ namespace Api.Contracts.V1
         [HttpGet(ApiRoutes.Project.GetProject)]
         public async Task<IActionResult> GetProject([FromRoute] int projectId)
         {
+            await _versionService.GetNewestVersionCo(projectId);
             if (projectId == 0)
             {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project id is requierd",
-                        }
-                    }
-                });
+                return BadRequest(new ErrorResponse(
+                    new ErrorModel("projectId", "Project ID is requierd")
+                    ));
             }
 
             var project = await _projectService.GetProjectByIdAsync(projectId);
 
             if (project == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            Message= "Project could not be found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
-            return Ok(project);
+            return Ok(new ProjectResponse(project));
         }
 
         /// <summary>
@@ -122,6 +105,7 @@ namespace Api.Contracts.V1
         public async Task<IActionResult> GetProjects([FromQuery] string search, [FromQuery] int limit)
         {
             List<Project> projects;
+            List<ProjectResponse> response = new List<ProjectResponse>();
             if (limit <= 0)
                 limit = 10000;
 
@@ -135,18 +119,16 @@ namespace Api.Contracts.V1
 
             if (projects.Count == 0)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            Message= "No projects found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel(null, "Projects not found")
+                    ));
             }
-            return Ok(projects);
+
+            projects.ForEach(project =>
+            {
+                response.Add(new ProjectResponse(project));
+            });
+            return Ok(response);
         }
 
         /// <summary>
@@ -170,19 +152,11 @@ namespace Api.Contracts.V1
             var updated = await _projectService.UpdateProjectAsync(projectId, project);
 
             if (!updated)
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "ProjectId",
-                            Message= "Project could not be found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
 
-            return Ok(new ProjectResponse { ProjectId = projectId });
+            return Ok(new ProjectResponse(project.PId));
         }
         /// <summary>
         /// Deleted specifed project.
@@ -200,16 +174,9 @@ namespace Api.Contracts.V1
                 return NoContent();
 
             return NotFound(
-                new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            Message = "Project not found",
-                        }
-                    }
-                });
+                new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
         }
 
         #endregion
@@ -227,33 +194,17 @@ namespace Api.Contracts.V1
             var projectExists = await _projectService.GetProjectByIdAsync(projectId);
             if (projectExists == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project not found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
             var versionExists = await _versionService.GetVersionByTitleAsync(projectId, request.Title);
             if (versionExists != null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "title",
-                            Message = "Version already exists for this project",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("title", "Version title already exists for this project")
+                    ));
             };
 
             var version = new Version
@@ -268,7 +219,7 @@ namespace Api.Contracts.V1
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.Id.ToString()).Replace("{projectId}", projectId.ToString());
 
-            var response = new VersionResponse { VersionId = version.Id };
+            var response = new VersionResponse(version.Id);
 
             return Created(location, response);
         }
@@ -284,36 +235,20 @@ namespace Api.Contracts.V1
             var projectExists = await _projectService.GetProjectByIdAsync(projectId);
             if (projectExists == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project not found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
-            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            var version = await _versionService.GetVersionByIdAsync(versionId, projectId);
             if (version == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "versionId",
-                            Message = "Version could not be found"
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("versionId", "Version not found")
+                    ));
             }
 
-            return Ok(version);
+            return Ok(new VersionResponse(version));
         }
 
         /// <summary>
@@ -323,38 +258,27 @@ namespace Api.Contracts.V1
         [HttpGet(ApiRoutes.Project.GetVersions)]
         public async Task<IActionResult> GetVersions([FromRoute] int projectId)
         {
+            List<VersionResponse> response = new List<VersionResponse>();
             var projectExists = await _projectService.GetProjectByIdAsync(projectId);
             if (projectExists == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project not found.",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
             var versions = await _versionService.GetVersionsAsync(projectId);
             if (versions.Count <= 0)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            Message = "No versions found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel(null, "Versions not found")
+                    ));
             }
 
-            return Ok(versions);
+            versions.ForEach(version => {
+                response.Add(new VersionResponse(version));
+            });
+            return Ok(response);
         }
 
         /// <summary>
@@ -366,36 +290,20 @@ namespace Api.Contracts.V1
         [HttpPut(ApiRoutes.Project.UpdateVersion)]
         public async Task<IActionResult> UpdateVersion([FromRoute] int projectId, [FromRoute] int versionId, [FromBody] UpdateVersionRequest request)
         {
-            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            var version = await _versionService.GetVersionByIdAsync(versionId, projectId);
             if (version == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "versionId",
-                            Message= "Version not found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("versionID", "Version not found")
+                    ));
             }
 
             var project = await _projectService.GetProjectByIdAsync(projectId);
             if (project == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message= "Project not found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
             version.Title = request.Title;
@@ -403,7 +311,7 @@ namespace Api.Contracts.V1
 
             await _versionService.UpdateVersionAsync(versionId, version);
 
-            return Ok(new VersionResponse { VersionId = versionId });
+            return Ok(new VersionResponse(version.Id));
         }
 
         [HttpDelete(ApiRoutes.Project.DeleteVersion)]
@@ -412,35 +320,19 @@ namespace Api.Contracts.V1
             var projectExists = await _projectService.GetProjectByIdAsync(projectId);
             if (projectExists == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "projectId",
-                            Message = "Project not found",
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("projectId", "Project not found")
+                    ));
             }
 
-            var version = await _versionService.GetVersionByIdAsync(projectId, versionId);
+            var version = await _versionService.GetVersionByIdAsync(versionId, projectId);
             if (version == null)
             {
-                return NotFound(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel
-                        {
-                            FieldName = "versionId",
-                            Message = "Version could not be found"
-                        }
-                    }
-                });
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("versionId", "Version not found")
+                    ));
             }
-            var deleted = await _versionService.DeleteVersionAsync(projectId, versionId);
+            await _versionService.DeleteVersionAsync(projectId, versionId);
             return NoContent();
         }
 

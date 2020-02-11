@@ -1,5 +1,7 @@
-﻿using Api.Data;
+﻿using Api.Contracts.V1.Responses.Project;
+using Api.Data;
 using Api.Domain;
+using Api.Domain.Projects;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +25,13 @@ namespace Api.Services
             var created = await _dataContext.SaveChangesAsync();
             return created > 0;
         }
-        
+
         public async Task<Project> GetProjectByIdAsync(int projectId)
         {
-            return await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
+            var result = await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
+
+            return result;
+
         }
 
         public async Task<List<Project>> GetProjectsAsync(int limit)
@@ -36,14 +41,13 @@ namespace Api.Services
 
         public async Task<List<Project>> GetProjectsAsync(int limit, string search)
         {
-            var projects = await _dataContext.Projects.ToListAsync();
-            var filterd = projects.Take(limit).Where(p => 
-            p.OId.ToString().Contains(search) || 
-            p.PId.ToString().Contains(search) || 
+            var projects = await _dataContext.Projects.Take(limit).Where(p =>
+            p.OId.ToString().Contains(search) ||
+            p.PId.ToString().Contains(search) ||
             p.Client.Contains(search) ||
             p.Name.Contains(search) ||
-            p.Manager.Contains(search)).ToList();
-            return filterd;
+            p.Manager.Contains(search)).ToListAsync();
+            return projects;
         }
 
         public async Task<bool> UpdateProjectAsync(int projectId, Project projectToUpdate)

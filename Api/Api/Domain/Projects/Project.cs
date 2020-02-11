@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using Version = Api.Domain.Versions.Version;
 
-namespace Api.Domain
+namespace Api.Domain.Projects
 {
     [Table("Project")]
     public class Project

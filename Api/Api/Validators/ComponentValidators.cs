@@ -14,6 +14,9 @@ namespace Api.Validators
             RuleFor(x => x.VersionId)
                 .NotEmpty()
                 .WithMessage(ValidatorMessages.PropertyRequierd);
+            RuleFor(x => x.Components)
+                .Must(list => list.Count >= 4)
+                .WithMessage(ValidatorMessages.MinimumArrayListLength);
         }
     }
 

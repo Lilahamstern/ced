@@ -27,10 +27,30 @@ namespace Api.SwaggerExample.Request
                    },
                    new ComponentRequest
                    {
-                      ComponentId = 3122321,
-                      Co = 521.32,
-                      Name = "Golv",
+                      ComponentId = 3122325,
+                      Co = 430.32,
+                      Name = "Floor",
                       Profile = "500x5000",
+                      Material = "Betong",
+                      Level = 0,
+                      Type = "Golv",
+                   },
+                   new ComponentRequest
+                   {
+                      ComponentId = 3122327,
+                      Co = 521.32,
+                      Name = "Wall 2",
+                      Profile = "300x500",
+                      Material = "Betong",
+                      Level = 0,
+                      Type = "Golv",
+                   },
+                   new ComponentRequest
+                   {
+                      ComponentId = 3122321,
+                      Co = 300.32,
+                      Name = "Wall 3",
+                      Profile = "500x400",
                       Material = "Betong",
                       Level = 0,
                       Type = "Golv",

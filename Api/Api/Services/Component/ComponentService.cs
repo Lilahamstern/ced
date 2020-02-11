@@ -20,22 +20,11 @@ namespace Api.Services
             _datacontext = dataContext;
         }
 
-        public async Task<bool> CreateComponentsAsync(List<Component> components)
+        public async Task<bool> AddComponentsAsync(List<Component> components)
         {
             _datacontext.Components.AddRange(components);
             var created = await _datacontext.SaveChangesAsync();
             return created > 0;
-        }
-
-        public async Task<Version> GetProjectVersionByVersionAsync(int projectId, string version)
-        {
-            return await _datacontext.Versions.SingleOrDefaultAsync(x => x.PId == projectId && x.Title == version);
-        }
-
-        public async Task<List<Version>> GetProjectVersionsByProjectAsync(int projectId)
-        {
-            var list = await _datacontext.Versions.ToListAsync();
-            return list.Where(x => x.PId == projectId).ToList();
         }
     }
 }

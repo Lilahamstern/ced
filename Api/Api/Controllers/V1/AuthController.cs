@@ -1,5 +1,6 @@
 ﻿using Api.Contracts.V1.Requests.User;
 using Api.Contracts.V1.Responses;
+using Api.Contracts.V1.Responses.User;
 using Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

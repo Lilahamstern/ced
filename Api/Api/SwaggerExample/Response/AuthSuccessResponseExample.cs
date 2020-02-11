@@ -1,4 +1,5 @@
 ﻿using Api.Contracts.V1.Responses;
+using Api.Contracts.V1.Responses.User;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;

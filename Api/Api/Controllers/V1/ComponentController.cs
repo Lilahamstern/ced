@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Api.Contracts.V1;
 using Api.Contracts.V1.Requests.Component;
 using Api.Contracts.V1.Responses;
+using Api.Contracts.V1.Responses.General;
 using Api.Domain.Components;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -28,39 +29,42 @@ namespace Api.Contracts.V1
         /// </summary>
         /// <param name="request">A list of components see model below</param>
         [HttpPost(ApiRoutes.Component.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateComponentRequest request)
+        public async Task<IActionResult> AddComponents([FromBody] CreateComponentRequest request)
         {
 
-            //var components = new List<Component>(); 
+            var version = await _versionService.GetVersionByIdAsync(request.VersionId);
+            if (version == null)
+            {
+                return NotFound(new ErrorResponse(
+                    new ErrorModel("versionId", "Version could not be found")
+                    )
+                );
+            }
 
+            var components = new List<Component>(); 
 
+            foreach(var c in request.Components)
+            {
+                components.Add(new Component
+                {
+                    PvId = request.VersionId,
+                    CId = c.ComponentId,
+                    Name = c.Name,
+                    Type = c.Type,
+                    Co = c.Co,
+                    Level = c.Level,
+                    Material = c.Material,
+                    Profile = c.Profile,
+                });
+            }
 
-            //foreach(var component in request.Components)
-            //{
-            //    var cd = new Component
-            //    {
-            //        PvId = projectId,
-            //        CId = component.ComponentId,
-            //        Name = component.Name,
-            //        Type = component.Type,
-            //        Co = component.Co,
-            //        Level = component.Level,
-            //        Material = component.Material,
-            //        Profile = component.Profile,
-            //    };
+            await _componentService.AddComponentsAsync(components);
 
-            //    components.Add(cd);
-            //}
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            var location = baseUrl + "/" + ApiRoutes.Component.Get.Replace("{versionId}", request.VersionId.ToString());
 
-            //var componentResult = await _componentService.CreateComponentsAsync(components);
-
-
-            //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            //var location = baseUrl + "/" + ApiRoutes.Pro.Get.Replace("{projectId}", projectId.ToString());
-
-            //var response = new SuccessResponse { Message = componentResult.ToString() };
-            //return Created(location, response);
-            return NotFound();
+            var response = new SuccessResponse { Message = $"Added {components.Count} to version: {request.VersionId}" };
+            return Created(location, response);
         }      
     }
 }

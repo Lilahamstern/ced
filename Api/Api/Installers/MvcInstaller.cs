@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Api.Filters;
+using Api.Data;
 
 namespace Api.Installers
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Contracts.V1.Responses
+namespace Api.Contracts.V1.Responses.User
 {
     public class AuthSuccessResponse
     {
