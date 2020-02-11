@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using ProjectModel = Api.Domain.Projects.Project;
 
 namespace Api.Contracts.V1.Responses.Project
@@ -13,6 +14,7 @@ namespace Api.Contracts.V1.Responses.Project
             Description = project.Description;
             Client = project.Client;
             Sector = project.Sector;
+            CreatedAt = project.CreatedAt;
         }
 
         public ProjectResponse(int projectId)
@@ -28,6 +30,7 @@ namespace Api.Contracts.V1.Responses.Project
         public string Client { get; set; }
         public string Sector { get; set; }
         public float? Co { get; set; } = null;
+        public DateTime? CreatedAt { get; set; }
 
     }
 }
