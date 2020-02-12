@@ -1,0 +1,66 @@
+﻿@using Services
+@using Web.Data
+@inject IProjectService ProjectService
+
+    <table class="table table-dark table-borderless">
+        <thead>
+            <tr>
+                <th>Project Id</th>
+                <th>Order Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Manager</th>
+                <th>Sector</th>
+                <th>Co</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (projects.Count <= 0)
+            {
+            <tr>
+                <td></td>
+                <td></td>
+                <td colspan="5"><div class="alert alert-danger text-center text-dark font-weight-bold">No projects found</div></td>
+            </tr>
+            }
+            else
+            {
+                @foreach (var project in projects)
+                {
+                    <tr>
+                        <td>@project.ProjectId</td>
+                        <td>@project.OrderId</td>
+                        <td>@project.Name</td>
+                        <td>@project.Description</td>
+                        <td>@project.Client</td>
+                        <td>@project.Manager</td>
+                        <td>@project.Sector</td>
+                        <td>@GetCoStatus(project.Co) </td>
+                        <td>@project.CreatedAt.ToLocalTime()</td>
+                    </tr>
+                }
+            }
+        </tbody>
+     </table>
+
+        @code {
+            private int currentCount = 0;
+            private List<Project> projects = new List<Project>();
+
+            protected override async Task OnInitializedAsync()
+            {
+                projects = await ProjectService.FetchProjectsAsync();
+            }
+
+            private string GetCoStatus(float co)
+            {
+                if (co == 0)
+                {
+                    return "Not defined";
+                }
+
+                return co.ToString();
+            }
+        }

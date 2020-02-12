@@ -14,6 +14,7 @@ namespace Api.Contracts.V1.Responses.Project
             Description = project.Description;
             Client = project.Client;
             Sector = project.Sector;
+            Manager = project.Manager;
             CreatedAt = project.CreatedAt;
         }
 
