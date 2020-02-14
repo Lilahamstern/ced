@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Web.Data;
+using Web.Models;
 
 namespace Web.Services
 {
     public interface IProjectService
     {
-        public Task<List<Project>> FetchProjectsAsync();
+        Task<List<Project>> GetProjectsAsync();
     }
 }

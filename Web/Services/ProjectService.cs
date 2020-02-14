@@ -1,24 +1,23 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using Newtonsoft;
 using System.Threading.Tasks;
-using Web.Data;
+using Web.Helpers;
+using Web.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace Web.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly HttpClient _httpClient;
-        public ProjectService(HttpClient httpClient)
+        public async Task<List<Project>> GetProjectsAsync()
         {
-            _httpClient = httpClient;
-        }
-        public async Task<List<Project>> FetchProjectsAsync()
-        {
-            var projects = await _httpClient.GetJsonAsync<List<Project>>("");
-            return projects;
+            var client = HttpClientHelper.GetHttpClient();
+            var response = await client.GetJsonAsync<List<Project>>("");
+
+            return response;
         }
     }
 }
