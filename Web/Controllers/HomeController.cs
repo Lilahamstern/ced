@@ -27,20 +27,22 @@ namespace Web.Controllers
             if (!String.IsNullOrEmpty(search))
             {
                 projects = await _projectService.GetProjectsSearchAsync(search);
+            } else
+            {
+                projects = await _projectService.GetProjectsAsync();
                 if (projects.Count <= 0)
                 {
-                    return View();
+                    return NotFound();
                 }
-                return View(projects);
             }
-            
-            projects = await _projectService.GetProjectsAsync();
-            if (projects.Count <= 0)
-            {
-                return NotFound();
-            }
+           
 
-            return View(projects);
+            var homeVM = new HomeViewModel
+            {
+                Projects = projects
+            };
+
+            return View(homeVM);
         }
 
         public IActionResult Privacy()
