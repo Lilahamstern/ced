@@ -1,8 +1,59 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Web.Models.Project>
+@{
+    ViewData["Title"] = "Project List";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(project => project.ProjectId)
+            <th>
+                @Html.DisplayNameFor(project => project.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(project => project.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(project => project.Manager)
+            </th>
+            <th>
+                @Html.DisplayNameFor(project => project.Client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(project => project.Sector)
+            </th>
+            <th>
+                Options
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Manager)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sector)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

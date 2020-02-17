@@ -6,21 +6,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Web.Models;
+using Web.Services;
 
 namespace Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IProjectService _projectService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProjectService projectService, ILogger<HomeController> logger)
         {
+            _projectService = projectService;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string search)
         {
-            return View();
+            List<Project> projects;
+            if (!String.IsNullOrEmpty(search))
+            {
+                projects = await _projectService.GetProjectsSearchAsync(search);
+                if (projects.Count <= 0)
+                {
+                    return View();
+                }
+                return View(projects);
+            }
+            
+            projects = await _projectService.GetProjectsAsync();
+            if (projects.Count <= 0)
+            {
+                return NotFound();
+            }
+
+            return View(projects);
         }
 
         public IActionResult Privacy()
