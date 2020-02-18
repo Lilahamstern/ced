@@ -4,13 +4,15 @@
 }
 
     <form asp-controller="Home" asp-action="Index" method="get">
-        <p>
-            <input type="text" asp-for="Search" />
-            <button class="btn btn-success" type="submit" >Search</button>
-        </p>
+            <div class="input-group col-8 mb-4 mx-auto">
+                <input type="text" asp-for="Search" class="form-control" aria-label="Search" placeholder="Search">
+                <div class="mx-3">
+                    <button type="submit" class="btn btn-success">Search</button>
+                </div>
+            </div>
     </form>
 
-<table class="table table-dark">
+<table class="table table-dark table-hover">
     <thead>
         <tr>
             <th>
@@ -37,17 +39,14 @@
             <th>
                 @Html.DisplayNameFor(item => item.Projects[0].ProjectId)
             </th>
-            <th>
-                Options
-            </th>
         </tr>
     </thead>
     <tbody>
         @if (Model.Projects.Count() <= 0) { 
 
             <tr>
-                <td colspan="9">
-                    <div class="alert alert-warning mx-auto">No projects found</div>
+                <td colspan="8">
+                    <div class="alert alert-warning mx-auto text-center">No projects found</div>
                 </td>
             </tr>
 
@@ -78,9 +77,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ProjectId)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a>
                 </td>
             </tr>
         }
