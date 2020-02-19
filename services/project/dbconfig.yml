@@ -1,8 +1,0 @@
-development:
-  datasource: host=localhost dbname=bec user=bec_admin password=jw8s0F4 sslmode=disable
-  dialect: postgres
-  dir: database/migrations
-production:
-  datasource: host=localhost dbname=bec user=bec_admin password=jw8s0F4 sslmode=disable
-  dialect: postgres
-  dir: database/migrations

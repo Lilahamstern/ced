@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WSP BEC</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="~/css/mdb.min.css" rel="stylesheet">
+    <!-- Material Design DataTabels -->
+    <link href="~/css/datatables.min.css" rel="stylesheet" />
+    <link href="~/css/datatables-select.min.css" rel="stylesheet" />
+    <!-- Custom -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="stylish-color-dark">
+    <img src="~/assets/logo-wsp.png" class="my-5 mx-auto d-block" alt="WSP Logo">
+    <div class="container jumbotron-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top border-dark footer text-white-50">
+        <div class="container">
+            &copy; 2020 - WSP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="~/js/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="~/js//mdb.min.js"></script>
+    <!-- Material Design DataTabels -->
+    <script type="text/javascript" src="~/js/datatables.min.js"></script>
+    <!-- Custom Javascript -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
