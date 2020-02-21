@@ -1,51 +1,46 @@
-﻿
-    <table id="table" class="ui sortable celled table black">
-        <thead>
-            <tr>
-                <th class="sorted descending">Name</th>
-                <th class="">Status</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-                <th class="">Notes</th>
-            </tr>
-        </thead>
-        <tbody>
+﻿@using Web.Model
+@using Web.Helpers
+@using System.Reflection
 
-
-
-            <tr>
-                <td>John</td>
-                <td>No Action</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-                <td>None</td>
-            </tr>
-            <tr>
-                <td>Jill</td>
-                <td class="negative">Denied</td>
-                <td>None</td>
-            </tr>
-            <tr>
-                <td>Jamie</td>
-                <td class="positive">Approved</td>
-                <td class="warning">Requires call</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>3 People</th>
-                <th>2 Approved</th>
-                <th></th>
-            </tr>
-        </tfoot>
-    </table>
+<table class="uk-table uk-table-divider uk-table-striped uk-table-hover uk-table-justify uk-table-small">
+    <caption>Projekt lista</caption>
+    <thead>
+        <tr>
+            @foreach (var prop in  project.GetType().GetProperties() )
+            {
+              <th>@GetDisplayName(prop)</th>
+            }
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+            <td>Table Footer</td>
+        </tr>
+    </tfoot>
+    <tbody>
+        <tr>
+            <td>Table Data</td>
+            <td>Table Data</td>
+            <td>Table Data</td>
+        </tr>
+        <tr>
+            <td>Table Data</td>
+            <td>Table Data</td>
+            <td>Table Data</td>
+        </tr>
+    </tbody>
+</table>
+    
 
 @code {
+    Project project = new Project { };
+    List<Project> projects = new List<Project>();
 
+    public string GetDisplayName(PropertyInfo property)
+    {
+        var dnh = new DisplayNameHelper();
+        return dnh.GetDisplayName(property);
+    }
 }
