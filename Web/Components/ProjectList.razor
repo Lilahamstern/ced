@@ -12,35 +12,39 @@
             }
         </tr>
     </thead>
-    <tfoot>
-        <tr>
-            <td>Table Footer</td>
-            <td>Table Footer</td>
-            <td>Table Footer</td>
-        </tr>
-    </tfoot>
     <tbody>
-        <tr>
-            <td>Table Data</td>
-            <td>Table Data</td>
-            <td>Table Data</td>
-        </tr>
-        <tr>
-            <td>Table Data</td>
-            <td>Table Data</td>
-            <td>Table Data</td>
-        </tr>
+        @foreach (var projectItem in projects)
+        {
+            <tr>
+                @foreach(var data in projectItem.GetType().GetProperties())
+                {
+                   <td>@data.GetValue(projectItem, null)</td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
     
 
 @code {
     Project project = new Project { };
-    List<Project> projects = new List<Project>();
+    List<Project> projects = new List<Project> {
+    new Project{
+        OrderId = 1412345, 
+        Client = "Volvo", 
+        Co = 13123.312f, 
+        CreatedAt = DateTime.Now, 
+        Manager = "John Doe",  
+        Name = "Hus med vagg", 
+        ProjectId = 2312312, 
+        Sector = "BBB"} 
+    };
+
+
 
     public string GetDisplayName(PropertyInfo property)
     {
         var dnh = new DisplayNameHelper();
-        return dnh.GetDisplayName(property);
+        return dnh.GetDisplayName(property).ToLower();
     }
 }

@@ -10,20 +10,6 @@ namespace Web.Helpers
 {
     public class DisplayNameHelper
     {
-        public string GetDisplayName(object obj, string propertyName)
-        {
-            if (obj == null) return null;
-            return GetDisplayName(obj.GetType(), propertyName);
-
-        }
-
-        public string GetDisplayName(Type type, string propertyName)
-        {
-            var property = type.GetProperty(propertyName);
-            if (property == null) return null;
-
-            return GetDisplayName(property);
-        }
 
         public string GetDisplayName(PropertyInfo property)
         {
