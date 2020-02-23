@@ -3,6 +3,7 @@ version: '3.4'
 services:
   client:
     image: ${DOCKER_REGISTRY-}client
+    container_name: client
     build:
       context: .
       dockerfile: Client/Dockerfile
@@ -14,7 +15,8 @@ services:
 
   server.api:
     image: ${DOCKER_REGISTRY-}serverapi
-    hostname: rest
+    hostname: server-api
+    container_name: server-api
     build:
       context: .
       dockerfile: Server.API/Dockerfile
@@ -23,8 +25,8 @@ services:
 
   server.grpc:
     image: ${DOCKER_REGISTRY-}servergrpc
-    container_name: server.grpc
-    hostname: grpc
+    hostname: server-grpc
+    container_name: server-grpc
     stdin_open: true
     tty: true
     build:

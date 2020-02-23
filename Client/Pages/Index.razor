@@ -17,13 +17,13 @@
     </div>
 
 @functions {
-    string message = "";
+    string message = "Hey";
     string response = "";
 
     async Task SendMessage()
     {
         Console.WriteLine("Now");
-        var channel = GrpcChannel.ForAddress(message);
+        var channel = GrpcChannel.ForAddress("http://server-grpc/");
         var client = new Greeter.GreeterClient(channel);
         var reply = await client.SayHelloAsync(new HelloRequest { Name = message });
         response = reply.Message;
