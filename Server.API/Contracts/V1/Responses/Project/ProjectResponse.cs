@@ -1,5 +1,5 @@
 ﻿using System;
-using ProjectModel = BusinessLayer.Models.Project;
+using ProjectModel = BusinessLayer.Models.EntityFramework.ProjectInformation;
 
 namespace Api.Contracts.V1.Responses.Project
 {
@@ -7,8 +7,8 @@ namespace Api.Contracts.V1.Responses.Project
     {
         public ProjectResponse(ProjectModel project)
         {
-            ProjectId = project.PId;
-            OrderId = project.OId;
+            ProjectId = project.ProjectId;
+            OrderId = project.OrderId;
             Name = project.Name;
             Description = project.Description;
             Client = project.Client;

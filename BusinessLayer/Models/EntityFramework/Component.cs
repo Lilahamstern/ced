@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace BusinessLayer.Models.EntityFramework
@@ -16,5 +17,8 @@ namespace BusinessLayer.Models.EntityFramework
         public string Material { get; set; }
         public float Co { get; set; }
         public int Level { get; set; }
+        public string Type { get; set; }
+        public int VersionId { get; set; }
+        public Version Version { get; set; }
     }
 }

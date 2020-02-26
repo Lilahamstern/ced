@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models;
+﻿using BusinessLayer.Models.EntityFramework;
 using DataAccessLayer;
 using System.Collections.Generic;
 using System.Threading.Tasks;

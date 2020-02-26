@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models;
+﻿using BusinessLayer.Models.EntityFramework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,14 +6,14 @@ namespace Api.Services
 {
     public interface IProjectService
     {
-        Task<bool> CreateProjectAsync(Project project);
-        Task<List<Project>> GetProjectsAsync(int limit);
+        Task<bool> CreateProjectAsync(ProjectInformation project);
+        Task<List<ProjectInformation>> GetProjectsAsync(int limit);
 
-        Task<List<Project>> GetProjectsAsync(int limit, string search);
+        Task<List<ProjectInformation>> GetProjectsAsync(int limit, string search);
 
-        Task<Project> GetProjectByIdAsync(int projectId);
+        Task<ProjectInformation> GetProjectByIdAsync(int projectId);
 
-        Task<bool> UpdateProjectAsync(int projectId, Project projectToUpdate);
+        Task<bool> UpdateProjectAsync(int projectId, ProjectInformation projectToUpdate);
 
         Task<bool> DeleteProjectAsync(int projectId);
 

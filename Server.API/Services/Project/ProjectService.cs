@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models;
+﻿using BusinessLayer.Models.EntityFramework;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -17,43 +17,45 @@ namespace Api.Services
             _dataContext = dataContext;
         }
 
-        public async Task<bool> CreateProjectAsync(Project project)
+        public async Task<bool> CreateProjectAsync(ProjectInformation project)
         {
-            await _dataContext.Projects.AddAsync(project);
+            await _dataContext.Projects.AddAsync(new Project { ProjectId = project.ProjectId });
+
+            await _dataContext.ProjectInformation.AddAsync(project);
             var created = await _dataContext.SaveChangesAsync();
             return created > 0;
         }
 
-        public async Task<Project> GetProjectByIdAsync(int projectId)
+        public async Task<ProjectInformation> GetProjectByIdAsync(int projectId)
         {
-            var result = await _dataContext.Projects.SingleOrDefaultAsync(x => x.PId == projectId);
+            var result = await _dataContext.ProjectInformation.SingleOrDefaultAsync(x => x.ProjectId == projectId);
 
             return result;
 
         }
 
-        public async Task<List<Project>> GetProjectsAsync(int limit)
+        public async Task<List<ProjectInformation>> GetProjectsAsync(int limit)
         {
-            return await _dataContext.Projects.Take(limit).ToListAsync();
+            return await _dataContext.ProjectInformation.Take(limit).ToListAsync();
         }
 
-        public async Task<List<Project>> GetProjectsAsync(int limit, string search)
+        public async Task<List<ProjectInformation>> GetProjectsAsync(int limit, string search)
         {
-            var projects = await _dataContext.Projects.Take(limit).Where(p =>
-            p.OId.ToString().Contains(search) ||
-            p.PId.ToString().Contains(search) ||
+            var projects = await _dataContext.ProjectInformation.Take(limit).Where(p =>
+            p.ProjectId.ToString().Contains(search) ||
+            p.OrderId.ToString().Contains(search) ||
             p.Client.Contains(search) ||
             p.Name.Contains(search) ||
             p.Manager.Contains(search)).ToListAsync();
             return projects;
         }
 
-        public async Task<bool> UpdateProjectAsync(int projectId, Project projectToUpdate)
+        public async Task<bool> UpdateProjectAsync(int projectId, ProjectInformation projectToUpdate)
         {
-            var result = await _dataContext.Projects.SingleOrDefaultAsync(p => p.PId == projectId);
+            var result = await _dataContext.ProjectInformation.SingleOrDefaultAsync(p => p.ProjectId == projectId);
             if (result != null)
             {
-                result.OId = projectToUpdate.OId;
+                result.OrderId = projectToUpdate.OrderId;
                 result.Name = projectToUpdate.Name;
                 result.Description = projectToUpdate.Description;
                 result.Manager = projectToUpdate.Manager;
@@ -68,7 +70,7 @@ namespace Api.Services
         public async Task<bool> DeleteProjectAsync(int projectId)
         {
             var project = await GetProjectByIdAsync(projectId);
-            _dataContext.Projects.Remove(project);
+            _dataContext.ProjectInformation.Remove(project);
             var deleted = await _dataContext.SaveChangesAsync();
             return deleted > 0;
         }

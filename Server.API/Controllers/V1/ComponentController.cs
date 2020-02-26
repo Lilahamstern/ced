@@ -1,7 +1,7 @@
 ﻿using Api.Contracts.V1.Requests.Component;
 using Api.Contracts.V1.Responses.General;
 using Api.Services;
-using BusinessLayer.Models;
+using BusinessLayer.Models.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,8 +42,8 @@ namespace Api.Contracts.V1
             {
                 components.Add(new Component
                 {
-                    VId = request.VersionId,
-                    CId = c.ComponentId,
+                    VersionId = request.VersionId,
+                    ComponentId = c.ComponentId,
                     Name = c.Name,
                     Type = c.Type,
                     Co = c.Co,

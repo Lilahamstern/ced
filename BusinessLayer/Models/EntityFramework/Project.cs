@@ -12,7 +12,7 @@ namespace BusinessLayer.Models.EntityFramework
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProjectId { get; set; }
-
-        public virtual ICollection<ProjectInformation> projectInformation { get; set; }
+        public virtual IEnumerable<ProjectInformation> ProjectInformation { get; set; }
+        public virtual IEnumerable<Version> Versions { get; set; }
     }
 }

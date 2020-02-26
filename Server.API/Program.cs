@@ -3,9 +3,12 @@ using DataAccessLayer.Seeder;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api
@@ -22,7 +25,14 @@ namespace Api
                 try
                 {
                     var context = services.GetRequiredService<DataContext>();
-                    context.Database.Migrate();
+                    context.Database.GetAppliedMigrations().ToList().ForEach(c =>
+                    {
+                        Console.WriteLine(c);
+                    });
+                    if(!context.Database.GetAppliedMigrations().Contains("20200226205043_InitalCreate"))
+                    {
+                        context.Database.Migrate();
+                    }
                     DataSeeder.Initialize(context);
                 }
                 catch (Exception e)

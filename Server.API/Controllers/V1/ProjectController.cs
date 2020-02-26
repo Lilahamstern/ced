@@ -3,7 +3,7 @@ using Api.Contracts.V1.Responses.General;
 using Api.Contracts.V1.Responses.Project;
 using Api.Contracts.V1.Responses.Version;
 using Api.Services;
-using BusinessLayer.Models;
+using BusinessLayer.Models.EntityFramework;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -36,10 +36,10 @@ namespace Api.Contracts.V1
         [ProducesResponseType(typeof(ProjectResponse), 201)]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
         {
-            var project = new Project
+            var project = new ProjectInformation
             {
-                PId = request.ProjectId,
-                OId = request.OrderId,
+                ProjectId = request.ProjectId,
+                OrderId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,
                 Client = request.Client,
@@ -47,7 +47,7 @@ namespace Api.Contracts.V1
                 Sector = request.Sector,
             };
 
-            var projectCheck = await _projectService.GetProjectByIdAsync(project.PId);
+            var projectCheck = await _projectService.GetProjectByIdAsync(project.ProjectId);
             if (projectCheck != null)
             {
                 return BadRequest(new ErrorResponse(
@@ -59,9 +59,9 @@ namespace Api.Contracts.V1
 
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Project.GetProject.Replace("{projectId}", project.PId.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Project.GetProject.Replace("{projectId}", project.ProjectId.ToString());
 
-            var response = new ProjectResponse(project.PId);
+            var response = new ProjectResponse(project.ProjectId);
 
             return Created(location, response);
         }
@@ -100,7 +100,7 @@ namespace Api.Contracts.V1
         [HttpGet(ApiRoutes.Project.GetProjects)]
         public async Task<IActionResult> GetProjects([FromQuery] string search, [FromQuery] int limit)
         {
-            List<Project> projects;
+            List<ProjectInformation> projects;
             List<ProjectResponse> response = new List<ProjectResponse>();
             if (limit <= 0)
                 limit = 10000;
@@ -136,9 +136,9 @@ namespace Api.Contracts.V1
         [HttpPut(ApiRoutes.Project.UpdateProject)]
         public async Task<IActionResult> UpdateProject([FromRoute] int projectId, [FromBody] UpdateProjectRequest request)
         {
-            var project = new Project
+            var project = new ProjectInformation
             {
-                OId = request.OrderId,
+                OrderId = request.OrderId,
                 Name = request.Name,
                 Description = request.Description,
                 Manager = request.Manager,
@@ -153,7 +153,7 @@ namespace Api.Contracts.V1
                     new ErrorModel("projectId", "Project not found")
                     ));
 
-            return Ok(new ProjectResponse(project.PId));
+            return Ok(new ProjectResponse(project.ProjectId));
         }
         /// <summary>
         /// Deleted specifed project.
@@ -206,7 +206,7 @@ namespace Api.Contracts.V1
 
             var version = new Version
             {
-                PId = projectId,
+                ProjectId = projectId,
                 Title = request.Title,
                 Description = request.Description
             };
@@ -214,9 +214,9 @@ namespace Api.Contracts.V1
             await _versionService.CreateVersionAsync(version);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.Id.ToString()).Replace("{projectId}", projectId.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.VersionId.ToString()).Replace("{projectId}", projectId.ToString());
 
-            var response = new VersionResponse(version.Id);
+            var response = new VersionResponse(version.VersionId);
 
             return Created(location, response);
         }
@@ -309,7 +309,7 @@ namespace Api.Contracts.V1
 
             await _versionService.UpdateVersionAsync(versionId, version);
 
-            return Ok(new VersionResponse(version.Id));
+            return Ok(new VersionResponse(version.VersionId));
         }
 
         [HttpDelete(ApiRoutes.Project.DeleteVersion)]

@@ -14,7 +14,7 @@ namespace Api.Contracts.V1.Requests.Component
         public string Name { get; set; }
         public string Profile { get; set; }
         public string Material { get; set; }
-        public double Co { get; set; }
+        public float Co { get; set; }
         public int Level { get; set; }
         public string Type { get; set; }
     }

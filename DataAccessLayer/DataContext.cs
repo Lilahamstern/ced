@@ -14,11 +14,16 @@ namespace DataAccessLayer
 {
     public class DataContext : DbContext
     {
+        public DataContext()
+        {
+
+        }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public virtual DbSet<Project> Projects { get; set; }
-        //public virtual DbSet<ProjectHistory> ProjectHistories { get; set; }
-        public virtual DbSet<Version> Versions { get; set; }
+        public virtual DbSet<ProjectInformation> ProjectInformation { get; set; }
         public virtual DbSet<Component> Components { get; set; }
+        public virtual DbSet<Version> Versions { get; set; }
 
         public override int SaveChanges()
         {

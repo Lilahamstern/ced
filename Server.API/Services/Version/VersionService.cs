@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Version = BusinessLayer.Models.Version;
+using Version = BusinessLayer.Models.EntityFramework.Version;
 
 namespace Api.Services
 {
@@ -29,7 +29,7 @@ namespace Api.Services
         public async Task<bool> DeleteVersionAsync(int projectId, int versionId)
         {
             var version = await (from v in _dataContext.Versions
-                                 where v.Id == versionId && v.PId == projectId
+                                 where v.VersionId == versionId && v.ProjectId == projectId
                                  select v).FirstOrDefaultAsync();
 
             _dataContext.Versions.Remove(version);
@@ -40,7 +40,7 @@ namespace Api.Services
         public async Task<Version> GetVersionByTitleAsync(int projectId, string title)
         {
             var version = await (from v in _dataContext.Versions
-                                 where v.Title == title && v.PId == projectId
+                                 where v.Title == title && v.ProjectId == projectId
                                  select v).FirstOrDefaultAsync();
             if (version == null)
                 return null;
@@ -52,7 +52,7 @@ namespace Api.Services
         public async Task<Version> GetVersionByIdAsync(int versionId, int projectId)
         {
             var version = await (from v in _dataContext.Versions
-                                 where v.Id == versionId && v.PId == projectId
+                                 where v.VersionId == versionId && v.ProjectId == projectId
                                  select v).FirstOrDefaultAsync();
             if (version == null)
                 return null;
@@ -64,7 +64,7 @@ namespace Api.Services
         public async Task<Version> GetVersionByIdAsync(int versionId)
         {
             var version = await (from v in _dataContext.Versions
-                                 where v.Id == versionId
+                                 where v.VersionId == versionId
                                  select v).FirstOrDefaultAsync();
             if (version == null)
                 return null;
@@ -75,7 +75,7 @@ namespace Api.Services
 
         public async Task<bool> UpdateVersionAsync(int versionId, Version versionToUpdate)
         {
-            var result = await _dataContext.Versions.SingleOrDefaultAsync(x => x.Id == versionId);
+            var result = await _dataContext.Versions.SingleOrDefaultAsync(x => x.VersionId == versionId);
             if (result != null)
             {
                 result.Title = versionToUpdate.Title;
@@ -89,7 +89,7 @@ namespace Api.Services
         public async Task<List<Version>> GetVersionsAsync(int projectId)
         {
             var versions = await (from v in _dataContext.Versions
-                                  where v.PId == projectId
+                                  where v.ProjectId == projectId
                                   select v).ToListAsync();
 
             versions.ForEach((version) => version.Project = null);
@@ -100,8 +100,8 @@ namespace Api.Services
         {
 
             var query = await (from v in _dataContext.Versions
-                               join c in _dataContext.Components on v.Id equals c.VId
-                               where v.PId == projectId
+                               join c in _dataContext.Components on v.VersionId equals c.VersionId
+                               where v.ProjectId == projectId
                                select new { Version = v, Component = c }).ToListAsync();
             foreach (var item in query)
             {

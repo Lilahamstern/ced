@@ -1,5 +1,5 @@
 ﻿using System;
-using VersionModel = BusinessLayer.Models.Version;
+using VersionModel = BusinessLayer.Models.EntityFramework.Version;
 
 namespace Api.Contracts.V1.Responses.Version
 {
@@ -7,8 +7,8 @@ namespace Api.Contracts.V1.Responses.Version
     {
         public VersionResponse(VersionModel version)
         {
-            VersionId = version.Id;
-            ProjectId = version.PId;
+            VersionId = version.VersionId;
+            ProjectId = version.ProjectId;
             Title = version.Title;
             Description = version.Description;
             CreatedAt = version.CreatedAt;

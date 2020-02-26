@@ -4,8 +4,9 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Ced.Server.DAL.Migrations
+namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -18,18 +19,21 @@ namespace Ced.Server.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Ced.BL.Models.Component", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Component", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CId")
+                    b.Property<float>("Co")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ComponentId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Co")
-                        .HasColumnType("float");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
@@ -46,20 +50,41 @@ namespace Ced.Server.DAL.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VId")
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VersionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VId");
+                    b.HasIndex("VersionId");
 
-                    b.ToTable("Component");
+                    b.ToTable("Components");
                 });
 
-            modelBuilder.Entity("Ced.BL.Models.Project", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Project", b =>
                 {
-                    b.Property<int>("PId")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ProjectId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.ProjectInformation", b =>
+                {
+                    b.Property<int>("ProjectInformationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Client")
                         .HasColumnType("nvarchar(max)");
@@ -76,7 +101,10 @@ namespace Ced.Server.DAL.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OId")
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Sector")
@@ -85,43 +113,16 @@ namespace Ced.Server.DAL.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("PId");
+                    b.HasKey("ProjectInformationId");
 
-                    b.ToTable("Project");
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectInformation");
                 });
 
-            modelBuilder.Entity("Ced.BL.Models.ProjectHistory", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Version", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Data")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Property")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PId");
-
-                    b.ToTable("ProjectHistory");
-                });
-
-            modelBuilder.Entity("Ced.BL.Models.Version", b =>
-                {
-                    b.Property<int>("Id")
+                    b.Property<int>("VersionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -132,7 +133,10 @@ namespace Ced.Server.DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PId")
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectInformationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -141,36 +145,44 @@ namespace Ced.Server.DAL.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("VersionId");
 
-                    b.HasIndex("PId");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("Version");
+                    b.HasIndex("ProjectInformationId");
+
+                    b.ToTable("Versions");
                 });
 
-            modelBuilder.Entity("Ced.BL.Models.Component", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Component", b =>
                 {
-                    b.HasOne("Ced.BL.Models.Version", "Version")
+                    b.HasOne("BusinessLayer.Models.EntityFramework.Version", "Version")
                         .WithMany("Components")
-                        .HasForeignKey("VId")
+                        .HasForeignKey("VersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ced.BL.Models.ProjectHistory", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.ProjectInformation", b =>
                 {
-                    b.HasOne("Ced.BL.Models.Project", "Project")
-                        .WithMany("ProjectHistory")
-                        .HasForeignKey("PId")
+                    b.HasOne("BusinessLayer.Models.EntityFramework.Project", "Project")
+                        .WithMany("ProjectInformation")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ced.BL.Models.Version", b =>
+            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Version", b =>
                 {
-                    b.HasOne("Ced.BL.Models.Project", "Project")
+                    b.HasOne("BusinessLayer.Models.EntityFramework.Project", "Project")
                         .WithMany("Versions")
-                        .HasForeignKey("PId")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessLayer.Models.EntityFramework.ProjectInformation", "ProjectInformation")
+                        .WithMany("Versions")
+                        .HasForeignKey("ProjectInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

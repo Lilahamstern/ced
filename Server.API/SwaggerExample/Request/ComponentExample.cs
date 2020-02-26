@@ -16,7 +16,7 @@ namespace Api.SwaggerExample.Request
                    new ComponentRequest
                    {
                       ComponentId = 3126312,
-                      Co = 341.32,
+                      Co = 341.32f,
                       Name = "Wall 1",
                       Profile = "500x500",
                       Material = "Betong",
@@ -26,7 +26,7 @@ namespace Api.SwaggerExample.Request
                    new ComponentRequest
                    {
                       ComponentId = 3122325,
-                      Co = 430.32,
+                      Co = 430.32f,
                       Name = "Floor",
                       Profile = "500x5000",
                       Material = "Betong",
@@ -36,7 +36,7 @@ namespace Api.SwaggerExample.Request
                    new ComponentRequest
                    {
                       ComponentId = 3122327,
-                      Co = 521.32,
+                      Co = 521.32f,
                       Name = "Wall 2",
                       Profile = "300x500",
                       Material = "Betong",
@@ -46,7 +46,7 @@ namespace Api.SwaggerExample.Request
                    new ComponentRequest
                    {
                       ComponentId = 3122321,
-                      Co = 300.32,
+                      Co = 300.32f,
                       Name = "Wall 3",
                       Profile = "500x400",
                       Material = "Betong",
