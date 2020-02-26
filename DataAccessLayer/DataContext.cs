@@ -1,5 +1,5 @@
-﻿using BusinessLayer.Models;
-using Version = BusinessLayer.Models.Version;
+﻿using BusinessLayer.Models.EntityFramework;
+using Version = BusinessLayer.Models.EntityFramework.Version;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System.IO;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
-using BusinessLayer.Models.Common;
+using BusinessLayer.Models.EntityFramework.Common;
 using System;
 
 namespace DataAccessLayer
@@ -16,7 +16,7 @@ namespace DataAccessLayer
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<ProjectHistory> ProjectHistories { get; set; }
+        //public virtual DbSet<ProjectHistory> ProjectHistories { get; set; }
         public virtual DbSet<Version> Versions { get; set; }
         public virtual DbSet<Component> Components { get; set; }
 

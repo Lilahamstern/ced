@@ -11,7 +11,7 @@ namespace Client.Helpers
         private GrpcChannel channel;
         public gRPCHelper()
         {
-            if (channel.)
+            
         }
         //Console.WriteLine("Now");
         //var channel = GrpcChannel.ForAddress("http://server-grpc/");

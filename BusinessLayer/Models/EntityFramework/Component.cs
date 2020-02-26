@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BusinessLayer.Models.EntityFramework
 {
-    public class Components : BaseEntity
+    public class Component : BaseEntity
     {
         [Key]
         public int Id { get; set; }
