@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BusinessLayer.Models.Common
+namespace BusinessLayer.Models.EntityFramework.Common
 {
     public abstract class BaseEntity
     {
