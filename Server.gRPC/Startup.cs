@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.gRPC.Installers;
+using Server.gRPC.Controllers;
 using System.Configuration;
 
 namespace Server.gRPC
@@ -36,7 +37,7 @@ namespace Server.gRPC
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<ProjectController>();
 
                 endpoints.MapGet("/", async context =>
                 {

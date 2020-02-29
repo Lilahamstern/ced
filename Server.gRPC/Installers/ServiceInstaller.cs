@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Server.gRPC.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Server.gRPC.Installers
     {
         public void InstallServices(IConfiguration configuration, IServiceCollection services)
         {
-            ///services.AddScoped()
+            services.AddScoped<IProjectService, ProjectService>();
         }
     }
 }
