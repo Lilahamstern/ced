@@ -1,6 +1,7 @@
 ﻿using Api.Filters;
 using Api.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,7 @@ namespace Api.Installers
     public class MvcInstaller : IInstaller
     {
 
-        public void InstallServices(IConfiguration configuration, IServiceCollection services)
+        public void InstallServices(IConfiguration configuration, IWebHostEnvironment env, IServiceCollection services)
         {
 
             services.AddScoped<IProjectService, ProjectService>();
