@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Model
 {
-    public class Project
+    public class ProjectModel
     {
         [DisplayName("Uppdrags ID")]
         public int OrderId { get; set; }
@@ -20,7 +20,7 @@ namespace Client.Model
         public float Co { get; set; }
         [DisplayName("Databas Id")]
         public int ProjectId { get; set; }
-        [DisplayName("Skapad pa")]
+        [DisplayName("Skapad")]
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; }
     }

@@ -1,14 +1,19 @@
-﻿@using Client.Model
+﻿@using PM = Client.Model.ProjectModel;
 @using Client.Helpers
 @using System.Reflection
+@using Client.Services
+@using Google.Protobuf.WellKnownTypes
+@using Grpc.Core
+@using Server.gRPC.Controllers;
+@inject IRPCService RPCService
 
 <table class="uk-table uk-table-divider uk-table-striped uk-table-hover uk-table-justify uk-table-small">
     <caption>Projekt lista</caption>
     <thead>
         <tr>
-            @foreach (var prop in  project.GetType().GetProperties() )
+            @foreach (var prop in project.GetType().GetProperties())
             {
-              <th>@GetDisplayName(prop)</th>
+                <th>@GetDisplayName(prop)</th>
             }
         </tr>
     </thead>
@@ -16,29 +21,46 @@
         @foreach (var projectItem in projects)
         {
             <tr>
-                @foreach(var data in projectItem.GetType().GetProperties())
+                @foreach (var data in projectItem.GetType().GetProperties())
                 {
-                   <td>@data.GetValue(projectItem, null)</td>
+                    <td>@data.GetValue(projectItem, null)</td>
                 }
             </tr>
         }
     </tbody>
 </table>
-    
+
 
 @code {
-    Project project = new Project { };
-    List<Project> projects = new List<Project> {
-    new Project{
-        OrderId = 1412345, 
-        Client = "Volvo", 
-        Co = 13123.312f, 
-        CreatedAt = DateTime.Now, 
-        Manager = "John Doe",  
-        Name = "Hus med vagg", 
-        ProjectId = 2312312, 
-        Sector = "BBB"} 
-    };
+    private Project.ProjectClient client;
+    PM project = new PM { };
+    List<PM> projects = new List<PM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        client = RPCService.GetProjectClient();
+        try
+        {
+            var res = await client.GetProjectsAsync(new ProjectGetRequest { });
+            foreach (var item in res.Projects)
+            {
+                projects.Add(new PM
+                {
+                    ProjectId = item.ProjectId,
+                    OrderId = item.OrderId,
+                    Name = item.Name,
+                    Manager = item.Manager,
+                    Client = item.Client,
+                    Sector = item.Sector,
+                    Co = 0,
+                    CreatedAt = item.CreatedAt.ToDateTime(),
+                });
+            };
+        } catch(RpcException e)
+        {
+            Console.WriteLine(e.Message);
+        };
+    }
 
 
 

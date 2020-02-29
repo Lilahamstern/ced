@@ -1,18 +1,21 @@
 ﻿using Grpc.Net.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Server.gRPC.Controllers;
 
-namespace Client.Helpers
+namespace Client.Services
 {
-    public class gRPCHelper
+    public class RPCService : IRPCService
     {
-        private GrpcChannel channel;
-        public gRPCHelper()
+        private readonly GrpcChannel _channel;
+        public RPCService()
         {
-            
+            _channel = GrpcChannel.ForAddress("http://server-grpc/");
         }
+
+        public Project.ProjectClient GetProjectClient()
+        {
+            return new Project.ProjectClient(_channel);
+        }
+
         //Console.WriteLine("Now");
         //var channel = GrpcChannel.ForAddress("http://server-grpc/");
         //var client = new Greeter.GreeterClient(channel);

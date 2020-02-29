@@ -1,27 +1,52 @@
 ﻿@using Client.Components
-@using Grpc.Net.Client
-@using Server.gRPC
+@using Client.Services
+@using Grpc.Core
+@using Server.gRPC.Controllers;
+@inject IRPCService RPCService
 @page "/"
 
 
 
     <div class="ui one column doubling stackable grid container segment">
         <p>
-            <input @bind="message" placeholder="Message" />
             <button @onclick="SendMessage" class="" >Get message</button>
         </p>
-        Server response: <strong>@response</strong>
+        Server response: <strong>@msg</strong>
         <div class="column">
             <ProjectList />
         </div>
     </div>
 
-@functions {
-    string message = "Hey";
-    string response = "";
+@code { 
+    private Project.ProjectClient client;
+
+    protected override async Task OnInitializedAsync()
+    {
+        client = RPCService.GetProjectClient();
+    }
+
+    string msg = "";
 
     async Task SendMessage()
     {
+        try {
+            var response = await client.CreateProjectAsync(new ProjectCreateRequest
+            {
+                ProjectId = 3737123,
+                OrderId = 3721032,
+                Name = "Testing",
+                Client = "Testing",
+                Description = "Testing desc",
+                Manager = "testing",
+                Sector = "testing",
+            });
 
+            msg = response.ProjectId.ToString();
+        } catch(RpcException ex)
+        {
+            Console.WriteLine(ex.Status.Detail);
+            Console.WriteLine(ex.StatusCode);
+            Console.WriteLine(ex.Message);
+        }
     }
 }
