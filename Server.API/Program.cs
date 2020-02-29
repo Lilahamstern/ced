@@ -29,10 +29,11 @@ namespace Api
                     {
                         Console.WriteLine(c);
                     });
-                    if(!context.Database.GetAppliedMigrations().Contains("20200226205043_InitalCreate"))
+                    if (!context.Database.GetAppliedMigrations().Contains("20200226205043_InitalCreate"))
                     {
                         context.Database.Migrate();
                     }
+                    
                     DataSeeder.Initialize(context);
                 }
                 catch (Exception e)
