@@ -1,5 +1,4 @@
-﻿using DataAccessLayer.Models;
-using Server.gRPC.Controllers;
+﻿using Server.gRPC.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +12,6 @@ namespace Server.gRPC.Services
 
         Task<Boolean> ProjectExistsAsync(int projectId);
 
-        Task<List<ProjectInformation>> GetAllProjectsAsync();
+        Task<List<ProjectModel>> GetAllProjectsAsync();
     }
 }

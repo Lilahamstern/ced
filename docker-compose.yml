@@ -10,18 +10,18 @@ services:
     networks:
       - database
     depends_on:
-      - server.api
+      #- server.api
       - server.grpc
 
-  server.api:
-    image: ${DOCKER_REGISTRY-}serverapi
-    hostname: server-api
-    container_name: server-api
-    build:
-      context: .
-      dockerfile: Server.API/Dockerfile
-    networks:
-      - database
+  #server.api:
+    #image: ${DOCKER_REGISTRY-}serverapi
+    #hostname: server-api
+    #container_name: server-api
+    #build:
+     # context: .
+      #dockerfile: Server.API/Dockerfile
+    #networks:
+      #- database
 
   server.grpc:
     image: ${DOCKER_REGISTRY-}servergrpc

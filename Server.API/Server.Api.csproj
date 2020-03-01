@@ -55,10 +55,4 @@
     <Folder Include="Contracts\V1\Responses\Component\" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-  </ItemGroup>
-
 </Project>

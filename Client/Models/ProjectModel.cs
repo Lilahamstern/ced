@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Client.Model
+namespace Client.Models
 {
     public class ProjectModel
     {

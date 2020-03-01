@@ -23,7 +23,6 @@ namespace Server.gRPC.Controllers
       var exists = await _projectService.ProjectExistsAsync(request.ProjectId);
       if (exists)
       {
-        Console.WriteLine();
         throw new RpcException(new Status(StatusCode.AlreadyExists, "ProjectId already exists"));
       }
 
@@ -37,28 +36,9 @@ namespace Server.gRPC.Controllers
 
         public override async Task<ProjectReply> GetProjects(ProjectGetRequest request, ServerCallContext context)
         {
-            List<ProjectModel> projects = new List<ProjectModel>();
-            var dbProjects = await _projectService.GetAllProjectsAsync();
+            var projects =  await _projectService.GetAllProjectsAsync();
 
-            foreach (var item in dbProjects)
-            {
-                var project = new ProjectModel();
-                project.ProjectId = item.Id;
-                project.OrderId = item.OrderId;
-                project.Name = item.Name;
-                project.Description = item.Description;
-                project.Manager = item.Manager;
-                project.Client = item.Client;
-                project.Sector = item.Sector;
-                project.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.CreatedAt.Value, DateTimeKind.Utc));
-                project.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.UpdatedAt.Value, DateTimeKind.Utc));
-
-                projects.Add(project);
-            }
-
-            var message = new ProjectReply { Projects = { projects } };
-
-            return await Task.FromResult(message);
+            return await Task.FromResult(new ProjectReply { Projects = { projects } });
         }
     }
 }
