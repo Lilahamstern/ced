@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models.EntityFramework;
+﻿using DataAccessLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,13 +14,13 @@ namespace DataAccessLayer.Seeder
                 var projects = new List<Project>()
                 {
                     new Project{
-                        ProjectId = 373091
+                        Id = 373091
                     },
                     new Project{
-                        ProjectId = 571290
+                        Id = 571290
                     },
                     new Project{
-                        ProjectId = 928731
+                        Id = 928731
                     }
 
                 };
@@ -105,7 +105,7 @@ namespace DataAccessLayer.Seeder
                 {
                     new Component
                     {
-                        VersionId = 4,
+                        VersionId = 3,
                         ComponentId = 461233,
                         Level = 0,
                         Material = "Concreat",
@@ -116,7 +116,7 @@ namespace DataAccessLayer.Seeder
                     },
                     new Component
                     {
-                        VersionId = 4,
+                        VersionId = 3,
                         ComponentId = 477409,
                         Level = 0,
                         Material = "Concreat",
@@ -127,7 +127,7 @@ namespace DataAccessLayer.Seeder
                     },
                     new Component
                     {
-                        VersionId = 4,
+                        VersionId = 3,
                         ComponentId = 389123,
                         Level = 0,
                         Material = "Concreat",
@@ -138,7 +138,7 @@ namespace DataAccessLayer.Seeder
                     },
                     new Component
                     {
-                        VersionId = 4,
+                        VersionId = 3,
                         ComponentId = 472818,
                         Level = 0,
                         Material = "Steel",

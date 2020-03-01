@@ -1,7 +1,7 @@
 ﻿using Api.Contracts.V1.Requests.Component;
 using Api.Contracts.V1.Responses.General;
 using Api.Services;
-using BusinessLayer.Models.EntityFramework;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;

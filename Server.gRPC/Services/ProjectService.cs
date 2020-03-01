@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models.EntityFramework;
+﻿using DataAccessLayer.Models;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Server.gRPC.Controllers;
@@ -19,16 +19,16 @@ namespace Server.gRPC.Services
     public async Task<ProjectCreateReply> CreateProjectAsync(ProjectCreateRequest request)
     {
       var project = new BusinessLayer.Models.EntityFramework.Project { ProjectId = request.ProjectId };
-      project.ProjectInformation = new List<ProjectInformation> {
-                new ProjectInformation {
-                    OrderId = request.OrderId,
-                    Name = request.Name,
-                    Description = request.Description,
-                    Manager = request.Manager,
-                    Client = request.Client,
-                    Sector = request.Sector,
-                }
-            };
+      //project.ProjectInformation = new List<ProjectInformation> {
+      //          new ProjectInformation {
+      //              OrderId = request.OrderId,
+      //              Name = request.Name,
+      //              Description = request.Description,
+      //              Manager = request.Manager,
+      //              Client = request.Client,
+      //              Sector = request.Sector,
+      //          }
+      //      };
 
       await _dataContext.AddAsync(project);
       var created = await _dataContext.SaveChangesAsync();
@@ -44,7 +44,7 @@ namespace Server.gRPC.Services
 
     public async Task<Boolean> ProjectExistsAsync(int projectId)
     {
-      var project = await _dataContext.Projects.Where(x => x.ProjectId == projectId).SingleOrDefaultAsync();
+      var project = await _dataContext.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
       return project != null;
     }
 

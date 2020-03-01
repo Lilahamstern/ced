@@ -3,7 +3,7 @@ using Api.Contracts.V1.Responses.General;
 using Api.Contracts.V1.Responses.Project;
 using Api.Contracts.V1.Responses.Version;
 using Api.Services;
-using BusinessLayer.Models.EntityFramework;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -214,9 +214,9 @@ namespace Api.Contracts.V1
             await _versionService.CreateVersionAsync(version);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-            var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.VersionId.ToString()).Replace("{projectId}", projectId.ToString());
+            var location = baseUrl + "/" + ApiRoutes.Project.GetVersion.Replace("{versionId}", version.Id.ToString()).Replace("{projectId}", projectId.ToString());
 
-            var response = new VersionResponse(version.VersionId);
+            var response = new VersionResponse(version.Id);
 
             return Created(location, response);
         }
@@ -309,7 +309,7 @@ namespace Api.Contracts.V1
 
             await _versionService.UpdateVersionAsync(versionId, version);
 
-            return Ok(new VersionResponse(version.VersionId));
+            return Ok(new VersionResponse(version.Id));
         }
 
         [HttpDelete(ApiRoutes.Project.DeleteVersion)]

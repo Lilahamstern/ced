@@ -1,5 +1,5 @@
-﻿using BusinessLayer.Models.EntityFramework;
-using Version = BusinessLayer.Models.EntityFramework.Version;
+﻿using DataAccessLayer.Models;
+using Version = DataAccessLayer.Models.Version;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System.IO;
@@ -14,11 +14,6 @@ namespace DataAccessLayer
 {
     public class DataContext : DbContext
     {
-        public DataContext()
-        {
-
-        }
-
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectInformation> ProjectInformation { get; set; }
@@ -61,10 +56,9 @@ namespace DataAccessLayer
                 .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Server.API/appsettings.json")
                 .Build();
             var builder = new DbContextOptionsBuilder<DataContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("MigrationConnection");
             builder.UseSqlServer(connectionString);
             return new DataContext(builder.Options);
-
         }
     }
 }

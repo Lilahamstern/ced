@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models.EntityFramework;
+﻿using DataAccessLayer.Models;
 using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace Api.Services
 
         public async Task<bool> CreateProjectAsync(ProjectInformation project)
         {
-            await _dataContext.Projects.AddAsync(new Project { ProjectId = project.ProjectId });
+            await _dataContext.Projects.AddAsync(new Project { Id = project.ProjectId });
 
             await _dataContext.ProjectInformation.AddAsync(project);
             var created = await _dataContext.SaveChangesAsync();

@@ -43,7 +43,7 @@ namespace Server.gRPC.Controllers
             foreach (var item in dbProjects)
             {
                 var project = new ProjectModel();
-                project.ProjectId = item.ProjectId;
+                project.ProjectId = item.Id;
                 project.OrderId = item.OrderId;
                 project.Name = item.Name;
                 project.Description = item.Description;

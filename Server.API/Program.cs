@@ -25,15 +25,7 @@ namespace Api
                 try
                 {
                     var context = services.GetRequiredService<DataContext>();
-                    context.Database.GetAppliedMigrations().ToList().ForEach(c =>
-                    {
-                        Console.WriteLine(c);
-                    });
-                    if (!context.Database.GetAppliedMigrations().Contains("20200226205043_InitalCreate"))
-                    {
-                        context.Database.Migrate();
-                    }
-                    
+
                     DataSeeder.Initialize(context);
                 }
                 catch (Exception e)

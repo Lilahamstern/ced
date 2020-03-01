@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200226205043_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20200301131902_ValidationAdded")]
+    partial class ValidationAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace DataAccessLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Component", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.Component", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,21 +41,29 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Material")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Profile")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VersionId")
+                    b.Property<int?>("VersionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -65,9 +73,9 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Components");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Project", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.Project", b =>
                 {
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -76,55 +84,64 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ProjectId");
+                    b.HasKey("Id");
 
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.ProjectInformation", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.ProjectInformation", b =>
                 {
-                    b.Property<int>("ProjectInformationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Client")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
 
                     b.Property<string>("Manager")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Sector")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ProjectInformationId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectInformation");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Version", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.Version", b =>
                 {
-                    b.Property<int>("VersionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -133,21 +150,24 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectInformationId")
+                    b.Property<int?>("ProjectInformationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("VersionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
@@ -156,37 +176,29 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Versions");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Component", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.Component", b =>
                 {
-                    b.HasOne("BusinessLayer.Models.EntityFramework.Version", "Version")
+                    b.HasOne("DataAccessLayer.Models.Version", null)
                         .WithMany("Components")
-                        .HasForeignKey("VersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VersionId");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.ProjectInformation", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.ProjectInformation", b =>
                 {
-                    b.HasOne("BusinessLayer.Models.EntityFramework.Project", "Project")
+                    b.HasOne("DataAccessLayer.Models.Project", null)
                         .WithMany("ProjectInformation")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
                 });
 
-            modelBuilder.Entity("BusinessLayer.Models.EntityFramework.Version", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.Version", b =>
                 {
-                    b.HasOne("BusinessLayer.Models.EntityFramework.Project", "Project")
+                    b.HasOne("DataAccessLayer.Models.Project", null)
                         .WithMany("Versions")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
-                    b.HasOne("BusinessLayer.Models.EntityFramework.ProjectInformation", "ProjectInformation")
+                    b.HasOne("DataAccessLayer.Models.ProjectInformation", null)
                         .WithMany("Versions")
-                        .HasForeignKey("ProjectInformationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectInformationId");
                 });
 #pragma warning restore 612, 618
         }

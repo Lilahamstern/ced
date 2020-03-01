@@ -1,4 +1,4 @@
-﻿using BusinessLayer.Models.EntityFramework;
+﻿using DataAccessLayer.Models;
 using Server.gRPC.Controllers;
 using System;
 using System.Collections.Generic;
