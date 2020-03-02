@@ -17,7 +17,7 @@ namespace DataLibrary.DataAccess
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../../Server.gRPC/appsettings.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/Server.gRPC/appsettings.json")
                 .Build();
             Console.WriteLine(Directory.GetCurrentDirectory());
             var conn = configuration.GetConnectionString("DefaultConnection");
