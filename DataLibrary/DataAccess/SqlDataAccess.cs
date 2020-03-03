@@ -17,12 +17,9 @@ namespace DataLibrary.DataAccess
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/Server.gRPC/appsettings.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Config.json")
                 .Build();
-            Console.WriteLine(Directory.GetCurrentDirectory());
-            var conn = configuration.GetConnectionString("DefaultConnection");
-            Console.WriteLine(conn);
-            return conn;
+            return configuration.GetConnectionString("DefaultConnection");
         }
 
         public static List<T> LoadData<T>(string sql)
@@ -40,7 +37,7 @@ namespace DataLibrary.DataAccess
                 return cnn.Execute(sql, data);
             }
         }
-        
+
         public static T QueryData<T>(string sql, T data)
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
