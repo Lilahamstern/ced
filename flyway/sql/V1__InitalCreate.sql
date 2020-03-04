@@ -4,6 +4,8 @@ CREATE TABLE `ced`.`project` (
   `UpdatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`));
 
+  
+
   CREATE TABLE `ced`.`projectInformation` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `OrderId` INT NOT NULL,
