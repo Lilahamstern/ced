@@ -17,7 +17,7 @@ namespace DataLibrary.BusinessLogic
                 UpdatedAt = DateTime.UtcNow,
             };
 
-            string sql = @"insert into dbo.Project (Id, CreatedAt, UpdatedAt)
+            string sql = @"insert into project (Id, CreatedAt, UpdatedAt)
                         values (@Id, @CreatedAt, @UpdatedAt);";
 
 
@@ -26,7 +26,7 @@ namespace DataLibrary.BusinessLogic
 
         public static int ProjectExists(int projectId)
         {
-            string sql = $"select COUNT(*) from dbo.Project where id = @projectId";
+            string sql = $"select COUNT(*) from project where id = @data";
             return SqlDataAccess.QueryData<int>(sql, projectId);
         }
 
@@ -44,7 +44,7 @@ namespace DataLibrary.BusinessLogic
                 Sector = sector,
             };
 
-            string sql = @"insert into dbo.ProjectInformation (ProjectId, OrderId, Name, Description, 
+            string sql = @"insert into projectInformation (ProjectId, OrderId, Name, Description, 
                     Manager, Client, Sector, CreatedAt, UpdatedAt)
                         values (@ProjectId, @OrderId, @Name, @Description, @Manager, @Client, @Sector, @CreatedAt, @UpdatedAt);";
 
@@ -54,7 +54,7 @@ namespace DataLibrary.BusinessLogic
         public static List<ProjectInformationModel> LoadProjects()
         {
             string sql = @"select ProjectId, OrderId, Name, Description, 
-                    Manager, Client, Sector, CreatedAt, UpdatedAt from dbo.ProjectInformation;";
+                    Manager, Client, Sector, CreatedAt, UpdatedAt from projectInformation LIMIT 10;";
 
             return SqlDataAccess.LoadData<ProjectInformationModel>(sql);
         }
