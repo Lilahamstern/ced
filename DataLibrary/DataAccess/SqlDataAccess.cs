@@ -17,7 +17,7 @@ namespace DataLibrary.DataAccess
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Config.json")
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/appsettings.json")
                 .Build();
             return configuration.GetConnectionString("DefaultConnection");
         }
@@ -42,7 +42,7 @@ namespace DataLibrary.DataAccess
         {
             using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
             {
-                return cnn.QuerySingle<T>(sql, data);
+                return cnn.QuerySingle<T>(sql, new { data });
             }
         }
     }
