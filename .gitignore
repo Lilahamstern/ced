@@ -3,6 +3,7 @@
 flyway/*
 !flyway/conf/**/*
 !flyway/sql/**/*
+!flyway/jars/*.*
 
 
 

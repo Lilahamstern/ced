@@ -23,6 +23,21 @@ services:
     #networks:
       #- database
 
+  database:
+    container_name: database
+    hostname: database
+    image: "mysql:8"
+    restart: always
+    environment:
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=supersecret
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "3306:3306"
+    networks:
+      - database
+
   server.grpc:
     image: ${DOCKER_REGISTRY-}servergrpc
     hostname: server-grpc
