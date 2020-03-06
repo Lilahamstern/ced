@@ -12,7 +12,7 @@ using MySql.Data.MySqlClient;
 
 namespace DataLibrary.DataAccess
 {
-    public static class DataAccess
+    public static class MySQLDataAccess
     {
         private static MySqlConnection GetConnection()
         {
