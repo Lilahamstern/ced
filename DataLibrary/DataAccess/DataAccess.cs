@@ -4,15 +4,20 @@ using System.Text;
 using Dapper;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
+using MySql.Data.MySqlClient;
 
 namespace DataLibrary.DataAccess
 {
-    public static class SqlDataAccess
+    public static class DataAccess
     {
+        private static MySqlConnection GetConnection()
+        {
+            return new MySqlConnection(GetConnectionString());
+        }
         public static string GetConnectionString()
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -24,7 +29,7 @@ namespace DataLibrary.DataAccess
 
         public static List<T> LoadData<T>(string sql)
         {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection cnn = GetConnection())
             {
                 return cnn.Query<T>(sql).ToList();
             }
@@ -32,7 +37,7 @@ namespace DataLibrary.DataAccess
 
         public static int SaveData<T>(string sql, T data)
         {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection cnn = GetConnection())
             {
                 return cnn.Execute(sql, data);
             }
@@ -40,7 +45,7 @@ namespace DataLibrary.DataAccess
 
         public static T QueryData<T>(string sql, T data)
         {
-            using (IDbConnection cnn = new SqlConnection(GetConnectionString()))
+            using (IDbConnection cnn = GetConnection())
             {
                 return cnn.QuerySingle<T>(sql, new { data });
             }

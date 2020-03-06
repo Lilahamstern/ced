@@ -21,13 +21,13 @@ namespace DataLibrary.BusinessLogic
                         values (@Id, @CreatedAt, @UpdatedAt);";
 
 
-            return SqlDataAccess.SaveData(sql, data);
+            return DataAccess.DataAccess.SaveData(sql, data);
         }
 
         public static int ProjectExists(int projectId)
         {
             string sql = $"select COUNT(*) from project where id = @data";
-            return SqlDataAccess.QueryData<int>(sql, projectId);
+            return DataAccess.DataAccess.QueryData<int>(sql, projectId);
         }
 
         public static int CreateProjectInformation(int projectId, int orderId, string name, string description, string manager,
@@ -48,7 +48,7 @@ namespace DataLibrary.BusinessLogic
                     Manager, Client, Sector, CreatedAt, UpdatedAt)
                         values (@ProjectId, @OrderId, @Name, @Description, @Manager, @Client, @Sector, @CreatedAt, @UpdatedAt);";
 
-            return SqlDataAccess.SaveData(sql, data);
+            return DataAccess.DataAccess.SaveData(sql, data);
         }
 
         public static List<ProjectInformationModel> LoadProjects()
@@ -56,7 +56,7 @@ namespace DataLibrary.BusinessLogic
             string sql = @"select ProjectId, OrderId, Name, Description, 
                     Manager, Client, Sector, CreatedAt, UpdatedAt from projectInformation LIMIT 10;";
 
-            return SqlDataAccess.LoadData<ProjectInformationModel>(sql);
+            return DataAccess.DataAccess.LoadData<ProjectInformationModel>(sql);
         }
     }
 }
