@@ -41,7 +41,7 @@
         client = RPCService.GetProjectClient();
         try
         {
-            var res = await client.GetProjectsAsync(new ProjectGetRequest { Search = "", Limit = 0});
+            var res = await client.GetProjectsAsync(new ProjectGetRequest { Search = "da", Limit = 1});
             foreach (var item in res.Projects)
             {
                 projects.Add(new PM
