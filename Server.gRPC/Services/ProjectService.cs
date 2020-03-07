@@ -1,56 +1,56 @@
-﻿using DataAccessLayer.Models;
-using DataAccessLayer;
-using Microsoft.EntityFrameworkCore;
+﻿using Google.Protobuf.WellKnownTypes;
 using Server.gRPC.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static DataLibrary.BusinessLogic.ProjectProcessor;
 
 namespace Server.gRPC.Services
 {
-  public class ProjectService : IProjectService
-  {
-    private readonly DataContext _dataContext;
-    public ProjectService(DataContext dataContext)
+    public class ProjectService : IProjectService
     {
-      _dataContext = dataContext;
-    }
-    public async Task<ProjectCreateReply> CreateProjectAsync(ProjectCreateRequest request)
-    {
-      var project = new BusinessLayer.Models.EntityFramework.Project { ProjectId = request.ProjectId };
-      //project.ProjectInformation = new List<ProjectInformation> {
-      //          new ProjectInformation {
-      //              OrderId = request.OrderId,
-      //              Name = request.Name,
-      //              Description = request.Description,
-      //              Manager = request.Manager,
-      //              Client = request.Client,
-      //              Sector = request.Sector,
-      //          }
-      //      };
-
-      await _dataContext.AddAsync(project);
-      var created = await _dataContext.SaveChangesAsync();
-      if (created != 0)
-      {
-        return new ProjectCreateReply
+        public async Task<ProjectCreateReply> CreateProjectAsync(ProjectCreateRequest request)
         {
-          ProjectId = request.ProjectId
-        };
-      }
-      return new ProjectCreateReply { ProjectId = 0 };
-    }
+            CreateProject(request.ProjectId);
 
-    public async Task<Boolean> ProjectExistsAsync(int projectId)
-    {
-      var project = await _dataContext.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
-      return project != null;
-    }
+            int created = CreateProjectInformation(request.ProjectId, request.OrderId, request.Name,
+                       request.Description, request.Manager, request.Client, request.Sector);
 
-    public async Task<List<ProjectInformation>> GetAllProjectsAsync()
-    {
-      return await _dataContext.ProjectInformation.ToListAsync();
+            if (created != 0)
+            {
+                request.ProjectId = 0;
+            }
+            return new ProjectCreateReply { ProjectId = request.ProjectId };
+        }
+
+        public async Task<Boolean> ProjectExistsAsync(int projectId)
+        {
+            int total = ProjectExists(projectId);
+            return total != 0;
+        }
+
+        public async Task<List<ProjectModel>> GetAllProjectsAsync()
+        {
+            List<ProjectModel> projects = new List<ProjectModel>();
+            var data = LoadProjects();
+
+            foreach (var item in data)
+            {
+                var project = new ProjectModel();
+                project.ProjectId = item.Id;
+                project.OrderId = item.OrderId;
+                project.Name = item.Name;
+                project.Description = (!string.IsNullOrEmpty(item.Description)) ? item.Description : "empty";
+                project.Manager = item.Manager;
+                project.Client = item.Client;
+                project.Sector = item.Sector;
+                project.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.CreatedAt, DateTimeKind.Utc));
+                project.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.UpdatedAt, DateTimeKind.Utc));
+
+                projects.Add(project);
+            }
+            return projects;
+        }
     }
-  }
 }

@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Protobuf Include="..\Server.gRPC\Protos\project.proto" GrpcServices="Client">
       <Link>Protos\project.proto</Link>
     </Protobuf>
