@@ -18,7 +18,7 @@ namespace Server.gRPC.Controllers
       _logger = logger;
     }
 
-    public override async Task<ProjectCreateReply> CreateProject(ProjectCreateRequest request, ServerCallContext context)
+    public override async Task<addProjectResponse> CreateProject(addProjectParams request, ServerCallContext context)
     {
       var exists = await _projectService.ProjectExistsAsync(request.ProjectId);
       if (exists)
@@ -34,11 +34,11 @@ namespace Server.gRPC.Controllers
       return await Task.FromResult(res);
     }
 
-        public override async Task<ProjectReply> GetProjects(ProjectGetRequest request, ServerCallContext context)
+        public override async Task<projectResponse> GetProjects(getProjectsParams request, ServerCallContext context)
         {
             var projects =  await _projectService.GetAllProjectsAsync();
 
-            return await Task.FromResult(new ProjectReply { Projects = { projects } });
+            return await Task.FromResult(new projectResponse { Projects = { projects } });
         }
     }
 }

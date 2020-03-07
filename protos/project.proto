@@ -7,11 +7,11 @@ option csharp_namespace = "Server.gRPC.Controllers";
 package project;
 
 service Project {
-	rpc CreateProject (ProjectCreateRequest) returns (ProjectCreateReply);
-	rpc GetProjects (ProjectGetRequest) returns (ProjectReply);
+	rpc CreateProject (addProjectParams) returns (addProjectResponse);
+	rpc GetProjects (getProjectsParams) returns (projectResponse);
 }
 
-message ProjectCreateRequest {
+message addProjectParams {
 	int32 project_id = 1;
 	int32 order_id = 2;
 	string name = 3;
@@ -21,20 +21,20 @@ message ProjectCreateRequest {
 	string sector = 7;
 }
 
-message ProjectGetRequest {
+message getProjectsParams {
 	string search = 1;
 	int32 limit = 2;
 }
 
-message ProjectCreateReply {
+message addProjectResponse {
 	int32 project_id = 1;
 }
 
-message ProjectReply {
-	repeated ProjectModel projects = 1;
+message projectResponse {
+	repeated projectObject projects = 1;
 }
 
-message ProjectModel {
+message projectObject {
 	int32 project_id = 1;
 	int32 order_id = 2;
 	string name = 3;

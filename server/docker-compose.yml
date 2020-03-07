@@ -1,32 +1,20 @@
 version: '3.4'
 
 services:
-  client:
-    image: ${DOCKER_REGISTRY-}client
-    container_name: client
-    build:
-      context: .
-      dockerfile: Client/Dockerfile
-    networks:
-      - database
-    depends_on:
-      #- server.api
-      - server.grpc
-
   #server.api:
-    #image: ${DOCKER_REGISTRY-}serverapi
-    #hostname: server-api
-    #container_name: server-api
-    #build:
-     # context: .
-      #dockerfile: Server.API/Dockerfile
-    #networks:
-      #- database
+  #image: ${DOCKER_REGISTRY-}serverapi
+  #hostname: server-api
+  #container_name: server-api
+  #build:
+  # context: .
+  #dockerfile: Server.API/Dockerfile
+  #networks:
+  #- database
 
   database:
     container_name: database
     hostname: database
-    image: "mysql:8"
+    image: 'mysql:8'
     restart: always
     environment:
       - MYSQL_USER=admin
@@ -34,7 +22,7 @@ services:
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     ports:
-      - "3306:3306"
+      - '3306:3306'
     networks:
       - database
 

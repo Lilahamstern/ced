@@ -10,7 +10,7 @@ namespace Server.gRPC.Services
 {
     public class ProjectService : IProjectService
     {
-        public async Task<ProjectCreateReply> CreateProjectAsync(ProjectCreateRequest request)
+        public async Task<addProjectResponse> CreateProjectAsync(addProjectParams request)
         {
             CreateProject(request.ProjectId);
 
@@ -21,7 +21,7 @@ namespace Server.gRPC.Services
             {
                 request.ProjectId = 0;
             }
-            return new ProjectCreateReply { ProjectId = request.ProjectId };
+            return new addProjectResponse { ProjectId = request.ProjectId };
         }
 
         public async Task<Boolean> ProjectExistsAsync(int projectId)
@@ -30,14 +30,14 @@ namespace Server.gRPC.Services
             return total != 0;
         }
 
-        public async Task<List<ProjectModel>> GetAllProjectsAsync()
+        public async Task<List<projectObject>> GetAllProjectsAsync()
         {
-            List<ProjectModel> projects = new List<ProjectModel>();
+            List<projectObject> projects = new List<projectObject>();
             var data = LoadProjects();
 
             foreach (var item in data)
             {
-                var project = new ProjectModel();
+                var project = new projectObject();
                 project.ProjectId = item.Id;
                 project.OrderId = item.OrderId;
                 project.Name = item.Name;
