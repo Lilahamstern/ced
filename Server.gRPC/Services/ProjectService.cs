@@ -41,7 +41,7 @@ namespace Server.gRPC.Services
                 project.ProjectId = item.Id;
                 project.OrderId = item.OrderId;
                 project.Name = item.Name;
-                project.Description = item.Description;
+                project.Description = (!string.IsNullOrEmpty(item.Description)) ? item.Description : "empty";
                 project.Manager = item.Manager;
                 project.Client = item.Client;
                 project.Sector = item.Sector;
