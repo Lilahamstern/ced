@@ -1,0 +1,17 @@
+{
+  "project": {
+    "projectId": "Databas Id",
+    "orderId": "Uppdrags Id",
+    "name": "Namn",
+    "desc": "Beskrivning",
+    "manager": "Ansvarig",
+    "client": "Klient",
+    "sector": "Sektor"
+  },
+  "table": {
+    "prev": "Föregående",
+    "next": "Nästa",
+    "showing": "Visa {0} av {1}",
+    "show": "Visa"
+  }
+}

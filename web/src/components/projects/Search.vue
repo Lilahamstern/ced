@@ -1,10 +1,8 @@
-<template>
-  <p class="text-blue-500">Counter is now: {{ counter }}</p>
-</template>
+<template><div></div> </template>
 
 <script>
 export default {
-  name: "project-search",
+  name: 'project-search',
   computed: {
     counter() {
       return this.$store.state.counter;

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <searchComp></searchComp>
-    <projectTable></projectTable>
+    <projectTable class="inline-block align-middle"></projectTable>
   </div>
 </template>
 
