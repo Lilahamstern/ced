@@ -54,7 +54,7 @@ namespace DataLibrary.BusinessLogic
         public static List<ProjectInformationModel> LoadProjects()
         {
             string sql = @"select ProjectId, OrderId, Name, Description, 
-                    Manager, Client, Sector, CreatedAt, UpdatedAt from projectInformation LIMIT 10;";
+                    Manager, Client, Sector, CreatedAt, UpdatedAt from projectInformation;";
 
             return MySQLDataAccess.LoadData<ProjectInformationModel>(sql);
         }

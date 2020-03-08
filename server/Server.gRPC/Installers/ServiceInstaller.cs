@@ -10,8 +10,21 @@ namespace Server.gRPC.Installers
 {
     public class ServiceInstaller : IInstaller
     {
+        readonly string MyAllowSpecificOrigins = "AllowOrigin";
         public void InstallServices(IConfiguration configuration, IServiceCollection services)
         {
+            services.AddCors(o =>
+            {
+                o.AddPolicy(MyAllowSpecificOrigins, 
+                    b =>
+                {
+                    b.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithExposedHeaders("Grpc-Status", "Grpc-Message");
+                });
+            });
+
             services.AddScoped<IProjectService, ProjectService>();
         }
     }

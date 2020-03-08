@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Server.gRPC.Installers;
 using Server.gRPC.Controllers;
 using System.Configuration;
+using Microsoft.AspNetCore.Cors;
 
 namespace Server.gRPC
 {
@@ -35,9 +36,17 @@ namespace Server.gRPC
 
             app.UseRouting();
 
+            app.UseCors(o => {
+                o.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+
+            app.UseGrpcWeb();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<ProjectController>();
+                endpoints.MapGrpcService<ProjectController>().EnableGrpcWeb().RequireCors("AllowOrigin");
 
                 endpoints.MapGet("/", async context =>
                 {
