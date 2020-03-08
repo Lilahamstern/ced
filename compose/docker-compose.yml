@@ -33,7 +33,7 @@ services:
     stdin_open: true
     tty: true
     build:
-      context: .
+      context: ../server
       dockerfile: Server.gRPC/Dockerfile
     networks:
       - database
