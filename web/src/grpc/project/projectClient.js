@@ -5,7 +5,7 @@ export default class ProjectGRPC {
   static _connection() {
     if (this._client == null) {
       try {
-        this._client = new ProjectClient('https://localhost:32770', null, null);
+        this._client = new ProjectClient('https://localhost:32768', null, null);
       } catch (error) {
         console.log(error);
       }
@@ -24,7 +24,6 @@ export default class ProjectGRPC {
         if (err != null) {
           reject(err);
         }
-        console.log(res.toObject().projectsList);
         resolve(res.toObject().projectsList);
       });
     });
