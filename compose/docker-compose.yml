@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  #server.api:
+  #image: ${DOCKER_REGISTRY-}serverapi
+  #hostname: server-api
+  #container_name: server-api
+  #build:
+  # context: .
+  #dockerfile: Server.API/Dockerfile
+  #networks:
+  #- database
+
+  database:
+    container_name: database
+    hostname: database
+    image: 'mysql:8'
+    restart: always
+    environment:
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=supersecret
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '3306:3306'
+    networks:
+      - database
+
+  server.grpc:
+    image: ${DOCKER_REGISTRY-}servergrpc
+    hostname: server-grpc
+    container_name: server-grpc
+    stdin_open: true
+    tty: true
+    build:
+      context: ../server
+      dockerfile: Server.gRPC/Dockerfile
+    networks:
+      - database
+
+networks:
+  database:
+    external: true

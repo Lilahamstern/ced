@@ -1,0 +1,17 @@
+{
+  "project": {
+    "projectId": "Database Id",
+    "orderId": "Order Id",
+    "name": "Name",
+    "desc": "Description",
+    "manager": "Manager",
+    "client": "Client",
+    "sector": "Sector"
+  },
+  "table": {
+    "prev": "Previous",
+    "next": "Next",
+    "showing": "Showing {0} of {1}",
+    "show": "Show"
+  }
+}
