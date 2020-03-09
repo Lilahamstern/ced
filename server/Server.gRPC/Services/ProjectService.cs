@@ -38,7 +38,7 @@ namespace Server.gRPC.Services
             foreach (var item in data)
             {
                 var project = new projectObject();
-                project.ProjectId = item.Id;
+                project.ProjectId = item.ProjectId;
                 project.OrderId = item.OrderId;
                 project.Name = item.Name;
                 project.Description = (!string.IsNullOrEmpty(item.Description)) ? item.Description : "empty";
