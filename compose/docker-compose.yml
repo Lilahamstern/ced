@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   #server.api:
@@ -14,15 +14,25 @@ services:
   database:
     container_name: database
     hostname: database
-    image: 'mysql:8'
+    image: postgres
     restart: always
     environment:
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=supersecret
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRES_PASSWORD=abc
+      - POSTGRES_DB=ced
     ports:
-      - '3306:3306'
+      - "5432:5432"
+    networks:
+      - database
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 8085:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dev@hamsterapps.net
+      - PGADMIN_DEFAULT_PASSWORD=12345
+
     networks:
       - database
 

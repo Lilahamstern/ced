@@ -1,9 +1,15 @@
-CREATE TABLE `ced`.`project` (
-  `Id` INT NOT NULL,
-  `CreatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `UpdatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`));
+CREATE TABLE public.project
+(
+    id serial,
+    created_at timestamp with time zone NOT NULL DEFAULT NOW(),
+    updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (id)
+);
 
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON public.project
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_updated_stamp();
   
 
   CREATE TABLE `ced`.`projectInformation` (
