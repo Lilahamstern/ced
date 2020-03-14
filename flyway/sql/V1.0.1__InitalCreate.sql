@@ -6,84 +6,73 @@ CREATE TABLE public.project
     PRIMARY KEY (id)
 );
 
-CREATE TRIGGER set_updated_at
-BEFORE UPDATE ON public.project
-FOR EACH ROW
-EXECUTE PROCEDURE trigger_set_updated_stamp();
-  
+CREATE TABLE public.project_information
+(
+    id serial,
+    order_id integer NOT NULL,
+    name character varying(45) NOT NULL,
+    description character varying(300) NOT NULL,
+    manager character varying(45) NOT NULL,
+    client character varying(45) NOT NULL,
+    sector character varying(45) NOT NULL,
+    project_id integer NOT NULL,
+    PRIMARY KEY(id)
+)
+    INHERITS (public.project);
 
-  CREATE TABLE `ced`.`projectInformation` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `OrderId` INT NOT NULL,
-  `Name` VARCHAR(40) NOT NULL,
-  `Description` VARCHAR(300) NULL,
-  `Manager` VARCHAR(40) NOT NULL,
-  `Client` VARCHAR(45) NOT NULL,
-  `Sector` VARCHAR(45) NOT NULL,
-  `ProjectId` INT NOT NULL,
-  `CreatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `UpdatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`));
+ALTER TABLE public.project_information
+    ADD CONSTRAINT fk_project FOREIGN KEY (project_id)
+    REFERENCES public.project (id) MATCH SIMPLE
+    ON UPDATE RESTRICT
+    ON DELETE CASCADE
+    NOT VALID;
 
+CREATE TABLE public.version
+(
+    id serial NOT NULL,
+    title character varying(30) NOT NULL,
+    description character varying(300) NOT NULL,
+    project_id integer NOT NULL,
+    project_information_id integer NOT NULL,
+    PRIMARY KEY(id)
+)
+    INHERITS (public.project);
 
- CREATE TABLE `ced`.`version` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `Title` VARCHAR(45) NOT NULL,
-  `Description` VARCHAR(300) NULL,
-  `ProjectId` INT NOT NULL,
-  `ProjectInformationId` INT NOT NULL,
-  `CreatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `UpdatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`));
+ALTER TABLE public.version
+    ADD CONSTRAINT fk_project FOREIGN KEY (project_id)
+    REFERENCES public.project (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
 
-  CREATE TABLE `ced`.`component` (
-  `Id` INT NOT NULL AUTO_INCREMENT,
-  `ComponentId` INT NOT NULL,
-  `Name` VARCHAR(60) NOT NULL,
-  `Profile` VARCHAR(30) NOT NULL,
-  `Material` VARCHAR(50) NOT NULL,
-  `Co` FLOAT NOT NULL,
-  `Level` INT NOT NULL,
-  `Type` VARCHAR(45) NOT NULL,
-  `VersionId` INT NOT NULL,
-  `CreatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `UpdatedAt` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`Id`));
+ALTER TABLE public.version
+    ADD CONSTRAINT fk_project_information FOREIGN KEY (project_information_id)
+    REFERENCES public.project_information (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
 
-  ALTER TABLE `ced`.`projectInformation` 
-ADD INDEX `FK_Project_Id_ProjectInformation_id_idx` (`ProjectId` ASC) VISIBLE;
-;
-ALTER TABLE `ced`.`projectInformation` 
-ADD CONSTRAINT `FK_Project_Id_ProjectInformation_id`
-  FOREIGN KEY (`ProjectId`)
-  REFERENCES `ced`.`project` (`Id`)
-  ON DELETE CASCADE
-  ON UPDATE RESTRICT;
+CREATE TABLE public.components
+(
+    id serial,
+    component_id integer NOT NULL,
+    name character varying(45) NOT NULL,
+    profile character varying(40) NOT NULL,
+    material character varying(40) NOT NULL,
+    co real NOT NULL,
+    level int NOT NULL,
+    type character varying(45) NOT NULL,
+    version_id integer NOT NULL,
+    PRIMARY KEY(id)
+)
+    INHERITS (public.project);
 
-  ALTER TABLE `ced`.`version` 
-ADD INDEX `FK_Project_Id_Version_ProjectId_idx` (`ProjectId` ASC) VISIBLE,
-ADD INDEX `FK_ProjectInformation_Id_Version_ProjectInfromationId_idx` (`ProjectInformationId` ASC) VISIBLE;
-;
-ALTER TABLE `ced`.`version` 
-ADD CONSTRAINT `FK_Project_Id_Version_ProjectId`
-  FOREIGN KEY (`ProjectId`)
-  REFERENCES `ced`.`project` (`Id`)
-  ON DELETE NO ACTION
-  ON UPDATE RESTRICT,
-ADD CONSTRAINT `FK_ProjectInformation_Id_Version_ProjectInfromationId`
-  FOREIGN KEY (`ProjectInformationId`)
-  REFERENCES `ced`.`projectInformation` (`Id`)
-  ON DELETE CASCADE
-  ON UPDATE RESTRICT;
+ALTER TABLE public.components
+    ADD CONSTRAINT pk_version FOREIGN KEY (version_id)
+    REFERENCES public.version (id) MATCH SIMPLE
+    ON UPDATE RESTRICT
+    ON DELETE CASCADE
+    NOT VALID;
 
-  ALTER TABLE `ced`.`component` 
-ADD INDEX `FK_version_Id_Component_VersionId_idx` (`VersionId` ASC) VISIBLE;
-;
-ALTER TABLE `ced`.`component` 
-ADD CONSTRAINT `FK_version_Id_Component_VersionId`
-  FOREIGN KEY (`VersionId`)
-  REFERENCES `ced`.`version` (`Id`)
-  ON DELETE CASCADE
-  ON UPDATE RESTRICT;
 
 
