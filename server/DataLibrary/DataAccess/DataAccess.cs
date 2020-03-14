@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 using Dapper;
-using System.Configuration;
 using System.Data;
-using MySql.Data;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Linq;
-using MySql.Data.MySqlClient;
+using Npgsql;
 
 namespace DataLibrary.DataAccess
 {
-    public static class MySQLDataAccess
+    public static class DataAccess
     {
-        private static MySqlConnection GetConnection()
+        private static NpgsqlConnection GetConnection()
         {
-            return new MySqlConnection(GetConnectionString());
+            return new NpgsqlConnection(GetConnectionString());
         }
         public static string GetConnectionString()
         {

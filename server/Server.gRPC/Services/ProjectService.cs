@@ -38,15 +38,15 @@ namespace Server.gRPC.Services
             foreach (var item in data)
             {
                 var project = new projectObject();
-                project.ProjectId = item.ProjectId;
-                project.OrderId = item.OrderId;
+                project.ProjectId = item.Project_id;
+                project.OrderId = item.Order_id;
                 project.Name = item.Name;
                 project.Description = (!string.IsNullOrEmpty(item.Description)) ? item.Description : "empty";
                 project.Manager = item.Manager;
                 project.Client = item.Client;
                 project.Sector = item.Sector;
-                project.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.CreatedAt, DateTimeKind.Utc));
-                project.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.UpdatedAt, DateTimeKind.Utc));
+                project.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.Created_at, DateTimeKind.Utc));
+                project.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(item.Updated_at, DateTimeKind.Utc));
 
                 projects.Add(project);
             }

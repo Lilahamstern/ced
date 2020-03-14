@@ -1,33 +1,31 @@
-﻿using DataLibrary.DataAccess;
+﻿
 using DataLibrary.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using static DataLibrary.DataAccess.DataAccess;
 
 namespace DataLibrary.BusinessLogic
 {
     public static class ProjectProcessor
     {
-        public static int  CreateProject(int projectId)
+        public static int CreateProject(int projectId)
         {
             ProjectModel data = new ProjectModel
             {
                 Id = projectId,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
             };
 
-            string sql = @"insert into project (Id, CreatedAt, UpdatedAt)
-                        values (@Id, @CreatedAt, @UpdatedAt);";
+            string sql = @"insert into project (id)
+                        values (@Id);";
 
 
-            return MySQLDataAccess.SaveData(sql, data);
+            return SaveData(sql, data);
         }
 
         public static int ProjectExists(int projectId)
         {
             string sql = $"select COUNT(*) from project where id = @data";
-            return MySQLDataAccess.QueryData<int>(sql, projectId);
+            return QueryData<int>(sql, projectId);
         }
 
         public static int CreateProjectInformation(int projectId, int orderId, string name, string description, string manager,
@@ -35,8 +33,8 @@ namespace DataLibrary.BusinessLogic
         {
             ProjectInformationModel data = new ProjectInformationModel
             {
-                ProjectId = projectId,
-                OrderId = orderId,
+                Project_id = projectId,
+                Order_id = orderId,
                 Name = name,
                 Description = description,
                 Manager = manager,
@@ -44,19 +42,19 @@ namespace DataLibrary.BusinessLogic
                 Sector = sector,
             };
 
-            string sql = @"insert into projectInformation (ProjectId, OrderId, Name, Description, 
-                    Manager, Client, Sector, CreatedAt, UpdatedAt)
-                        values (@ProjectId, @OrderId, @Name, @Description, @Manager, @Client, @Sector, @CreatedAt, @UpdatedAt);";
+            string sql = @"insert into project_information (project_id, order_id, name, description, 
+                    manager, client, sector)
+                        values (@ProjectId, @OrderId, @Name, @Description, @Manager, @Client, @Sector);";
 
-            return MySQLDataAccess.SaveData(sql, data);
+            return SaveData(sql, data);
         }
 
         public static List<ProjectInformationModel> LoadProjects()
         {
-            string sql = @"select ProjectId, OrderId, Name, Description, 
-                    Manager, Client, Sector, CreatedAt, UpdatedAt from projectInformation;";
+            string sql = @"select project_id, order_id, name, description, 
+                    manager, client, sector, created_at, updated_at from project_information;";
 
-            return MySQLDataAccess.LoadData<ProjectInformationModel>(sql);
+            return LoadData<ProjectInformationModel>(sql);
         }
     }
 }
