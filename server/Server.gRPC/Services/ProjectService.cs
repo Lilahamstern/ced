@@ -30,10 +30,10 @@ namespace Server.gRPC.Services
             return total != 0;
         }
 
-        public async Task<List<projectObject>> GetAllProjectsAsync()
+        public async Task<List<projectObject>> GetProjectsAsync(string query)
         {
             List<projectObject> projects = new List<projectObject>();
-            var data = LoadProjects();
+            var data = LoadProjects(query);
 
             foreach (var item in data)
             {

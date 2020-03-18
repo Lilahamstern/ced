@@ -12,6 +12,6 @@ namespace Server.gRPC.Services
 
         Task<Boolean> ProjectExistsAsync(int projectId);
 
-        Task<List<projectObject>> GetAllProjectsAsync();
+        Task<List<projectObject>> GetProjectsAsync(string query);
     }
 }

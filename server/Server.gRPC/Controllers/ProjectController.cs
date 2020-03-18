@@ -36,7 +36,7 @@ namespace Server.gRPC.Controllers
 
         public override async Task<projectResponse> GetProjects(getProjectsParams request, ServerCallContext context)
         {
-            var projects =  await _projectService.GetAllProjectsAsync();
+            var projects =  await _projectService.GetProjectsAsync(request.Search);
 
             return await Task.FromResult(new projectResponse { Projects = { projects } });
         }

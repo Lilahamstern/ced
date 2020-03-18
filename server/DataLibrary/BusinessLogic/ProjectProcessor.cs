@@ -49,10 +49,9 @@ namespace DataLibrary.BusinessLogic
             return SaveData(sql, data);
         }
 
-        public static List<ProjectInformationModel> LoadProjects()
+        public static List<ProjectInformationModel> LoadProjects(string query)
         {
-            string sql = @"select project_id, order_id, name, description, 
-                    manager, client, sector, created_at, updated_at from project_information;";
+            string sql = $"SELECT * FROM get_projects('{query}')";
 
             return LoadData<ProjectInformationModel>(sql);
         }
