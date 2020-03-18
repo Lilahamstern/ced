@@ -1,11 +1,31 @@
-<template><div></div> </template>
+<template>
+  <div>
+    <form @submit.prevent="submit">
+      <input
+        type="text"
+        placeholder="Search"
+        v-model="query"
+        class="outline-none bg-gray-700 p-4 focus:bg-blue-900 w-1/3 h-8"
+      />
+      <button
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-2 py-1 h-full outline-none"
+        type="submit"
+      >Search</button>
+    </form>
+  </div>
+</template>
 
 <script>
 export default {
-  name: 'project-search',
-  computed: {
-    counter() {
-      return this.$store.state.counter;
+  name: "project-search",
+  data() {
+    return {
+      query: ""
+    };
+  },
+  methods: {
+    submit() {
+      this.$emit("search-project", this.query);
     }
   }
 };

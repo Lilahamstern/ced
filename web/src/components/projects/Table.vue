@@ -57,18 +57,6 @@
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-30"
               >{{ project.projectId }}</td>
             </tr>
-            <!-- <tr
-            v-if="selectedProject == project.projectId"
-            :key="project.projectId*2000"
-            class="bg-gray-500 half-width cursor-pointer"
-          >
-            <td class="border-b border-gray-500 cursor-pointer"></td>
-            <td class="border-b border-gray-500 px-4 py-2 cursor-pointer">{{ project.name }}</td>
-            <td class="border-b border-gray-500 px-4 py-2 cursor-pointer">{{ project.manager }}</td>
-            <td class="border-b border-gray-500 px-4 py-2 cursor-pointer">{{ project.client }}</td>
-            <td class="border-b border-gray-500 px-4 py-2 cursor-pointer">{{ project.sector }}</td>
-            <td class="border-b border-gray-500 px-4 py-2 cursor-pointer">{{ project.projectId }}</td>
-            </tr>-->
           </template>
         </tbody>
       </table>
@@ -93,24 +81,27 @@
 </template>
 
 <script>
-import projectGRPC from "../../grpc/project/projectClient";
 import alertError from "../alerts/error";
 export default {
   name: "project-table",
   components: {
     alertError
   },
+  props: {
+    projects: {},
+    error: {
+      type: String,
+      required: false
+    }
+  },
   data: function() {
     return {
       selectedProject: null,
-      projects: [],
       currentSort: "asc",
       currentSortDir: "name",
-      loading: true,
       pageSize: 10,
       currentPage: 1,
-      options: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }],
-      error: null
+      options: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }]
     };
   },
   methods: {
@@ -162,22 +153,13 @@ export default {
       return this.projects.length;
     },
     loadTable: function() {
-      console.log(!this.error);
       if (!this.loading && !this.error) return false;
       return true;
+    },
+    loading: function() {
+      if (this.projects.length >= 0 && !this.error) return false;
+      return true;
     }
-  },
-  created: async function() {
-    projectGRPC
-      .getProjects()
-      .then(res => {
-        this.projects = res;
-        this.loading = false;
-      })
-      .catch(err => {
-        this.error = err;
-        this.loading = false;
-      });
   }
 };
 </script>
