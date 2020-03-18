@@ -444,8 +444,7 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
   proto.project.getProjectsParams.toObject = function(includeInstance, msg) {
     var f,
       obj = {
-        search: jspb.Message.getFieldWithDefault(msg, 1, ''),
-        limit: jspb.Message.getFieldWithDefault(msg, 2, 0)
+        search: jspb.Message.getFieldWithDefault(msg, 1, '')
       };
 
     if (includeInstance) {
@@ -490,10 +489,6 @@ proto.project.getProjectsParams.deserializeBinaryFromReader = function(
         var value = /** @type {string} */ (reader.readString());
         msg.setSearch(value);
         break;
-      case 2:
-        var value = /** @type {number} */ (reader.readInt32());
-        msg.setLimit(value);
-        break;
       default:
         reader.skipField();
         break;
@@ -528,10 +523,6 @@ proto.project.getProjectsParams.serializeBinaryToWriter = function(
   if (f.length > 0) {
     writer.writeString(1, f);
   }
-  f = message.getLimit();
-  if (f !== 0) {
-    writer.writeInt32(2, f);
-  }
 };
 
 /**
@@ -548,22 +539,6 @@ proto.project.getProjectsParams.prototype.getSearch = function() {
  */
 proto.project.getProjectsParams.prototype.setSearch = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-/**
- * optional int32 limit = 2;
- * @return {number}
- */
-proto.project.getProjectsParams.prototype.getLimit = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-/**
- * @param {number} value
- * @return {!proto.project.getProjectsParams} returns this
- */
-proto.project.getProjectsParams.prototype.setLimit = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 if (jspb.Message.GENERATE_TO_OBJECT) {

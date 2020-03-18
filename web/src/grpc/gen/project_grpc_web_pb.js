@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 /**
  * @fileoverview gRPC-Web generated client stub for project
  * @enhanceable
