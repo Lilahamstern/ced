@@ -23,7 +23,6 @@ message addProjectParams {
 
 message getProjectsParams {
 	string search = 1;
-	int32 limit = 2;
 }
 
 message addProjectResponse {
