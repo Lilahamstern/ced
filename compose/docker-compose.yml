@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   #server.api:
@@ -10,31 +10,6 @@ services:
   #dockerfile: Server.API/Dockerfile
   #networks:
   #- database
-
-  database:
-    container_name: database
-    hostname: database
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=abc
-      - POSTGRES_DB=ced
-    ports:
-      - "5432:5432"
-    networks:
-      - database
-
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    ports:
-      - 8085:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=dev@hamsterapps.net
-      - PGADMIN_DEFAULT_PASSWORD=12345
-
-    networks:
-      - database
 
   server.grpc:
     image: ${DOCKER_REGISTRY-}servergrpc
