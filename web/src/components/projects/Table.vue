@@ -43,15 +43,15 @@
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32"
               >{{ project.orderId }}</td>
-              <td class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32">{{ project.name }}</td>
+              <td class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48">{{ project.name }}</td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48"
               >{{ project.manager }}</td>
               <td
-                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48"
+                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32"
               >{{ project.client }}</td>
               <td
-                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48 truncate"
+                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32 truncate"
               >{{ project.sector }}</td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-30"
