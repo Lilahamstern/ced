@@ -11,7 +11,7 @@ CREATE TABLE public.project_information
     id serial,
     order_id integer NOT NULL,
     name character varying(45) NOT NULL,
-    description character varying(300) NOT NULL,
+    description character varying(300),
     manager character varying(45) NOT NULL,
     client character varying(45) NOT NULL,
     sector character varying(45) NOT NULL,
