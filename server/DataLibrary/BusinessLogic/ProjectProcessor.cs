@@ -25,7 +25,7 @@ namespace DataLibrary.BusinessLogic
         public static int ProjectExists(int projectId)
         {
             string sql = $"select COUNT(*) from project where id = @data";
-            return QueryData<int>(sql, projectId);
+            return QueryData(sql, projectId);
         }
 
         public static int CreateProjectInformation(int projectId, int orderId, string name, string description, string manager,
@@ -51,9 +51,9 @@ namespace DataLibrary.BusinessLogic
 
         public static List<ProjectInformationModel> LoadProjects(string query)
         {
-            string sql = $"SELECT * FROM get_projects('{query}')";
+            string sql = @"SELECT * FROM get_projects(@data)";
 
-            return LoadData<ProjectInformationModel>(sql);
+            return LoadData<ProjectInformationModel>(sql, query);
         }
     }
 }
