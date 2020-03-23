@@ -1,23 +1,28 @@
 <template>
   <div class="home">
     <searchComp @search-project="searchProjects"></searchComp>
-    <projectTable class="inline-block align-middle" :projects="projects" :error="error"></projectTable>
+    <projectTable
+      @fetch-proejct="fetchProjects"
+      class="inline-block align-middle"
+      :projects="projects"
+      :error="error"
+    ></projectTable>
   </div>
 </template>
 
 <script>
-import searchComp from "@/components/projects/Search";
-import projectTable from "@/components/projects/Table";
-import projectGRPC from "../grpc/project/projectClient";
+import searchComp from '@/components/projects/Search';
+import projectTable from '@/components/projects/Table';
+import projectGRPC from '../grpc/project/projectClient';
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     searchComp,
     projectTable
   },
   data() {
     return {
-      query: "",
+      query: '',
       projects: [],
       error: null
     };
@@ -43,9 +48,6 @@ export default {
           this.error = err.message;
         });
     }
-  },
-  created: async function() {
-    this.fetchProjects();
   }
 };
 </script>
