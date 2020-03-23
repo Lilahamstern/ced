@@ -12,6 +12,8 @@
     "prev": "Previous",
     "next": "Next",
     "showing": "Showing {0} of {1}",
-    "show": "Show"
+    "show": "Show",
+    "search": "Search",
+    "loading": "Loading..."
   }
 }

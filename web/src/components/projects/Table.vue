@@ -1,7 +1,7 @@
 <template>
   <div class="mt-16 flex flex-wrap">
     <!-- Loading Component -->
-    <p v-if="loading" class="mx-auto">Loading</p>
+    <p v-if="loading" class="mx-auto">{{ $t('table.loading') }}</p>
     <!-- Alert Component -->
     <alertError
       title="Error Occuerd"

@@ -12,6 +12,8 @@
     "prev": "Föregående",
     "next": "Nästa",
     "showing": "Visa {0} av {1}",
-    "show": "Visa"
+    "show": "Visa",
+    "search": "Sök",
+    "loading": "Laddar..."
   }
 }
