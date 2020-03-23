@@ -1,8 +1,18 @@
 <template>
   <div class="mt-16 flex flex-wrap">
+    <!-- Loading Component -->
     <p v-if="loading" class="mx-auto">Loading</p>
-    <alertError title="Error Occuerd" :message="error.message" v-if="error" class="mx-auto" />
-    <div v-if="!loadTable" class="mx-auto">
+    <!-- Alert Component -->
+    <alertError
+      title="Error Occuerd"
+      :message="error"
+      v-if="error"
+      class="mx-auto"
+    />
+    <!-- Table design and inputs -->
+
+    <!-- Table size controller -->
+    <div v-if="loadTable" class="mx-auto">
       <p class="mb-4 w-full text-left">
         {{ $t('table.show') }}
         <select
@@ -14,81 +24,115 @@
             v-for="option in options"
             :value="option.value"
             :key="option.value"
-          >{{ option.value }}</option>
+            >{{ option.value }}</option
+          >
         </select>
       </p>
-      <table class="border-collapse border-collapse border-2 border-gray-600 w-full text-left">
+
+      <!-- Table content -->
+      <table
+        class="border-collapse border-collapse border-2 border-gray-600 w-full text-left"
+      >
         <thead>
           <tr>
-            <th
-              class="px-4 py-2 cursor-pointer"
-              @click="sort('orderId')"
-            >{{ $t('project.orderId') }}</th>
-            <th class="px-4 py-2 cursor-pointer" @click="sort('name')">{{ $t('project.name') }}</th>
-            <th
-              class="px-4 py-2 cursor-pointer"
-              @click="sort('manager')"
-            >{{ $t('project.manager') }}</th>
-            <th class="px-4 py-2 cursor-pointer" @click="sort('client')">{{ $t('project.client') }}</th>
-            <th class="px-4 py-2 cursor-pointer" @click="sort('sector')">{{ $t('project.sector') }}</th>
-            <th
-              class="px-4 py-2 cursor-pointer"
-              @click="sort('projectId')"
-            >{{ $t('project.projectId') }}</th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('orderId')">
+              {{ $t('project.orderId') }}
+            </th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('name')">
+              {{ $t('project.name') }}
+            </th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('manager')">
+              {{ $t('project.manager') }}
+            </th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('client')">
+              {{ $t('project.client') }}
+            </th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('sector')">
+              {{ $t('project.sector') }}
+            </th>
+            <th class="px-4 py-2 cursor-pointer" @click="sort('projectId')">
+              {{ $t('project.projectId') }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <template v-for="project in sortedProjects">
-            <tr @click="extend(project.projectId)" :key="project.projectId" class="text-left">
+            <tr
+              @click="extend(project.projectId)"
+              :key="project.projectId"
+              class="text-left"
+            >
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32"
-              >{{ project.orderId }}</td>
-              <td class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48">{{ project.name }}</td>
+              >
+                {{ project.orderId }}
+              </td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48"
-              >{{ project.manager }}</td>
+              >
+                {{ project.name }}
+              </td>
+              <td
+                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-48"
+              >
+                {{ project.manager }}
+              </td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32"
-              >{{ project.client }}</td>
+              >
+                {{ project.client }}
+              </td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32 truncate"
-              >{{ project.sector }}</td>
+              >
+                {{ project.sector }}
+              </td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-30"
-              >{{ project.projectId }}</td>
+              >
+                {{ project.projectId }}
+              </td>
             </tr>
           </template>
         </tbody>
       </table>
+
+      <!-- Table Controller bottom -->
       <div class="inline-flex mt-4 h-8 w-full">
         <div class="w-1/2 text-left h-full">
           <button
             class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-0 mr-4 px-2 h-full"
             @click="prevPage"
-          >{{ $t('table.prev') }}</button>
+          >
+            {{ $t('table.prev') }}
+          </button>
           <button
             class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-0 px-2 h-full"
             @click="nextPage"
-          >{{ $t('table.next') }}</button>
+          >
+            {{ $t('table.next') }}
+          </button>
         </div>
-
-        <p
-          class="w-1/2 text-right h-full"
-        >{{ $t('table.showing', [showingProjects, projects.length]) }}</p>
+        <p class="w-1/2 text-right h-full">
+          {{ $t('table.showing', [showingProjects, projects.length]) }}
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import alertError from "../alerts/error";
+import alertError from '../alerts/error';
 export default {
-  name: "project-table",
+  name: 'project-table',
   components: {
     alertError
   },
   props: {
-    projects: {},
+    projects: {
+      type: Array,
+      requierd: true
+    },
     error: {
       type: String,
       required: false
@@ -96,9 +140,10 @@ export default {
   },
   data: function() {
     return {
+      loading: true,
       selectedProject: null,
-      currentSort: "asc",
-      currentSortDir: "name",
+      currentSort: 'asc',
+      currentSortDir: 'name',
       pageSize: 10,
       currentPage: 1,
       options: [{ value: 5 }, { value: 10 }, { value: 15 }, { value: 20 }]
@@ -107,7 +152,7 @@ export default {
   methods: {
     sort: function(sort) {
       if (sort === this.currentSort) {
-        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
       }
       this.currentSort = sort;
     },
@@ -126,6 +171,9 @@ export default {
     },
     extend: function(id) {
       this.selectedProject = id;
+    },
+    changeLoadingState: function() {
+      this.loading = !this.loading;
     }
   },
   computed: {
@@ -134,7 +182,7 @@ export default {
         .slice(0)
         .sort((a, b) => {
           let modifier = 1;
-          if (this.currentSortDir === "desc") modifier = -1;
+          if (this.currentSortDir === 'desc') modifier = -1;
           if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
           if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
           return 0;
@@ -153,12 +201,16 @@ export default {
       return this.projects.length;
     },
     loadTable: function() {
-      if (!this.loading && !this.error) return false;
+      if (this.loading || this.error) return false;
       return true;
+    }
+  },
+  watch: {
+    projects: function() {
+      this.changeLoadingState();
     },
-    loading: function() {
-      if (this.projects.length >= 0 && !this.error) return false;
-      return true;
+    error: function() {
+      this.changeLoadingState();
     }
   }
 };
