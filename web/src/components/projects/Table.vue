@@ -35,6 +35,7 @@
       >
         <thead>
           <tr>
+            <th class="px-4 py-2"></th>
             <th class="px-4 py-2 cursor-pointer" @click="sort('orderId')">
               {{ $t('project.orderId') }}
             </th>
@@ -57,11 +58,13 @@
         </thead>
         <tbody>
           <template v-for="project in sortedProjects">
-            <tr
-              @click="extend(project.projectId)"
-              :key="project.projectId"
-              class="text-left"
-            >
+            <tr :key="project.projectId" class="text-left">
+              <td
+                class="border-t border-gray-500 px-4 py-2 cursor-pointer w-12 text-center"
+                @click="extend(project.projectId)"
+              >
+                <i class="fas fa-arrow-right"></i>
+              </td>
               <td
                 class="border-t border-gray-500 px-4 py-2 cursor-pointer w-32"
               >
@@ -109,6 +112,7 @@
           <button
             class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-0 px-2 h-full"
             @click="nextPage"
+            :disabled="!canNextPage"
           >
             {{ $t('table.next') }}
           </button>
@@ -140,8 +144,7 @@ export default {
   },
   data: function() {
     return {
-      loading: true,
-      selectedProject: null,
+      loading: false,
       currentSort: 'asc',
       currentSortDir: 'name',
       pageSize: 10,
@@ -157,13 +160,10 @@ export default {
       this.currentSort = sort;
     },
     nextPage: function() {
-      if (this.currentPage * this.pageSize < this.projects.length)
-        this.currentPage++;
-      this.selectedProject = 0;
+      if (this.canNextPage) this.currentPage++;
     },
     prevPage: function() {
       if (this.currentPage > 1) this.currentPage--;
-      this.selectedProject = 0;
     },
     sizeValidation: function() {
       let currentSize = this.pageSize * this.currentPage;
@@ -173,7 +173,7 @@ export default {
       this.selectedProject = id;
     },
     changeLoadingState: function() {
-      this.loading = !this.loading;
+      this.loading = false;
     }
   },
   computed: {
@@ -203,6 +203,9 @@ export default {
     loadTable: function() {
       if (this.loading || this.error) return false;
       return true;
+    },
+    canNextPage() {
+      return this.currentPage * this.pageSize < this.projects.length;
     }
   },
   watch: {
@@ -212,6 +215,10 @@ export default {
     error: function() {
       this.changeLoadingState();
     }
+  },
+  beforeMount() {
+    this.loading = true;
+    this.$emit('fetch-proejct');
   }
 };
 </script>
