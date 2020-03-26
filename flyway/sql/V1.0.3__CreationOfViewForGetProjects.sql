@@ -15,7 +15,7 @@ RETURNS SETOF project_return
 AS
 $BODY$
 
-select DISTINCT ON (project_id) t1.project_id, t1.order_id, t1.name, t1.description, t1.manager, t1.client, t1.sector, t1.created_at
+select DISTINCT ON (project_id) t1.project_id, t1.order_id, t1.name, t1.description, t1.manager, t1.client, t1.sector, t1.created_at, t1.updated_at
 from project_information t1
 INNER JOIN
 (SELECT project_id, MAX(created_at) AS MaxDateTime
@@ -26,9 +26,9 @@ ON t1.project_id = t2.project_id
 and t1.created_at = t2.MaxDateTime
 where 
 CAST(order_id as TEXT) LIKE '%'|| query || '%'
-OR name LIKE '%'|| query || '%'
-OR manager LIKE '%'|| query || '%'
-OR client LIKE '%'|| query || '%'
-OR sector LIKE '%'|| query || '%';
+OR LOWER(name) LIKE '%'|| query || '%'
+OR LOWER(manager) LIKE '%'|| query || '%'
+OR LOWER(client) LIKE '%'|| query || '%'
+OR LOWER(sector) LIKE '%'|| query || '%';
 
 $BODY$ LANGUAGE sql;

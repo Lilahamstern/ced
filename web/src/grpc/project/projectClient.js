@@ -36,7 +36,7 @@ export default class ProjectGRPC {
     }
 
     let req = new getProjectsParams();
-    req.setSearch(search);
+    req.setSearch(search.toLowerCase());
 
     return new Promise((resolve, reject) => {
       this._client.getProjects(req, {}, (err, res) => {
