@@ -9,7 +9,7 @@ package project;
 service Project {
 	rpc CreateProject (addProjectParams) returns (addProjectResponse);
 	rpc GetProjects (getProjectsParams) returns (projectResponse);
-	rpc GetProjectByProjectId (GetProjectsByProjectIdParams) returns (projectResponse);
+	rpc GetProjectByProjectId (getProjectsByProjectIdParams) returns (projectResponse);
 }
 
 message addProjectParams {
@@ -26,8 +26,8 @@ message getProjectsParams {
 	string search = 1;
 }
 
-message GetProjectsByProjectIdParams {
-	int32 version_id = 1;
+message getProjectsByProjectIdParams {
+	int32 project_id = 1;
 }
 
 message addProjectResponse {
