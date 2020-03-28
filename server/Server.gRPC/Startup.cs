@@ -6,8 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.gRPC.Installers;
 using Server.gRPC.Controllers;
-using System.Configuration;
-using Microsoft.AspNetCore.Cors;
 
 namespace Server.gRPC
 {
