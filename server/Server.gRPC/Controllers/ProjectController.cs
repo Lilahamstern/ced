@@ -38,7 +38,26 @@ namespace Server.gRPC.Controllers
         {
             var projects =  await _projectService.GetProjectsAsync(request.Search);
 
+            if(projects.Count == 0)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, "Projects not found"));
+            }
+
             return await Task.FromResult(new projectResponse { Projects = { projects } });
         }
+
+        public override async Task<projectResponse> GetProjectByProjectId(getProjectsByProjectIdParams request, ServerCallContext context)
+        {
+            var exists = await _projectService.ProjectExistsAsync(request.ProjectId);
+            if (!exists)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, "ProjectId does not exists"));
+            }
+
+
+
+            return new projectResponse { };
+        }
     }
+
 }

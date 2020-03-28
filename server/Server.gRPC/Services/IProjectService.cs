@@ -9,9 +9,8 @@ namespace Server.gRPC.Services
     public interface IProjectService
     {
         Task<addProjectResponse> CreateProjectAsync(addProjectParams request);
-
         Task<Boolean> ProjectExistsAsync(int projectId);
-
         Task<List<projectObject>> GetProjectsAsync(string query);
+        Task<List<projectObject>> GetProjectsByProjectId(int id);
     }
 }

@@ -53,7 +53,7 @@ namespace DataLibrary.BusinessLogic
         {
             string sql = @"SELECT * FROM get_projects(@data)";
 
-            return LoadData<ProjectInformationModel>(sql, query);
+            return LoadData<ProjectInformationModel>(sql, query.ToLower());
         }
     }
 }
