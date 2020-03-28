@@ -127,6 +127,7 @@
 
 <script>
 import alertError from '../alerts/error';
+import projectGRPC from '../../grpc/project/projectClient';
 export default {
   name: 'project-table',
   components: {
@@ -170,7 +171,7 @@ export default {
       if (currentSize > this.projects.length) return (this.currentPage = 1);
     },
     extend: function(id) {
-      this.selectedProject = id;
+      projectGRPC.getProjectInfoByProjectId(id);
     },
     changeLoadingState: function() {
       this.loading = false;
