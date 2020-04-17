@@ -55,5 +55,13 @@ namespace DataLibrary.BusinessLogic
 
             return LoadData<ProjectInformationModel>(sql, query.ToLower());
         }
+
+        public static List<ProjectInformationModel> LoadProjectsByProjectId(int projectId)
+        {
+            string sql = @"SELECT * FROM get_project_by_project_id(@data)";
+                
+            return new List<ProjectInformationModel>();
+            //return LoadData<ProjectInformationModel>(sql, projectId);
+        }
     }
 }

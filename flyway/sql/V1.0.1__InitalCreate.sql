@@ -6,34 +6,12 @@ CREATE TABLE public.project
     PRIMARY KEY (id)
 );
 
-CREATE TABLE public.project_information
-(
-    id serial,
-    order_id integer NOT NULL,
-    name character varying(45) NOT NULL,
-    description character varying(300),
-    manager character varying(45) NOT NULL,
-    client character varying(45) NOT NULL,
-    sector character varying(45) NOT NULL,
-    project_id integer NOT NULL,
-    PRIMARY KEY(id)
-)
-    INHERITS (public.project);
-
-ALTER TABLE public.project_information
-    ADD CONSTRAINT fk_project FOREIGN KEY (project_id)
-    REFERENCES public.project (id) MATCH SIMPLE
-    ON UPDATE RESTRICT
-    ON DELETE CASCADE
-    NOT VALID;
-
 CREATE TABLE public.version
 (
     id serial NOT NULL,
     title character varying(30) NOT NULL,
     description character varying(300) NOT NULL,
     project_id integer NOT NULL,
-    project_information_id integer NOT NULL,
     PRIMARY KEY(id)
 )
     INHERITS (public.project);
@@ -45,9 +23,31 @@ ALTER TABLE public.version
     ON DELETE NO ACTION
     NOT VALID;
 
-ALTER TABLE public.version
-    ADD CONSTRAINT fk_project_information FOREIGN KEY (project_information_id)
-    REFERENCES public.project_information (id) MATCH SIMPLE
+CREATE TABLE public.project_information
+(
+    id serial,
+    order_id integer NOT NULL,
+    name character varying(45) NOT NULL,
+    description character varying(300),
+    manager character varying(45) NOT NULL,
+    client character varying(45) NOT NULL,
+    sector character varying(45) NOT NULL,
+    project_id integer NOT NULL,
+    version_id integer NOT NULL,
+    PRIMARY KEY(id)
+)
+    INHERITS (public.project);
+
+ALTER TABLE public.project_information
+    ADD CONSTRAINT fk_project FOREIGN KEY (project_id)
+    REFERENCES public.project (id) MATCH SIMPLE
+    ON UPDATE RESTRICT
+    ON DELETE CASCADE
+    NOT VALID;
+
+ALTER TABLE public.project_information
+    ADD CONSTRAINT fk_version FOREIGN KEY (version_id)
+    REFERENCES public.version (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
