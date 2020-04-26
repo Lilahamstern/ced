@@ -29,9 +29,9 @@ public class Mutation implements GraphQLMutationResolver {
     return project;
   }
 
-  public Version createVersion(String title, String description, Long projectId) {
-    Version version = new Version();
+  public Version createVersion(Long projectId, String title, String description) {
 
+    Version version = new Version();
     version.setTitle(title);
     version.setDescription(description);
     version.setProject(new Project(projectId));
