@@ -1,0 +1,18 @@
+type Project {
+  id: ID!
+  versions: [Version]
+  createdAt: Float
+  updatedAt: Float
+}
+
+extend type Query {
+  findAllProjects: [Project]!
+  #findProjectById(id: ID!): Project!
+  #countProjects: Long!
+}
+
+extend type Mutation {
+  createProject(id: ID!): Project!
+  #updateProject(id: ID!): Project!
+  deleteProject(id: ID!): Boolean!
+}

@@ -1,0 +1,13 @@
+type Version {
+  id: ID!
+  project: Project!
+  title: String!
+  description: String
+  #information: Information!
+  createdAt: Float
+  updatedAt: Float
+}
+
+extend type Mutation {
+  createVersion(projectId: ID!, title: String!, description: String): Version!
+}

@@ -1,0 +1,22 @@
+type Version {
+  id: ID!
+  project_id: ID!
+  title: String!
+  description: String
+  information: Information!
+  created_at: Float
+  updated_at: Float
+}
+
+extend type Query {
+  findAllVersions: [Version]!
+  findSingelVersionById(id: ID!): Version!
+  findVersionsByProject(project_id: Int!): [Version]!
+  countVersionsByProject(project_id: Int!): Long!
+}
+
+extend type Mutation {
+  createVersion(project_id: Int!, title: String!, description: String): Version!
+  updateVersion(id: ID!, title: String, description: String): Version!
+  deleteVersion(id: ID!): Boolean!
+}
