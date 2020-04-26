@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Project extends Auditable {
+public class Project extends BaseEntity {
 
   @Id
   private Long id;

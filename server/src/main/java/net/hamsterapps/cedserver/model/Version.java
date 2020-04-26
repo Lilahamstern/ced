@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.GenerationType;
 
 @Entity
-public class Version extends Auditable {
+public class Version extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
