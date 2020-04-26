@@ -1,8 +1,8 @@
 type Project {
   id: ID!
   versions: [Version]
-  createdAt: Float
-  updatedAt: Float
+  createdAt: String
+  updatedAt: String
 }
 
 extend type Query {
