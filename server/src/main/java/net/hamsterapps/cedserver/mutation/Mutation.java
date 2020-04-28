@@ -32,9 +32,10 @@ public class Mutation implements GraphQLMutationResolver {
   public Version createVersion(Long projectId, String title, String description) {
 
     Version version = new Version();
+    Project project = new Project(projectId);
     version.setTitle(title);
     version.setDescription(description);
-    version.setProject(new Project(projectId));
+    version.setProject(project.doesProjectExist());
 
     versionRepository.save(version);
 
