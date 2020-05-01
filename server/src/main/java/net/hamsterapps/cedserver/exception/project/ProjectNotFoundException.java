@@ -21,7 +21,7 @@ public class ProjectNotFoundException extends RuntimeException implements GraphQ
 
   public ProjectNotFoundException(String message, Long projectId) {
     super(message);
-    extensions.put("invlidProjectId", projectId);
+    extensions.put("invalidProjectId", projectId);
   }
 
   @Override
