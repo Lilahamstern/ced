@@ -47,15 +47,10 @@ public class Mutation implements GraphQLMutationResolver {
     return version;
   }
 
-  public Boolean deleteProject(Long id) throws NotFoundException {
-    Optional<Project> project = projectRepository.findById(id);
-    if (project.isPresent()) {
-      projectRepository.deleteById(id);
-      return true;
-    }
-    throw new NotFoundException("This shouldent work");
-    // projectRepository.deleteById(id);
-    // return true;
+  public Boolean deleteProject(Long id) {
+    Project project = projectService.projectExists(id);
+    projectRepository.deleteById(project.getId());
+    return true;
   }
 
 }
