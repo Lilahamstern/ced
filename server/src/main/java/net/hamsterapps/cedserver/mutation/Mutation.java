@@ -1,12 +1,9 @@
 package net.hamsterapps.cedserver.mutation;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
-import javassist.NotFoundException;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 import net.hamsterapps.cedserver.repository.ProjectRepository;
