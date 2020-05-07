@@ -22,7 +22,6 @@ public class ProjectResolver implements GraphQLResolver<Project> {
   }
 
   public List<Version> getVersions(Project project) {
-    System.out.println(project);
     return versionRepository.findAll();
   }
 
