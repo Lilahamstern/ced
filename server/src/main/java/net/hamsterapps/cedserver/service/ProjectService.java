@@ -20,8 +20,37 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Project projectExists(Long id) {
-    return projectRepository.findById(id)
-        .orElseThrow(() -> new ProjectNotFoundException(String.format("Project %d not found", id), id));
+    return projectExists(id, true);
+  }
+
+  @Override
+  public Project projectExists(Long id, Boolean throwError) {
+    if (id == null || id <= 0)
+      return null;
+
+    Project project = projectRepository.findById(id).orElse(null);
+    if (throwError && project == null)
+      throw new ProjectNotFoundException(String.format("Project %d not found", id), id);
+
+    return project;
+  }
+
+  @Override
+  public Project createProject(Long id) {
+    Project project = new Project(id);
+
+    projectRepository.save(project);
+
+    return project;
+  }
+
+  @Override
+  public Boolean deleteProjec(Long id) {
+    this.projectExists(id);
+
+    projectRepository.deleteById(id);
+
+    return true;
   }
 
 }
