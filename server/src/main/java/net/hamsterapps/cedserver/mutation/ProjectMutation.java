@@ -18,8 +18,6 @@ public class ProjectMutation implements GraphQLMutationResolver {
   }
 
   public Boolean deleteProject(Long id) {
-    projectService.projectExists(id);
-
     return projectService.deleteProjec(id);
   }
 }
