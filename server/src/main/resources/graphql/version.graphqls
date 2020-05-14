@@ -10,4 +10,5 @@ type Version {
 
 extend type Mutation {
   createVersion(projectId: ID!, title: String!, description: String): Version!
+  deleteVersion(id: ID!): Boolean!
 }
