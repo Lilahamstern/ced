@@ -28,7 +28,7 @@ public class ProjectService implements IProjectService {
   public Project createProject(Long id) {
 
     if (this.projectExists(id) != null) {
-      ExceptionHandler.ThrowProjectFound(id);
+      ExceptionHandler.projectFound(id);
     }
 
     Project project = new Project(id);
@@ -42,7 +42,7 @@ public class ProjectService implements IProjectService {
   public Boolean deleteProjec(Long id) {
 
     if (this.projectExists(id) == null) {
-      ExceptionHandler.ThrowProjectNotFound(id);
+      ExceptionHandler.projectNotFound(id);
     }
 
     projectRepository.deleteById(id);
