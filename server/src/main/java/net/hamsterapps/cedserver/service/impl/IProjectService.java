@@ -6,8 +6,6 @@ public interface IProjectService {
 
   public Project projectExists(Long id);
 
-  public Project projectExists(Long id, Boolean throwError);
-
   public Project createProject(Long id);
 
   public Boolean deleteProjec(Long id);

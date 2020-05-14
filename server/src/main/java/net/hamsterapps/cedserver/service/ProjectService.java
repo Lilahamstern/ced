@@ -3,8 +3,7 @@ package net.hamsterapps.cedserver.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.hamsterapps.cedserver.exception.project.ProjectFoundException;
-import net.hamsterapps.cedserver.exception.project.ProjectNotFoundException;
+import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.repository.ProjectRepository;
 import net.hamsterapps.cedserver.service.impl.IProjectService;
@@ -21,28 +20,21 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Project projectExists(Long id) {
-    return projectExists(id, true);
-  }
-
-  @Override
-  public Project projectExists(Long id, Boolean throwError) {
     if (id == null || id <= 0)
       return null;
 
     Project project = projectRepository.findById(id).orElse(null);
-    if (throwError) {
-      if (project == null)
-        throw new ProjectNotFoundException(String.format("Project %d not found", id), id);
-
-      throw new ProjectFoundException(String.format("Project %d already exists", id), id);
-    }
 
     return project;
   }
 
   @Override
   public Project createProject(Long id) {
-    this.projectExists(id);
+
+    if (this.projectExists(id) != null) {
+      ExceptionHandler.ThrowProjectFound(id);
+    }
+
     Project project = new Project(id);
 
     projectRepository.save(project);
@@ -52,7 +44,10 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Boolean deleteProjec(Long id) {
-    this.projectExists(id, false);
+
+    if (this.projectExists(id) == null) {
+      ExceptionHandler.ThrowProjectNotFound(id);
+    }
 
     projectRepository.deleteById(id);
 
