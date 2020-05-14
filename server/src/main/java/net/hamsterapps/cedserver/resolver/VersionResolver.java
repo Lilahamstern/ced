@@ -12,11 +12,6 @@ public class VersionResolver implements GraphQLResolver<Version> {
   @Autowired
   private ProjectRepository projectRepository;
 
-  public VersionResolver(ProjectRepository projectRepository) {
-    super();
-    this.projectRepository = projectRepository;
-  }
-
   public Project getProject(Version version) {
     return projectRepository.findById(version.getProject().getId()).orElseThrow(null);
   }

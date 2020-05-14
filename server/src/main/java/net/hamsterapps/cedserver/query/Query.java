@@ -10,15 +10,11 @@ import net.hamsterapps.cedserver.repository.ProjectRepository;
 @Component
 public class Query implements GraphQLQueryResolver {
 
+  @Autowired
   private ProjectRepository projectRepository;
 
-  @Autowired
-  public Query(ProjectRepository projectRepository) {
-    super();
-    this.projectRepository = projectRepository;
-  }
-
   public Iterable<Project> findAllProjects() {
+    // TODO: Add to projectService
     return projectRepository.findAll();
   }
 

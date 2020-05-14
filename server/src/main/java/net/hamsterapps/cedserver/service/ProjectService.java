@@ -11,12 +11,8 @@ import net.hamsterapps.cedserver.service.impl.IProjectService;
 @Service
 public class ProjectService implements IProjectService {
 
-  private ProjectRepository projectRepository;
-
   @Autowired
-  public ProjectService(ProjectRepository projectRepository) {
-    this.projectRepository = projectRepository;
-  }
+  private ProjectRepository projectRepository;
 
   @Override
   public Project projectExists(Long id) {
