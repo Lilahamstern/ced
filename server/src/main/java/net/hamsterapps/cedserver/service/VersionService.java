@@ -57,4 +57,9 @@ public class VersionService implements IVersionService {
     return true;
   }
 
+  @Override
+  public Iterable<Version> findAll() {
+    return versionRepository.findAll();
+  }
+
 }

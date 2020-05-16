@@ -5,17 +5,16 @@ import org.springframework.stereotype.Component;
 
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import net.hamsterapps.cedserver.model.Project;
-import net.hamsterapps.cedserver.repository.ProjectRepository;
+import net.hamsterapps.cedserver.service.ProjectService;
 
 @Component
 public class Query implements GraphQLQueryResolver {
 
   @Autowired
-  private ProjectRepository projectRepository;
+  private ProjectService projectService;
 
   public Iterable<Project> findAllProjects() {
-    // TODO: Add to projectService
-    return projectRepository.findAll();
+    return projectService.findAll();
   }
 
 }

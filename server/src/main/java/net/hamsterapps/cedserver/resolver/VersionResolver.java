@@ -5,15 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import graphql.kickstart.tools.GraphQLResolver;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
-import net.hamsterapps.cedserver.repository.ProjectRepository;
+import net.hamsterapps.cedserver.service.ProjectService;
 
 public class VersionResolver implements GraphQLResolver<Version> {
 
   @Autowired
-  private ProjectRepository projectRepository;
+  private ProjectService projectService;
 
   public Project getProject(Version version) {
-    return projectRepository.findById(version.getProject().getId()).orElseThrow(null);
+    return projectService.findById(version.getProject().getId());
   }
 
   public Long getProjectId(Version version) {

@@ -50,4 +50,14 @@ public class ProjectService implements IProjectService {
     return true;
   }
 
+  @Override
+  public Iterable<Project> findAll() {
+    return projectRepository.findAll();
+  }
+
+  @Override
+  public Project findById(Long id) {
+    return projectRepository.findById(id).orElse(null);
+  }
+
 }
