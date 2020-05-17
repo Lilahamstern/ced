@@ -8,10 +8,6 @@ group = 'net.hamsterapps'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_11
 
-ext {
-    karateVersion = '1.0.0'
-}
-
 repositories {
 	mavenCentral()
 	jcenter()
@@ -34,11 +30,9 @@ dependencies {
 
 
 	runtimeOnly 'org.postgresql:postgresql'
-	
 
-  testCompile "com.intuit.karate:karate-junit5:${karateVersion}"
-  testCompile "com.intuit.karate:karate-apache:${karateVersion}"
-  testCompile "net.masterthought:cucumber-reporting:3.8.0"
+	testRuntime("org.junit.jupiter:junit-jupiter-engine:5.5.2")
+  testRuntime("org.junit.platform:junit-platform-runner:1.5.2")
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -47,9 +41,6 @@ dependencies {
 
 test {
   useJUnitPlatform()
-  systemProperty "karate.options", System.properties.getProperty("karate.options")
-  systemProperty "karate.env", System.properties.getProperty("karate.env")
-  outputs.upToDateWhen { false }
 }
 
 sourceSets {
@@ -59,9 +50,4 @@ sourceSets {
             exclude '**/*.java'
         }
     }
-}
-
-task karateDebug(type: JavaExec) {
-    classpath = sourceSets.test.runtimeClasspath
-    main = 'com.intuit.karate.cli.Main'
 }
