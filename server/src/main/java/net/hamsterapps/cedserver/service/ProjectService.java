@@ -15,7 +15,7 @@ public class ProjectService implements IProjectService {
   private ProjectRepository projectRepository;
 
   @Override
-  public Project projectExists(Long id) {
+  public Project exists(Long id) {
     if (id == null || id <= 0)
       return null;
 
@@ -25,9 +25,9 @@ public class ProjectService implements IProjectService {
   }
 
   @Override
-  public Project createProject(Long id) {
+  public Project create(Long id) {
 
-    if (this.projectExists(id) != null) {
+    if (this.exists(id) != null) {
       ExceptionHandler.projectFound(id);
     }
 
@@ -39,9 +39,9 @@ public class ProjectService implements IProjectService {
   }
 
   @Override
-  public Boolean deleteProjec(Long id) {
+  public Boolean delete(Long id) {
 
-    if (this.projectExists(id) == null) {
+    if (this.exists(id) == null) {
       ExceptionHandler.projectNotFound(id);
     }
 

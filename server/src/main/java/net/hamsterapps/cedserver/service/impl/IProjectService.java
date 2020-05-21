@@ -4,14 +4,14 @@ import net.hamsterapps.cedserver.model.Project;
 
 public interface IProjectService {
 
-  public Project projectExists(Long id);
+  public Project exists(Long id);
 
   public Iterable<Project> findAll();
 
   public Project findById(Long id);
 
-  public Project createProject(Long id);
+  public Project create(Long id);
 
-  public Boolean deleteProjec(Long id);
+  public Boolean delete(Long id);
 
 }

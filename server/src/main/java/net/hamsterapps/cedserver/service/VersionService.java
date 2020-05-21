@@ -19,7 +19,7 @@ public class VersionService implements IVersionService {
   private ProjectService projectService;
 
   @Override
-  public Version versionExists(Long id) {
+  public Version exists(Long id) {
     if (id == null || id <= 0)
       return null;
 
@@ -29,9 +29,9 @@ public class VersionService implements IVersionService {
   }
 
   @Override
-  public Version createVersion(Long projectId, String title, String description) {
+  public Version create(Long projectId, String title, String description) {
 
-    Project project = projectService.projectExists(projectId);
+    Project project = projectService.exists(projectId);
 
     if (project == null) {
       ExceptionHandler.projectNotFound(projectId);
@@ -47,8 +47,8 @@ public class VersionService implements IVersionService {
   }
 
   @Override
-  public Boolean deleteVersion(Long id) {
-    if (this.versionExists(id) == null) {
+  public Boolean delete(Long id) {
+    if (this.exists(id) == null) {
       ExceptionHandler.versionNotFound(id);
     }
 

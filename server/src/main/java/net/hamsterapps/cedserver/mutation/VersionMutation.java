@@ -15,11 +15,11 @@ public class VersionMutation implements GraphQLMutationResolver {
 
   public Version createVersion(Long projectId, String title, String description) {
 
-    return versionService.createVersion(projectId, title, description);
+    return versionService.create(projectId, title, description);
   }
 
   public Boolean deleteVersion(Long id) {
-    return versionService.deleteVersion(id);
+    return versionService.delete(id);
   }
 
 }

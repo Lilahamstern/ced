@@ -14,10 +14,10 @@ public class ProjectMutation implements GraphQLMutationResolver {
   private ProjectService projectService;
 
   public Project createProject(Long id) {
-    return projectService.createProject(id);
+    return projectService.create(id);
   }
 
   public Boolean deleteProject(Long id) {
-    return projectService.deleteProjec(id);
+    return projectService.delete(id);
   }
 }
