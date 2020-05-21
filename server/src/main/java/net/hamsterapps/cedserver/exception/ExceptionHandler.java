@@ -16,4 +16,8 @@ public class ExceptionHandler {
     throw new CustomException(HttpStatus.NOT_FOUND, String.format("Version %d not found", id));
   }
 
+  public static void informationNotFound(Long id) {
+    throw new CustomException(HttpStatus.NOT_FOUND, String.format("Information %d not found", id));
+  }
+
 }
