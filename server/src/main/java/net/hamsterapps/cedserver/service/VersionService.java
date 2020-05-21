@@ -23,7 +23,7 @@ public class VersionService implements IVersionService {
     if (id == null || id <= 0)
       return null;
 
-    Version version = versionRepository.findById(id).orElse(null);
+    Version version = this.findById(id);
 
     return version;
   }
@@ -60,6 +60,11 @@ public class VersionService implements IVersionService {
   @Override
   public Iterable<Version> findAll() {
     return versionRepository.findAll();
+  }
+
+  @Override
+  public Version findById(Long id) {
+    return versionRepository.findById(id).orElse(null);
   }
 
 }

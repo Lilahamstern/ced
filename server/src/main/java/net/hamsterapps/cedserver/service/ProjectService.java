@@ -19,7 +19,7 @@ public class ProjectService implements IProjectService {
     if (id == null || id <= 0)
       return null;
 
-    Project project = projectRepository.findById(id).orElse(null);
+    Project project = this.findById(id);
 
     return project;
   }

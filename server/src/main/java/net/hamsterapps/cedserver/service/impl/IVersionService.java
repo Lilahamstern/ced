@@ -8,6 +8,8 @@ public interface IVersionService {
 
   public Iterable<Version> findAll();
 
+  public Version findById(Long id);
+
   public Version create(Long id, String title, String description);
 
   public Boolean delete(Long id);
