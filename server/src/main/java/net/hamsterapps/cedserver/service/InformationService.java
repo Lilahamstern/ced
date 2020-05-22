@@ -14,7 +14,13 @@ import net.hamsterapps.cedserver.service.impl.IInformationService;
 public class InformationService implements IInformationService {
 
   @Autowired
-  private InformationRepository InformationRepository;
+  private InformationRepository informationRepository;
+
+  @Autowired
+  private ProjectService projectService;
+
+  @Autowired
+  private VersionService versionService;
 
   @Override
   public Information exists(Long id) {
@@ -28,19 +34,39 @@ public class InformationService implements IInformationService {
 
   @Override
   public Iterable<Information> findAll() {
-    return InformationRepository.findAll();
+    return informationRepository.findAll();
   }
 
   @Override
   public Information findById(Long id) {
-    return InformationRepository.findById(id).orElse(null);
+    return informationRepository.findById(id).orElse(null);
   }
 
   @Override
   public Information create(Long id, Long orderId, String name, String description, String manager, String client,
-      String sector, Version version, Project project) {
-    // TODO Auto-generated method stub
-    return null;
+      String sector, Long versionId, Long projectId) {
+
+    Project project = projectService.exists(projectId);
+    if (project == null) {
+      ExceptionHandler.projectNotFound(projectId);
+    }
+
+    Version version = versionService.exists(versionId);
+    if (version == null) {
+      ExceptionHandler.versionNotFound(versionId);
+    }
+
+    Information information = new Information();
+    information.setOrderId(orderId);
+    information.setName(name);
+    information.setDescription(description);
+    information.setManager(manager);
+    information.setClient(client);
+    information.setSector(sector);
+    information.setVersion(version);
+    information.setProject(project);
+
+    return informationRepository.save(information);
   }
 
   @Override
@@ -50,7 +76,7 @@ public class InformationService implements IInformationService {
       ExceptionHandler.informationNotFound(id);
     }
 
-    InformationRepository.deleteById(id);
+    informationRepository.deleteById(id);
 
     return true;
 
