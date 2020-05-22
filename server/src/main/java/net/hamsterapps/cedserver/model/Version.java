@@ -29,6 +29,13 @@ public class Version extends BaseEntity {
     super();
   }
 
+  public Version(String title, String description, Project project) {
+    super();
+    this.title = title;
+    this.description = description;
+    this.project = project;
+  }
+
   public Version(Long id, String title, String description, Project project) {
     super();
     this.id = id;
@@ -45,24 +52,12 @@ public class Version extends BaseEntity {
     return this.title;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
   public String getDescription() {
     return this.description;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public Project getProject() {
     return this.project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
   }
 
 }

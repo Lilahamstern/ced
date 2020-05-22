@@ -3,6 +3,7 @@ package net.hamsterapps.cedserver.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.hamsterapps.cedserver.builder.ProjectBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.repository.ProjectRepository;
@@ -31,11 +32,7 @@ public class ProjectService implements IProjectService {
       ExceptionHandler.projectFound(id);
     }
 
-    Project project = new Project(id);
-
-    projectRepository.save(project);
-
-    return project;
+    return projectRepository.save(new ProjectBuilder().setId(id).build());
   }
 
   @Override

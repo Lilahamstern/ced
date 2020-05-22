@@ -3,6 +3,7 @@ package net.hamsterapps.cedserver.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.hamsterapps.cedserver.builder.InformationBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Information;
 import net.hamsterapps.cedserver.model.Project;
@@ -56,15 +57,8 @@ public class InformationService implements IInformationService {
       ExceptionHandler.versionNotFound(versionId);
     }
 
-    Information information = new Information();
-    information.setOrderId(orderId);
-    information.setName(name);
-    information.setDescription(description);
-    information.setManager(manager);
-    information.setClient(client);
-    information.setSector(sector);
-    information.setVersion(version);
-    information.setProject(project);
+    Information information = new InformationBuilder().setOrderId(orderId).setName(name).setDescription(description)
+        .setManager(manager).setClient(client).setSector(sector).setVersion(version).setProject(project).build();
 
     return informationRepository.save(information);
   }

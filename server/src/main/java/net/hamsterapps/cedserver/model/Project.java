@@ -22,8 +22,4 @@ public class Project extends BaseEntity {
     return this.id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
 }

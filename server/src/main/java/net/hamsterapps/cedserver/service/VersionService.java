@@ -3,6 +3,7 @@ package net.hamsterapps.cedserver.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.hamsterapps.cedserver.builder.VersionBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
@@ -37,10 +38,7 @@ public class VersionService implements IVersionService {
       ExceptionHandler.projectNotFound(projectId);
     }
 
-    Version version = new Version();
-    version.setTitle(title);
-    version.setDescription(description);
-    version.setProject(project);
+    Version version = new VersionBuilder().setTitle(title).setDescription(description).setProject(project).build();
 
     return versionRepository.save(version);
 

@@ -45,6 +45,19 @@ public class Information extends BaseEntity {
     super();
   }
 
+  public Information(Long orderId, String name, String description, String manager, String client, String sector,
+      Version version, Project project) {
+    super();
+    this.orderId = orderId;
+    this.name = name;
+    this.description = description;
+    this.manager = manager;
+    this.client = client;
+    this.sector = sector;
+    this.version = version;
+    this.project = project;
+  }
+
   public Information(Long id, Long orderId, String name, String description, String manager, String client,
       String sector, Version version, Project project) {
     super();
@@ -67,64 +80,32 @@ public class Information extends BaseEntity {
     return this.orderId;
   }
 
-  public void setOrderId(Long orderId) {
-    this.orderId = orderId;
-  }
-
   public String getName() {
     return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getDescription() {
     return this.description;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public String getManager() {
     return this.manager;
-  }
-
-  public void setManager(String manager) {
-    this.manager = manager;
   }
 
   public String getClient() {
     return this.client;
   }
 
-  public void setClient(String client) {
-    this.client = client;
-  }
-
   public String getSector() {
     return this.sector;
-  }
-
-  public void setSector(String sector) {
-    this.sector = sector;
   }
 
   public Version getVersion() {
     return this.version;
   }
 
-  public void setVersion(Version version) {
-    this.version = version;
-  }
-
   public Project getProject() {
     return this.project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
   }
 
 }
