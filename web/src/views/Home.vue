@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <searchComp @search-project="searchProjects"></searchComp>
+    <searchComp @search-project="fetchProjects"></searchComp>
     <projectTable
       @fetch-proejct="fetchProjects"
       class="inline-block align-middle"
@@ -28,23 +28,15 @@ export default {
     };
   },
   methods: {
-    fetchProjects: function() {
+    fetchProjects: function(e) {
       projectGRPC
-        .getProjects()
+        .getProjects(e)
         .then(res => {
           this.projects = res;
+          this.error = null;
         })
         .catch(err => {
-          this.error = err.message;
-        });
-    },
-    searchProjects: function(e) {
-      projectGRPC
-        .searchProjects(e)
-        .then(res => {
-          this.projects = res;
-        })
-        .catch(err => {
+          this.projects = [];
           this.error = err.message;
         });
     }
