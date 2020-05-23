@@ -2,10 +2,14 @@ type Version {
   id: ID!
   project: Project!
   title: String!
-  description: String!
-  #information: Information!
+  description: String
+  information: Information
   createdAt: String
   updatedAt: String
+}
+
+extend type Query {
+  findProjectVersions(id: ID!): [Version]!
 }
 
 extend type Mutation {

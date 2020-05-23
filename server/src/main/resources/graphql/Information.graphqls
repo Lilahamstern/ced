@@ -6,10 +6,12 @@ type Information {
   manager: String!
   client: String!
   sector: String!
-  version: Version!
-  project: Project!
+  version: Version
+  project: Project
   createdAt: String
   updatedAt: String
+
+  # TODO: remobe project
 }
 
 

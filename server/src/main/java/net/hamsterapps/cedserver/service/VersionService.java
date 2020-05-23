@@ -1,14 +1,13 @@
 package net.hamsterapps.cedserver.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import net.hamsterapps.cedserver.builder.VersionBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 import net.hamsterapps.cedserver.repository.VersionRepository;
 import net.hamsterapps.cedserver.service.impl.IVersionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class VersionService implements IVersionService {
@@ -36,35 +35,40 @@ public class VersionService implements IVersionService {
 
     Project project = projectService.exists(projectId);
 
-    if (project == null) {
-      ExceptionHandler.projectNotFound(projectId);
+      if (project == null) {
+          ExceptionHandler.projectNotFound(projectId);
+      }
+
+      Version version = new VersionBuilder().setTitle(title).setDescription(description).setProject(project).build();
+
+      return versionRepository.save(version);
+
+  }
+
+    @Override
+    public Iterable<Version> findAll() {
+        return versionRepository.findAll();
     }
 
-    Version version = new VersionBuilder().setTitle(title).setDescription(description).setProject(project).build();
+    @Override
+    public Boolean delete(Long id) {
+        if (this.exists(id) == null) {
+            ExceptionHandler.versionNotFound(id);
+        }
 
-    return versionRepository.save(version);
+        versionRepository.deleteById(id);
 
-  }
-
-  @Override
-  public Boolean delete(Long id) {
-    if (this.exists(id) == null) {
-      ExceptionHandler.versionNotFound(id);
+        return true;
     }
 
-    versionRepository.deleteById(id);
+    @Override
+    public Version findById(Long id) {
+        return versionRepository.findById(id).orElse(null);
+    }
 
-    return true;
-  }
-
-  @Override
-  public Iterable<Version> findAll() {
-    return versionRepository.findAll();
-  }
-
-  @Override
-  public Version findById(Long id) {
-    return versionRepository.findById(id).orElse(null);
-  }
+    @Override
+    public Iterable<Version> findByProjectId(Long id) {
+        return versionRepository.findByProjectId(id);
+    }
 
 }

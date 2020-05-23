@@ -10,6 +10,8 @@ public interface IVersionService {
 
   Version findById(Long id);
 
+  Iterable<Version> findByProjectId(Long id);
+
   Version create(Long id, String title, String description);
 
   Boolean delete(Long id);
