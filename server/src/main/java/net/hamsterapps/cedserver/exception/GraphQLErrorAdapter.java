@@ -14,7 +14,7 @@ public class GraphQLErrorAdapter implements GraphQLError {
    *
    */
   private static final long serialVersionUID = 1L;
-  private GraphQLError error;
+  private final GraphQLError error;
 
   public GraphQLErrorAdapter(GraphQLError error) {
     this.error = error;

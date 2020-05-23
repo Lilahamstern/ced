@@ -18,7 +18,6 @@ public class Version extends BaseEntity {
   @Column(nullable = false)
   private String title;
 
-  @Column(nullable = true)
   private String description;
 
   @ManyToOne

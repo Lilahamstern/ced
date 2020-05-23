@@ -4,14 +4,14 @@ import net.hamsterapps.cedserver.model.Version;
 
 public interface IVersionService {
 
-  public Version exists(Long id);
+  Version exists(Long id);
 
-  public Iterable<Version> findAll();
+  Iterable<Version> findAll();
 
-  public Version findById(Long id);
+  Version findById(Long id);
 
-  public Version create(Long id, String title, String description);
+  Version create(Long id, String title, String description);
 
-  public Boolean delete(Long id);
+  Boolean delete(Long id);
 
 }

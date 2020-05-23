@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 
 import graphql.ErrorClassification;
@@ -16,7 +17,7 @@ public class CustomException extends RuntimeException implements GraphQLError {
   private static final long serialVersionUID = 1L;
   private final int errorCode;
 
-  public CustomException(HttpStatus errorCode, String message) {
+  public CustomException(@NotNull HttpStatus errorCode, String message) {
     super(message);
 
     this.errorCode = errorCode.value();
@@ -46,5 +47,4 @@ public class CustomException extends RuntimeException implements GraphQLError {
   public ErrorClassification getErrorType() {
     return ErrorType.DataFetchingException;
   }
-
 }

@@ -6,11 +6,17 @@ import graphql.kickstart.tools.GraphQLResolver;
 import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 import net.hamsterapps.cedserver.service.ProjectService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VersionResolver implements GraphQLResolver<Version> {
 
+  private final ProjectService projectService;
+
   @Autowired
-  private ProjectService projectService;
+  public VersionResolver(ProjectService projectService) {
+    this.projectService = projectService;
+  }
 
   public Project getProject(Version version) {
     return projectService.findById(version.getProject().getId());

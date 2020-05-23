@@ -10,8 +10,12 @@ import net.hamsterapps.cedserver.service.VersionService;
 @Component
 public class VersionMutation implements GraphQLMutationResolver {
 
+  private final VersionService versionService;
+
   @Autowired
-  private VersionService versionService;
+  public VersionMutation(VersionService versionService) {
+    this.versionService = versionService;
+  }
 
   public Version createVersion(Long projectId, String title, String description) {
 

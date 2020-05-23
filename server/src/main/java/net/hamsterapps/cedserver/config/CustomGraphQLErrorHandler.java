@@ -18,20 +18,16 @@ public class CustomGraphQLErrorHandler {
   @Bean
   public GraphQLErrorHandler errorHandler() {
 
-    return new GraphQLErrorHandler() {
+    return errors -> {
+      List<GraphQLError> clientErrors = errors.stream().filter(this::isClientError).collect(Collectors.toList());
 
-      @Override
-      public List<GraphQLError> processErrors(final List<GraphQLError> errors) {
-        List<GraphQLError> clientErrors = errors.stream().filter(e -> isClientError(e)).collect(Collectors.toList());
+      List<GraphQLError> serverErrors = errors.stream().filter(e -> !isClientError(e)).map(GraphQLErrorAdapter::new)
+          .collect(Collectors.toList());
 
-        List<GraphQLError> serverErrors = errors.stream().filter(e -> !isClientError(e)).map(GraphQLErrorAdapter::new)
-            .collect(Collectors.toList());
-
-        List<GraphQLError> e = new ArrayList<>();
-        e.addAll(clientErrors);
-        e.addAll(serverErrors);
-        return e;
-      }
+      List<GraphQLError> e = new ArrayList<>();
+      e.addAll(clientErrors);
+      e.addAll(serverErrors);
+      return e;
     };
   }
 

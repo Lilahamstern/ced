@@ -11,10 +11,15 @@ import net.hamsterapps.cedserver.service.VersionService;
 @Component
 public class ProjectResolver implements GraphQLResolver<Project> {
 
+  private final VersionService versionService;
+
   @Autowired
-  private VersionService versionService;
+  public ProjectResolver(VersionService versionService) {
+    this.versionService = versionService;
+  }
 
   public Iterable<Version> getVersions(Project project) {
+    //TODO: getVersions for one project
     return versionService.findAll();
   }
 

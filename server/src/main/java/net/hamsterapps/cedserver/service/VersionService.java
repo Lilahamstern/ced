@@ -13,20 +13,22 @@ import net.hamsterapps.cedserver.service.impl.IVersionService;
 @Service
 public class VersionService implements IVersionService {
 
-  @Autowired
-  private VersionRepository versionRepository;
+  private final VersionRepository versionRepository;
+
+  private final ProjectService projectService;
 
   @Autowired
-  private ProjectService projectService;
+  public VersionService(VersionRepository versionRepository, ProjectService projectService) {
+    this.versionRepository = versionRepository;
+    this.projectService = projectService;
+  }
 
   @Override
   public Version exists(Long id) {
     if (id == null || id <= 0)
       return null;
 
-    Version version = this.findById(id);
-
-    return version;
+    return this.findById(id);
   }
 
   @Override

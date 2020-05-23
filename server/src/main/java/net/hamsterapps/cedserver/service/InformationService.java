@@ -14,23 +14,25 @@ import net.hamsterapps.cedserver.service.impl.IInformationService;
 @Service
 public class InformationService implements IInformationService {
 
-  @Autowired
-  private InformationRepository informationRepository;
+  private final InformationRepository informationRepository;
+
+  private final ProjectService projectService;
+
+  private final VersionService versionService;
 
   @Autowired
-  private ProjectService projectService;
-
-  @Autowired
-  private VersionService versionService;
+  public InformationService(InformationRepository informationRepository, ProjectService projectService, VersionService versionService) {
+    this.informationRepository = informationRepository;
+    this.projectService = projectService;
+    this.versionService = versionService;
+  }
 
   @Override
   public Information exists(Long id) {
     if (id == null || id <= 0)
       return null;
 
-    Information information = this.findById(id);
-
-    return information;
+    return this.findById(id);
   }
 
   @Override
@@ -44,8 +46,8 @@ public class InformationService implements IInformationService {
   }
 
   @Override
-  public Information create(Long id, Long orderId, String name, String description, String manager, String client,
-      String sector, Long versionId, Long projectId) {
+  public Information create(Long orderId, String name, String description, String manager, String client, String sector,
+      Long versionId, Long projectId) {
 
     Project project = projectService.exists(projectId);
     if (project == null) {

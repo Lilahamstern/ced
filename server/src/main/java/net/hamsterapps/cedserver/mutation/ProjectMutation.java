@@ -10,8 +10,12 @@ import net.hamsterapps.cedserver.service.ProjectService;
 @Component
 public class ProjectMutation implements GraphQLMutationResolver {
 
+  private final ProjectService projectService;
+
   @Autowired
-  private ProjectService projectService;
+  public ProjectMutation(ProjectService projectService) {
+    this.projectService = projectService;
+  }
 
   public Project createProject(Long id) {
     return projectService.create(id);
