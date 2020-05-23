@@ -1,8 +1,5 @@
 package net.hamsterapps.cedserver.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import net.hamsterapps.cedserver.builder.InformationBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Information;
@@ -10,6 +7,8 @@ import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 import net.hamsterapps.cedserver.repository.InformationRepository;
 import net.hamsterapps.cedserver.service.impl.IInformationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class InformationService implements IInformationService {
@@ -46,8 +45,13 @@ public class InformationService implements IInformationService {
   }
 
   @Override
+  public Information findByVersionId(Long id) {
+    return informationRepository.findByVersionId(versionService.exists(id).getId());
+  }
+
+  @Override
   public Information create(Long orderId, String name, String description, String manager, String client, String sector,
-      Long versionId, Long projectId) {
+                            Long versionId, Long projectId) {
 
     Project project = projectService.exists(projectId);
     if (project == null) {

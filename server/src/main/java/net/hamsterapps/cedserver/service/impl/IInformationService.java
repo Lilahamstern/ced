@@ -10,6 +10,8 @@ public interface IInformationService {
 
   Information findById(Long id);
 
+  Information findByVersionId(Long versionId);
+
   Information create(Long orderId, String name, String description, String manager, String client, String sector,
                      Long versionId, Long projectId);
 
