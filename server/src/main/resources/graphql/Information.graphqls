@@ -1,24 +1,22 @@
 type Information {
   id: ID!
-  project_id: ID!
-  order_id: ID!
+  orderId: ID!
   name: String!
   description: String
   manager: String!
   client: String!
   sector: String!
-  version_id: ID!
-  created_at: Float
-  updated_at: Float
-}
-  
-extend type Query {
+  version: Version!
+  project: Project!
+  createdAt: String
+  updatedAt: String
 }
 
+
 extend type Mutation {
-  createInformation(project_id: ID!, order_id: ID!, name: String!, description: String, 
-  manager: String, client: String!, sector: String!, version_id: ID!): Information!
+  createInformation(orderId: ID!, name: String!, description: String, 
+  manager: String, client: String!, sector: String!, versionId: ID!, projectId: ID!): Information!
   #updateInformation(id: ID!, project_id: ID!, order_id: ID!, name: String!, description: String, 
   #manager: String, client: String!, sector: String!, version_id: ID!): Information!
-  deleteInformatin(id: ID!): Boolean!
+  deleteInformation(id: ID!): Boolean!
 }
