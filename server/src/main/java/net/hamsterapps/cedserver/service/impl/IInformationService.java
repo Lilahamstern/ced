@@ -13,7 +13,7 @@ public interface IInformationService {
   Information findByVersionId(Long versionId);
 
   Information create(Long orderId, String name, String description, String manager, String client, String sector,
-                     Long versionId, Long projectId);
+                     Long versionId);
 
   Boolean delete(Long id);
 
