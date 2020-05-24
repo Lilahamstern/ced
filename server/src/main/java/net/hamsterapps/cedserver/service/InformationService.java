@@ -14,14 +14,11 @@ public class InformationService implements IInformationService {
 
   private final InformationRepository informationRepository;
 
-  private final ProjectService projectService;
-
   private final VersionService versionService;
 
   @Autowired
-  public InformationService(InformationRepository informationRepository, ProjectService projectService, VersionService versionService) {
+  public InformationService(InformationRepository informationRepository, VersionService versionService) {
     this.informationRepository = informationRepository;
-    this.projectService = projectService;
     this.versionService = versionService;
   }
 
