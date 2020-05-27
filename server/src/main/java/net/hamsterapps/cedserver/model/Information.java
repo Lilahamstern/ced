@@ -15,7 +15,6 @@ public class Information extends BaseEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = true)
   private String description;
 
   @Column(nullable = false)
