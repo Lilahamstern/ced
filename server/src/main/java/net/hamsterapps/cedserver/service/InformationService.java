@@ -41,8 +41,8 @@ public class InformationService implements IInformationService {
   }
 
   @Override
-  public Information findByVersionId(Long id) {
-    return informationRepository.findByVersionId(versionService.exists(id).getId());
+  public Information findByVersionId(Long versionId) {
+    return informationRepository.findByVersionId(versionService.exists(versionId).getId());
   }
 
   @Override
@@ -52,6 +52,10 @@ public class InformationService implements IInformationService {
     Version version = versionService.exists(versionId);
     if (version == null) {
       ExceptionHandler.versionNotFound(versionId);
+    }
+
+    if (this.findByVersionId(versionId) != null) {
+      ExceptionHandler.informationFound(versionId);
     }
 
     Information information = new InformationBuilder().setOrderId(orderId).setName(name).setDescription(description)
