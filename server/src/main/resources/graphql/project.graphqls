@@ -5,13 +5,13 @@ type Project {
   updatedAt: String
 }
 
-extend type Query {
+type Query {
   findAllProjects: [Project]!
   #findProjectById(id: ID!): Project!
   #countProjects: Long!
 }
 
-extend type Mutation {
+type Mutation {
   createProject(id: ID!): Project!
   #updateProject(id: ID!): Project!
   deleteProject(id: ID!): Boolean!
