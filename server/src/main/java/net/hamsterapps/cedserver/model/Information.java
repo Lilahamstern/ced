@@ -34,8 +34,7 @@ public class Information extends BaseEntity {
     super();
   }
 
-  public Information(Long orderId, String name, String description, String manager, String client, String sector,
-                     Version version) {
+  public Information(Long orderId, String name, String description, String manager, String client, String sector, Version version) {
     super();
     this.orderId = orderId;
     this.name = name;

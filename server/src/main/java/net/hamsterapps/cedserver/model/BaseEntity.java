@@ -6,6 +6,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.time.Instant;
 
+
 @MappedSuperclass
 public abstract class BaseEntity {
 

@@ -46,8 +46,7 @@ public class InformationService implements IInformationService {
   }
 
   @Override
-  public Information create(Long orderId, String name, String description, String manager, String client, String sector,
-                            Long versionId) {
+  public Information create(Long orderId, String name, String description, String manager, String client, String sector, Long versionId) {
 
     Version version = versionService.exists(versionId);
     if (version == null) {

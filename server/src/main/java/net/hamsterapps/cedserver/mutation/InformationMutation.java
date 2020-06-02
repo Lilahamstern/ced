@@ -16,8 +16,7 @@ public class InformationMutation implements GraphQLMutationResolver {
     this.informationService = informationService;
   }
 
-  public Information createInformation(Long orderId, String name, String description, String manager, String client, String sector,
-                                       Long versionId) {
+  public Information createInformation(Long orderId, String name, String description, String manager, String client, String sector, Long versionId) {
     return informationService.create(orderId, name, description, manager, client, sector, versionId);
   }
 
