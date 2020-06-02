@@ -6,7 +6,7 @@ type Project {
 }
 
 type Query {
-  findAllProjects: [Project]!
+  getProjects: [Project]!
   #findProjectById(id: ID!): Project!
   #countProjects: Long!
 }
