@@ -1,7 +1,6 @@
 package net.hamsterapps.cedserver.builder;
 
 import net.hamsterapps.cedserver.model.Information;
-import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 
 public class InformationBuilder {
@@ -12,7 +11,6 @@ public class InformationBuilder {
   private String client;
   private String sector;
   private Version version;
-  private Project project;
 
   public InformationBuilder setOrderId(Long orderId) {
     this.orderId = orderId;
@@ -44,17 +42,12 @@ public class InformationBuilder {
     return this;
   }
 
-  public InformationBuilder setProject(Project project) {
-    this.project = project;
-    return this;
-  }
-
   public InformationBuilder setVersion(Version version) {
     this.version = version;
     return this;
   }
 
   public Information build() {
-    return new Information(orderId, name, description, manager, client, sector, version, project);
+    return new Information(orderId, name, description, manager, client, sector, version);
   }
 }

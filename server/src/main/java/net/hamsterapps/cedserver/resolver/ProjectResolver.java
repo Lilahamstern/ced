@@ -3,11 +3,6 @@ package net.hamsterapps.cedserver.resolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import graphql.kickstart.tools.GraphQLResolver;
-import net.hamsterapps.cedserver.model.Project;
-import net.hamsterapps.cedserver.model.Version;
-import net.hamsterapps.cedserver.service.VersionService;
-
 @Component
 public class ProjectResolver implements GraphQLResolver<Project> {
 
@@ -19,8 +14,7 @@ public class ProjectResolver implements GraphQLResolver<Project> {
   }
 
   public Iterable<Version> getVersions(Project project) {
-    //TODO: getVersions for one project
-    return versionService.findAll();
+    return versionService.findByProjectId(project.getId());
   }
 
   public Long getProjectId(Project project) {

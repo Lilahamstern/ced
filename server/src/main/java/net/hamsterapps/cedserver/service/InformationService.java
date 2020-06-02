@@ -3,7 +3,6 @@ package net.hamsterapps.cedserver.service;
 import net.hamsterapps.cedserver.builder.InformationBuilder;
 import net.hamsterapps.cedserver.exception.ExceptionHandler;
 import net.hamsterapps.cedserver.model.Information;
-import net.hamsterapps.cedserver.model.Project;
 import net.hamsterapps.cedserver.model.Version;
 import net.hamsterapps.cedserver.repository.InformationRepository;
 import net.hamsterapps.cedserver.service.impl.IInformationService;
@@ -15,14 +14,11 @@ public class InformationService implements IInformationService {
 
   private final InformationRepository informationRepository;
 
-  private final ProjectService projectService;
-
   private final VersionService versionService;
 
   @Autowired
-  public InformationService(InformationRepository informationRepository, ProjectService projectService, VersionService versionService) {
+  public InformationService(InformationRepository informationRepository, VersionService versionService) {
     this.informationRepository = informationRepository;
-    this.projectService = projectService;
     this.versionService = versionService;
   }
 
@@ -45,26 +41,24 @@ public class InformationService implements IInformationService {
   }
 
   @Override
-  public Information findByVersionId(Long id) {
-    return informationRepository.findByVersionId(versionService.exists(id).getId());
+  public Information findByVersionId(Long versionId) {
+    return informationRepository.findByVersionId(versionService.exists(versionId).getId());
   }
 
   @Override
-  public Information create(Long orderId, String name, String description, String manager, String client, String sector,
-                            Long versionId, Long projectId) {
-
-    Project project = projectService.exists(projectId);
-    if (project == null) {
-      ExceptionHandler.projectNotFound(projectId);
-    }
+  public Information create(Long orderId, String name, String description, String manager, String client, String sector, Long versionId) {
 
     Version version = versionService.exists(versionId);
     if (version == null) {
       ExceptionHandler.versionNotFound(versionId);
     }
 
+    if (this.findByVersionId(versionId) != null) {
+      ExceptionHandler.informationFound(versionId);
+    }
+
     Information information = new InformationBuilder().setOrderId(orderId).setName(name).setDescription(description)
-        .setManager(manager).setClient(client).setSector(sector).setVersion(version).setProject(project).build();
+            .setManager(manager).setClient(client).setSector(sector).setVersion(version).build();
 
     return informationRepository.save(information);
   }

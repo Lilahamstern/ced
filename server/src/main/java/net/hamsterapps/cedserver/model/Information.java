@@ -1,12 +1,6 @@
 package net.hamsterapps.cedserver.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Information extends BaseEntity {
@@ -21,7 +15,6 @@ public class Information extends BaseEntity {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = true)
   private String description;
 
   @Column(nullable = false)
@@ -37,16 +30,11 @@ public class Information extends BaseEntity {
   @JoinColumn(name = "version_id", nullable = false, updatable = false)
   private Version version;
 
-  @ManyToOne
-  @JoinColumn(name = "project_id", nullable = false, updatable = false)
-  private Project project;
-
   public Information() {
     super();
   }
 
-  public Information(Long orderId, String name, String description, String manager, String client, String sector,
-      Version version, Project project) {
+  public Information(Long orderId, String name, String description, String manager, String client, String sector, Version version) {
     super();
     this.orderId = orderId;
     this.name = name;
@@ -55,11 +43,10 @@ public class Information extends BaseEntity {
     this.client = client;
     this.sector = sector;
     this.version = version;
-    this.project = project;
   }
 
   public Information(Long id, Long orderId, String name, String description, String manager, String client,
-      String sector, Version version, Project project) {
+                     String sector, Version version) {
     super();
     this.id = id;
     this.orderId = orderId;
@@ -69,7 +56,6 @@ public class Information extends BaseEntity {
     this.client = client;
     this.sector = sector;
     this.version = version;
-    this.project = project;
   }
 
   public Long getId() {
@@ -102,10 +88,6 @@ public class Information extends BaseEntity {
 
   public Version getVersion() {
     return this.version;
-  }
-
-  public Project getProject() {
-    return this.project;
   }
 
 }

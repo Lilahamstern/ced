@@ -1,11 +1,11 @@
 package net.hamsterapps.cedserver.model;
 
-import java.time.Instant;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import java.time.Instant;
+
 
 @MappedSuperclass
 public abstract class BaseEntity {
@@ -18,7 +18,7 @@ public abstract class BaseEntity {
     this.createdAt = getTimeInstant();
   }
 
-  @Column(name = "created_at", insertable = true, updatable = false)
+  @Column(name = "created_at", updatable = false)
   public Instant getCreatedAt() {
     return this.createdAt;
   }
@@ -27,7 +27,7 @@ public abstract class BaseEntity {
     this.createdAt = timestamp;
   }
 
-  @Column(name = "updated_at", insertable = false, updatable = true)
+  @Column(name = "updated_at", insertable = false)
   public Instant getUpdatedAt() {
     return this.updatedAt;
   }

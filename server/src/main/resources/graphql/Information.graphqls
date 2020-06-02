@@ -7,17 +7,14 @@ type Information {
   client: String!
   sector: String!
   version: Version
-  project: Project
   createdAt: String
   updatedAt: String
-
-  # TODO: remobe project
 }
 
 
 extend type Mutation {
-  createInformation(orderId: ID!, name: String!, description: String, 
-  manager: String, client: String!, sector: String!, versionId: ID!, projectId: ID!): Information!
+  createInformation(orderId: ID!, name: String!, description: String,
+    manager: String, client: String!, sector: String!, versionId: ID!): Information!
   #updateInformation(id: ID!, project_id: ID!, order_id: ID!, name: String!, description: String, 
   #manager: String, client: String!, sector: String!, version_id: ID!): Information!
   deleteInformation(id: ID!): Boolean!

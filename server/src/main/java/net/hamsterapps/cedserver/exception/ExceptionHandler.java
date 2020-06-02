@@ -20,4 +20,7 @@ public class ExceptionHandler {
     throw new CustomException(HttpStatus.NOT_FOUND, String.format("Information %d not found", id));
   }
 
+  public static void informationFound(Long id) {
+    throw new CustomException(HttpStatus.CONFLICT, String.format("Information does already exist on version %d", id));
+  }
 }
