@@ -1,5 +1,7 @@
 package net.hamsterapps.cedserver.mutation;
 
+import net.hamsterapps.cedserver.input.CreateProjectInput;
+import net.hamsterapps.cedserver.input.DeleteProjectInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +19,11 @@ public class ProjectMutation implements GraphQLMutationResolver {
     this.projectService = projectService;
   }
 
-  public Project createProject(Long id) {
-    return projectService.create(id);
+  public Project createProject(CreateProjectInput input) {
+    return projectService.create(input.getId());
   }
 
-  public Boolean deleteProject(Long id) {
-    return projectService.delete(id);
+  public Boolean deleteProject(DeleteProjectInput input) {
+    return projectService.delete(input.getId());
   }
 }

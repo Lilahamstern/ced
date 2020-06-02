@@ -11,8 +11,16 @@ type Query {
   #countProjects: Long!
 }
 
+input createProjectInput {
+  id: ID!
+}
+
+input deleteProjectInput {
+  id: ID!
+}
+
 type Mutation {
-  createProject(id: ID!): Project!
+  createProject(input: createProjectInput): Project!
   #updateProject(id: ID!): Project!
-  deleteProject(id: ID!): Boolean!
+  deleteProject(input: deleteProjectInput!): Boolean!
 }
