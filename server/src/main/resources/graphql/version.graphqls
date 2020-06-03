@@ -8,11 +8,17 @@ type Version {
   updatedAt: String
 }
 
+input  createVersionInput {
+  projectId: ID!
+  title: String!
+  description: String
+}
+
 extend type Query {
   findProjectVersions(id: ID!): [Version]!
 }
 
 extend type Mutation {
-  createVersion(projectId: ID!, title: String!, description: String): Version!
-  deleteVersion(id: ID!): Boolean!
+  createVersion(input: createVersionInput): Version!
+  deleteVersion(input: deleteInput): Boolean!
 }

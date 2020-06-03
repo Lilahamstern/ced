@@ -1,10 +1,10 @@
-package net.hamsterapps.cedserver.input;
+package net.hamsterapps.cedserver.model.graphql.project;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CreateProjectInput {
 
-    public Long id;
+    private final Long id;
 
     public CreateProjectInput(@JsonProperty("id") Long id) {
         this.id = id;
