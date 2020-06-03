@@ -11,11 +11,20 @@ type Information {
   updatedAt: String
 }
 
+input createInformationInput {
+  orderId: ID!
+  name: String!
+  description: String
+  manager: String!
+  client: String!
+  sector: String!
+  versionId: ID!
+}
+
 
 extend type Mutation {
-  createInformation(orderId: ID!, name: String!, description: String,
-    manager: String, client: String!, sector: String!, versionId: ID!): Information!
+  createInformation(input: createInformationInput): Information!
   #updateInformation(id: ID!, project_id: ID!, order_id: ID!, name: String!, description: String, 
   #manager: String, client: String!, sector: String!, version_id: ID!): Information!
-  deleteInformation(id: ID!): Boolean!
+  deleteInformation(input: deleteInput): Boolean!
 }

@@ -2,6 +2,8 @@ package net.hamsterapps.cedserver.mutation;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import net.hamsterapps.cedserver.model.Information;
+import net.hamsterapps.cedserver.model.graphql.common.DeleteInput;
+import net.hamsterapps.cedserver.model.graphql.information.CreateInformationInput;
 import net.hamsterapps.cedserver.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,12 +18,12 @@ public class InformationMutation implements GraphQLMutationResolver {
     this.informationService = informationService;
   }
 
-  public Information createInformation(Long orderId, String name, String description, String manager, String client, String sector, Long versionId) {
-    return informationService.create(orderId, name, description, manager, client, sector, versionId);
+  public Information createInformation(CreateInformationInput input) {
+    return informationService.create(input.getOrderId(), input.getName(), input.getDescription(), input.getManager(), input.getClient(), input.getSector(), input.getVersionId());
   }
 
-  public Boolean deleteInformation(Long id) {
-    return informationService.delete(id);
+  public Boolean deleteInformation(DeleteInput input) {
+    return informationService.delete(input.getId());
   }
 
 
