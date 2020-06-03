@@ -1,11 +1,11 @@
-package net.hamsterapps.cedserver.input;
+package net.hamsterapps.cedserver.model.graphql.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DeleteProjectInput {
+public class DeleteInput {
     public Long id;
 
-    public DeleteProjectInput(@JsonProperty("id") Long id) {
+    public DeleteInput(@JsonProperty("id") Long id) {
         this.id = id;
     }
 

@@ -15,12 +15,8 @@ input createProjectInput {
   id: ID!
 }
 
-input deleteProjectInput {
-  id: ID!
-}
-
 type Mutation {
   createProject(input: createProjectInput): Project!
   #updateProject(id: ID!): Project!
-  deleteProject(input: deleteProjectInput!): Boolean!
+  deleteProject(input: deleteInput!): Boolean!
 }

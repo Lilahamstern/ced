@@ -1,0 +1,4 @@
+# Common used inputs
+input deleteInput {
+    id: ID!
+}
