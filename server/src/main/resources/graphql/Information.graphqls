@@ -21,6 +21,10 @@ input createInformationInput {
   versionId: ID!
 }
 
+extend type Query {
+  information(id: ID!): Information
+}
+
 
 extend type Mutation {
   createInformation(input: createInformationInput): Information!

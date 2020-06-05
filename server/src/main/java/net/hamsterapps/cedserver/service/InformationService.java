@@ -27,7 +27,7 @@ public class InformationService implements IInformationService {
     if (id == null || id <= 0)
       return null;
 
-    return this.findById(id);
+     return informationRepository.findById(id).orElse(null);
   }
 
   @Override
@@ -37,7 +37,12 @@ public class InformationService implements IInformationService {
 
   @Override
   public Information findById(Long id) {
-    return informationRepository.findById(id).orElse(null);
+    Information information = this.exists(id);
+    if (information == null) {
+      ExceptionHandler.informationNotFound(id);
+    }
+
+    return information;
   }
 
   @Override
