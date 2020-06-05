@@ -16,8 +16,12 @@ public class ProjectQuery implements GraphQLQueryResolver {
     this.projectService = projectService;
   }
 
-  public Iterable<Project> getProjects() {
+  public Iterable<Project> projects() {
     return projectService.findAll();
+  }
+
+  public Project project(Long id) {
+    return projectService.findById(id);
   }
 
 }

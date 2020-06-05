@@ -24,7 +24,7 @@ public class ProjectService implements IProjectService {
     if (id == null || id <= 0)
       return null;
 
-    return this.findById(id);
+    return projectRepository.findById(id).orElse(null);
   }
 
   @Override
@@ -56,7 +56,12 @@ public class ProjectService implements IProjectService {
 
   @Override
   public Project findById(Long id) {
-    return projectRepository.findById(id).orElse(null);
+    Project project = this.exists(id);
+    if (project == null) {
+      ExceptionHandler.projectNotFound(id);
+    }
+
+    return project;
   }
 
 }

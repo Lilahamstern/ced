@@ -9,9 +9,6 @@ public class Project extends BaseEntity {
   @Id
   private Long id;
 
-/*  @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-  private List<Version> versions;*/
-
   public Project() {
     super();
   }

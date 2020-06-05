@@ -15,7 +15,8 @@ input  createVersionInput {
 }
 
 extend type Query {
-  findProjectVersions(id: ID!): [Version]!
+  versions(projectId: ID!): [Version]
+  version(id: ID!): Version
 }
 
 extend type Mutation {

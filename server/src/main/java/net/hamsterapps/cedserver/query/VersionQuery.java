@@ -16,7 +16,11 @@ public class VersionQuery implements GraphQLQueryResolver {
         this.versionService = versionService;
     }
 
-    public Iterable<Version> findProjectVersions(Long id) {
-        return versionService.findByProjectId(id);
+    public Iterable<Version> versions(Long projectId) {
+        return versionService.findByProjectId(projectId);
+    }
+
+    public Version version(Long id) {
+        return versionService.findById(id);
     }
 }

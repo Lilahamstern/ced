@@ -14,7 +14,7 @@ public class Version extends BaseEntity {
 
   private String description;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   @JoinColumn(name = "project_id", nullable = false, updatable = false)
   private Project project;
 
