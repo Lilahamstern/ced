@@ -26,8 +26,8 @@ public class Information extends BaseEntity {
   @Column(nullable = false)
   private String sector;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "version_id", nullable = false, updatable = false)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "version_id", nullable = false, updatable = false )
   private Version version;
 
   public Information() {
