@@ -27,7 +27,6 @@ export default {
     };
   },
   methods: {
-    // todo: fetch projects
     fetchProjects: function() {
 
     }
