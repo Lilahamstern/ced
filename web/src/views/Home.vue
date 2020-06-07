@@ -13,7 +13,6 @@
 <script>
 import searchComp from '@/components/projects/Search';
 import projectTable from '@/components/projects/Table';
-import projectGRPC from '../grpc/project/projectClient';
 export default {
   name: 'Home',
   components: {
@@ -28,17 +27,9 @@ export default {
     };
   },
   methods: {
-    fetchProjects: function(e) {
-      projectGRPC
-        .getProjects(e)
-        .then(res => {
-          this.projects = res;
-          this.error = null;
-        })
-        .catch(err => {
-          this.projects = [];
-          this.error = err.message;
-        });
+    // todo: fetch projects
+    fetchProjects: function() {
+
     }
   }
 };
