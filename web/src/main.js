@@ -8,8 +8,8 @@ import devtools from '@vue/devtools';
 import { ApolloClient} from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import VueApollo from 'vue-apollo;'
 import  {setContext} from "apollo-link-context";
+import VueApollo from 'vue-apollo;'
 
 // Custom
 import '@/assets/css/tailwind.css';
@@ -36,9 +36,10 @@ const httpLink = new HttpLink({
   uri: "http://localhost:3000/graphql"
 });
 
-const middlewareLink = setContext(() => {
-  headers: {}
-});
+const middlewareLink = setContext(() => ({
+  headers: {
+  }
+}));
 
 const link = middlewareLink.concat(httpLink);
 
