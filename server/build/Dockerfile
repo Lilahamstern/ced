@@ -54,5 +54,5 @@ COPY --from=build-env /app/main .
 
 # Execute app
 
-#CMD ["./main"]
-CMD ["./dlv", "--listen=:2345", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "./main"]
+CMD ["./main"]
+#CMD ["./dlv", "--listen=:2345", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "./main"]
