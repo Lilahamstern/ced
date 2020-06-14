@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -30,8 +33,28 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	if err := srv.ListenAndServe(); err != nil {
-		log.Panic(err)
-	}
+	go func() {
+		log.Println("Starting server")
+		log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+		if err := srv.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	calmShutdown(srv)
+}
+
+func calmShutdown(srv *http.Server) {
+	interruptChan := make(chan os.Signal, 1)
+	signal.Notify(interruptChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until signal is received
+	<-interruptChan
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	srv.Shutdown(ctx)
+
+	log.Println("Shutting down server!")
+	os.Exit(0)
 }
