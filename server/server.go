@@ -39,7 +39,7 @@ func main() {
 
 	go func() {
 		log.Println("Starting server")
-		log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+		log.Printf("Server started! Visit http://localhost:%s/ for GrahQL Playground", port)
 		if err := srv.ListenAndServe(); err != nil {
 			log.Fatal(err)
 		}
