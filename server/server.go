@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"log"
 	"net/http"
@@ -20,6 +21,9 @@ func main() {
 	port := os.Getenv("PORT")
 
 	config.LoadConfig()
+
+	database.InitDB()
+	database.Migrate()
 
 	router := gin.Default()
 	router.POST("/query", GraphQLHandler())
