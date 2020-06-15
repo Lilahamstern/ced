@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/lilahamstern/ced/server/pkg/config"
 	"log"
 	"net/http"
 	"os"
@@ -17,9 +18,8 @@ const defaultPort = "8080"
 
 func main() {
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
+
+	config.LoadConfig()
 
 	router := gin.Default()
 	router.POST("/query", GraphQLHandler())
