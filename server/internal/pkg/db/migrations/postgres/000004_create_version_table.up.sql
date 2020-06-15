@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Versions
     projectId     BIGINT    NOT NULL,
     informationId UUID      NULL,
     createdAt     TIMESTAMP          default current_timestamp,
-    updatedAt     TIMESTAMP NULL,
+    updatedAt     TIMESTAMP NULL     DEFAULT NULL,
     FOREIGN KEY (projectId) REFERENCES Projects (id) ON DELETE CASCADE,
     FOREIGN KEY (informationId) REFERENCES VersionInformation (id)
         ON DELETE SET NULL
