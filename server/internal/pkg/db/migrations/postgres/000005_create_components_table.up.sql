@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Components
     level     INT          NOT NULL,
     type      VARCHAR(50)  NOT NULL,
     createdAt TIMESTAMP             default current_timestamp,
-    updatedAt TIMESTAMP    NULL     DEFAULT NULL,
+    updatedAt TIMESTAMP             DEFAULT current_timestamp,
     FOREIGN KEY (versionId) REFERENCES Versions (id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 )

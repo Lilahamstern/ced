@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS VersionInformation
     client      VARCHAR(50) NOT NULL,
     sector      VARCHAR(50) NOT NULL,
     createdAt   TIMESTAMP            default current_timestamp,
-    updatedAt   TIMESTAMP   NULL     DEFAULT NULL,
+    updatedAt   TIMESTAMP            DEFAULT current_timestamp,
     PRIMARY KEY (id)
 )
