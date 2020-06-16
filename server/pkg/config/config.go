@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// config struct for config generaiton
 type config struct {
 	Port    int
 	DbHost  string
@@ -19,6 +20,7 @@ type config struct {
 	DbFlags string
 }
 
+// LoadConfig will load config if it exists otherwise it will generate config based on config struct.
 func LoadConfig() {
 	if err := godotenv.Load(); err != nil {
 		log.Println(".env config file not found...")
@@ -28,6 +30,7 @@ func LoadConfig() {
 	log.Println("Loaded config...")
 }
 
+// loadDefaultValues will set default values to config struct
 func loadDefaultValues() config {
 	return config{
 		Port:    8080,
@@ -40,6 +43,7 @@ func loadDefaultValues() config {
 	}
 }
 
+// generateConfigFil generates config file depending on config struct
 func generateConfigFile() {
 	log.Println("Generating default .env config...")
 	confFile := createConfigFile()
@@ -51,6 +55,7 @@ func generateConfigFile() {
 	log.Println("Generation complete...")
 }
 
+// createConfigFile will creating config file and return *os.File
 func createConfigFile() *os.File {
 	file, err := os.Create(".env")
 	if err != nil {
@@ -59,6 +64,7 @@ func createConfigFile() *os.File {
 	return file
 }
 
+// writeConfigToFile will write config and its values to .env file
 func writeConfigToFile(file *os.File) {
 	for k, v := range mapValuesFromConfig() {
 		data := fmt.Sprintf("%v=%v", k, v)
@@ -68,6 +74,8 @@ func writeConfigToFile(file *os.File) {
 	}
 }
 
+// mapValuesFromConfig takes the loaded config and put it into a map[string]interface{}
+// It returns the loaded config in map with key:value
 func mapValuesFromConfig() map[string]interface{} {
 	conf := loadDefaultValues()
 	cv := reflect.ValueOf(conf)

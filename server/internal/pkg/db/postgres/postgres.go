@@ -14,6 +14,8 @@ import (
 
 var DB *sql.DB
 
+// InitDB will initialize database connection
+// If connection fails reconnection will be tried
 func InitDB() {
 
 	var db *sql.DB
@@ -39,12 +41,14 @@ func InitDB() {
 	log.Println("Connected to database...")
 }
 
+// PingCheckDB ping database if that does not succeed error will be thrown.
 func PingCheckDB() {
 	if err := DB.Ping(); err != nil {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 }
 
+// Migrate current database migrations to db. If they arent in the database
 func Migrate() {
 	PingCheckDB()
 	driver, err := postgres.WithInstance(DB, &postgres.Config{})
@@ -67,6 +71,8 @@ func Migrate() {
 	log.Println("Migrated database...")
 }
 
+// generateDbUrl generates database url from environment variables
+// Returns database url as string
 func generateDbUrl() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s",
 		os.Getenv("dbuser"),
