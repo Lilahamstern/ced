@@ -10,7 +10,7 @@ input creatProjectInput {
 }
 
 type Query {
-    projects: [Project!]!
+    projects: [Project]!
     project(id: ID!): Project!
 }
 
