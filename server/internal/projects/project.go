@@ -3,7 +3,7 @@ package projects
 import (
 	"database/sql"
 	"fmt"
-	"github.com/lilahamstern/ced/server/graph/model"
+	"github.com/lilahamstern/ced/server/internal/model/graph"
 	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"log"
 	"strconv"
@@ -18,8 +18,8 @@ type Project struct {
 }
 
 // ToGraphModel will map Project to Graphql model of project and return it as pointer
-func (project Project) ToGraphModel() *model.Project {
-	return &model.Project{
+func (project Project) ToGraphModel() *graph.Project {
+	return &graph.Project{
 		ID:        strconv.FormatInt(project.ID, 10),
 		CreatedAt: project.CreatedAt.String(),
 		UpdatedAt: project.UpdatedAt.String(),

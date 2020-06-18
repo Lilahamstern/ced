@@ -1,0 +1,18 @@
+type Version {
+    id: ID!
+    createdAt: String!
+    updatedAt: String!
+}
+
+input createVersionInput {
+    projectId: ID!
+    informationId: ID!
+}
+
+extend type Query {
+    version(id: ID!): Version!
+}
+
+extend type Mutation {
+    createVersion(input: createVersionInput): Version!
+}

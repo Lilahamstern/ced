@@ -1,5 +1,6 @@
 type Project {
     id: ID!
+    version: Version
     createdAt: String!
     updatedAt: String!
 }
@@ -9,8 +10,8 @@ input creatProjectInput {
 }
 
 type Query {
-    projects: [Project]
-    project(id: ID!): Project
+    projects: [Project!]!
+    project(id: ID!): Project!
 }
 
 type Mutation {
