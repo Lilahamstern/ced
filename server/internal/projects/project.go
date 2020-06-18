@@ -17,8 +17,8 @@ type Project struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// ToGrpahProject will map Project to Graphql model of project and return it as pointer
-func (project Project) ToGraphProject() *model.Project {
+// ToGraphModel will map Project to Graphql model of project and return it as pointer
+func (project Project) ToGraphModel() *model.Project {
 	return &model.Project{
 		ID:        strconv.FormatInt(project.ID, 10),
 		CreatedAt: project.CreatedAt.String(),

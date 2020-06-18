@@ -28,7 +28,7 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input *model.Creat
 		return nil, fmt.Errorf("internal server error")
 	}
 
-	return project.ToGraphProject(), nil
+	return project.ToGraphModel(), nil
 }
 
 func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
@@ -36,7 +36,7 @@ func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) 
 	dbProjects := projects.GetAll()
 
 	for _, project := range dbProjects {
-		respRojects = append(respRojects, project.ToGraphProject())
+		respRojects = append(respRojects, project.ToGraphModel())
 	}
 
 	return respRojects, nil
@@ -48,7 +48,7 @@ func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project,
 		return nil, err
 	}
 
-	return project.ToGraphProject(), nil
+	return project.ToGraphModel(), nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
