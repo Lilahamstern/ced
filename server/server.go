@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	. "github.com/lilahamstern/ced/server/internal/pkg/handler"
 )
@@ -24,6 +25,7 @@ func main() {
 	database.Migrate()
 
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.POST("/query", GraphQLHandler())
 	router.GET("/", PlaygroundHandler())
 
