@@ -56,7 +56,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Project  func(childComplexity int, id string) int
+		Project  func(childComplexity int, id int64) int
 		Projects func(childComplexity int) int
 		Version  func(childComplexity int, id string) int
 	}
@@ -74,7 +74,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Projects(ctx context.Context) ([]*model.Project, error)
-	Project(ctx context.Context, id string) (*model.Project, error)
+	Project(ctx context.Context, id int64) (*model.Project, error)
 	Version(ctx context.Context, id string) (*model.Version, error)
 }
 
@@ -155,7 +155,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Project(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Project(childComplexity, args["id"].(int64)), true
 
 	case "Query.projects":
 		if e.complexity.Query.Projects == nil {
@@ -262,19 +262,19 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 
 var sources = []*ast.Source{
 	&ast.Source{Name: "schema/project.graphqls", Input: `type Project {
-    id: ID!
+    id: Int!
     version: Version
     createdAt: String!
     updatedAt: String!
 }
 
 input creatProjectInput {
-    id: ID!
+    id: Int!
 }
 
 type Query {
     projects: [Project]!
-    project(id: ID!): Project!
+    project(id: Int!): Project!
 }
 
 type Mutation {
@@ -350,9 +350,9 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_project_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int64
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNInt2int64(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -522,9 +522,9 @@ func (ec *executionContext) _Project_id(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Project_version(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
@@ -684,7 +684,7 @@ func (ec *executionContext) _Query_project(ctx context.Context, field graphql.Co
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Project(rctx, args["id"].(string))
+		return ec.resolvers.Query().Project(rctx, args["id"].(int64))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1976,7 +1976,7 @@ func (ec *executionContext) unmarshalInputcreatProjectInput(ctx context.Context,
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.ID, err = ec.unmarshalNInt2int64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2467,6 +2467,20 @@ func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface
 
 func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalID(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNInt2int64(ctx context.Context, v interface{}) (int64, error) {
+	return graphql.UnmarshalInt64(v)
+}
+
+func (ec *executionContext) marshalNInt2int64(ctx context.Context, sel ast.SelectionSet, v int64) graphql.Marshaler {
+	res := graphql.MarshalInt64(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

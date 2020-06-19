@@ -1,17 +1,17 @@
 type Project {
-    id: ID!
+    id: Int!
     version: Version
     createdAt: String!
     updatedAt: String!
 }
 
 input creatProjectInput {
-    id: ID!
+    id: Int!
 }
 
 type Query {
     projects: [Project]!
-    project(id: ID!): Project!
+    project(id: Int!): Project!
 }
 
 type Mutation {

@@ -3,7 +3,7 @@
 package model
 
 type CreatProjectInput struct {
-	ID string `json:"id"`
+	ID int64 `json:"id"`
 }
 
 type CreateVersionInput struct {

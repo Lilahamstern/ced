@@ -5,51 +5,22 @@ package resolver
 
 import (
 	"context"
-	"fmt"
-	"log"
-	"strconv"
 
 	"github.com/lilahamstern/ced/server/internal/graph/generated"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	"github.com/lilahamstern/ced/server/internal/projects"
+	"github.com/lilahamstern/ced/server/internal/project"
 )
 
 func (r *mutationResolver) CreateProject(ctx context.Context, input *model.CreatProjectInput) (*model.Project, error) {
-	id, err := strconv.ParseInt(input.ID, 10, 64)
-	if err != nil {
-		return nil, fmt.Errorf("internal server error")
-	}
-	var project = projects.Project{
-		ID: id,
-	}
-
-	project, err = project.Save()
-	if err != nil {
-		log.Println(err)
-		return nil, fmt.Errorf("internal server error")
-	}
-
-	return project.ToGraphModel(), nil
+	return project.Save(input)
 }
 
 func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
-	var resProjects []*model.Project
-	dbProjects := projects.GetAll()
-
-	for _, project := range dbProjects {
-		resProjects = append(resProjects, project.ToGraphModel())
-	}
-
-	return resProjects, nil
+	return project.GetAll()
 }
 
-func (r *queryResolver) Project(ctx context.Context, id string) (*model.Project, error) {
-	project, err := projects.Get(id)
-	if err != nil {
-		return nil, err
-	}
-
-	return project.ToGraphModel(), nil
+func (r *queryResolver) Project(ctx context.Context, id int64) (*model.Project, error) {
+	return project.Get(id)
 }
 
 // Mutation returns generated.MutationResolver implementation.
