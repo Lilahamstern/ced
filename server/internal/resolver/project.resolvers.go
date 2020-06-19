@@ -15,6 +15,10 @@ func (r *mutationResolver) CreateProject(ctx context.Context, input *model.Creat
 	return project.Save(input)
 }
 
+func (r *projectResolver) Version(ctx context.Context, obj *model.Project) (*model.Version, error) {
+	return nil, nil
+}
+
 func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
 	return project.GetAll()
 }
@@ -26,8 +30,12 @@ func (r *queryResolver) Project(ctx context.Context, id int64) (*model.Project, 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
+// Project returns generated.ProjectResolver implementation.
+func (r *Resolver) Project() generated.ProjectResolver { return &projectResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
+type projectResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

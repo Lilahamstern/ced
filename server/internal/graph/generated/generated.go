@@ -36,6 +36,7 @@ type Config struct {
 
 type ResolverRoot interface {
 	Mutation() MutationResolver
+	Project() ProjectResolver
 	Query() QueryResolver
 }
 
@@ -71,6 +72,9 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateProject(ctx context.Context, input *model.CreatProjectInput) (*model.Project, error)
 	CreateVersion(ctx context.Context, input *model.CreateVersionInput) (*model.Version, error)
+}
+type ProjectResolver interface {
+	Version(ctx context.Context, obj *model.Project) (*model.Version, error)
 }
 type QueryResolver interface {
 	Projects(ctx context.Context) ([]*model.Project, error)
@@ -538,13 +542,13 @@ func (ec *executionContext) _Project_version(ctx context.Context, field graphql.
 		Object:   "Project",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Version, nil
+		return ec.resolvers.Project().Version(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2068,19 +2072,28 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 		case "id":
 			out.Values[i] = ec._Project_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "version":
-			out.Values[i] = ec._Project_version(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Project_version(ctx, field, obj)
+				return res
+			})
 		case "createdAt":
 			out.Values[i] = ec._Project_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "updatedAt":
 			out.Values[i] = ec._Project_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
