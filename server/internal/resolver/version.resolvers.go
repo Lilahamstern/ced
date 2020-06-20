@@ -5,8 +5,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/lilahamstern/ced/server/internal/graph/generated"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
 	"github.com/lilahamstern/ced/server/internal/version"
@@ -17,7 +15,7 @@ func (r *mutationResolver) CreateVersion(ctx context.Context, input *model.Creat
 }
 
 func (r *queryResolver) Version(ctx context.Context, id string) (*model.Version, error) {
-	panic(fmt.Errorf("not implemented"))
+	return version.GetById(id)
 }
 
 func (r *versionResolver) ProjectID(ctx context.Context, obj *model.Version) (*int64, error) {
