@@ -1,6 +1,6 @@
 type Project {
     id: Int!
-    version: Version
+    versions: [Version]
     createdAt: String!
     updatedAt: String!
 }

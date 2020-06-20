@@ -36,6 +36,17 @@ func Save(input *model.CreateVersionInput) (*model.Version, error) {
 	return version.ToGraphModel(), nil
 }
 
+func GetByProjectId(id int64) ([]*model.Version, error) {
+	var versions []*model.Version
+	dbVersions := database.GetVersionByProjectId(id)
+
+	for _, version := range dbVersions {
+		versions = append(versions, version.ToGraphModel())
+	}
+
+	return versions, nil
+}
+
 func GetById(id string) (*model.Version, error) {
 	version, err := database.GetVersionById(id)
 	if err != nil {

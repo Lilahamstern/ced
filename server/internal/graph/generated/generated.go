@@ -38,7 +38,6 @@ type ResolverRoot interface {
 	Mutation() MutationResolver
 	Project() ProjectResolver
 	Query() QueryResolver
-	Version() VersionResolver
 }
 
 type DirectiveRoot struct {
@@ -54,7 +53,7 @@ type ComplexityRoot struct {
 		CreatedAt func(childComplexity int) int
 		ID        func(childComplexity int) int
 		UpdatedAt func(childComplexity int) int
-		Version   func(childComplexity int) int
+		Versions  func(childComplexity int) int
 	}
 
 	Query struct {
@@ -66,8 +65,8 @@ type ComplexityRoot struct {
 	Version struct {
 		CreatedAt     func(childComplexity int) int
 		ID            func(childComplexity int) int
-		InformationID func(childComplexity int) int
-		ProjectID     func(childComplexity int) int
+		InformationId func(childComplexity int) int
+		ProjectId     func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 	}
 }
@@ -77,16 +76,12 @@ type MutationResolver interface {
 	CreateVersion(ctx context.Context, input *model.CreateVersionInput) (*model.Version, error)
 }
 type ProjectResolver interface {
-	Version(ctx context.Context, obj *model.Project) (*model.Version, error)
+	Versions(ctx context.Context, obj *model.Project) ([]*model.Version, error)
 }
 type QueryResolver interface {
 	Projects(ctx context.Context) ([]*model.Project, error)
 	Project(ctx context.Context, id int64) (*model.Project, error)
 	Version(ctx context.Context, id string) (*model.Version, error)
-}
-type VersionResolver interface {
-	ProjectID(ctx context.Context, obj *model.Version) (*int64, error)
-	InformationID(ctx context.Context, obj *model.Version) (string, error)
 }
 
 type executableSchema struct {
@@ -149,12 +144,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Project.UpdatedAt(childComplexity), true
 
-	case "Project.version":
-		if e.complexity.Project.Version == nil {
+	case "Project.versions":
+		if e.complexity.Project.Versions == nil {
 			break
 		}
 
-		return e.complexity.Project.Version(childComplexity), true
+		return e.complexity.Project.Versions(childComplexity), true
 
 	case "Query.project":
 		if e.complexity.Query.Project == nil {
@@ -202,18 +197,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		return e.complexity.Version.ID(childComplexity), true
 
 	case "Version.informationId":
-		if e.complexity.Version.InformationID == nil {
+		if e.complexity.Version.InformationId == nil {
 			break
 		}
 
-		return e.complexity.Version.InformationID(childComplexity), true
+		return e.complexity.Version.InformationId(childComplexity), true
 
 	case "Version.projectId":
-		if e.complexity.Version.ProjectID == nil {
+		if e.complexity.Version.ProjectId == nil {
 			break
 		}
 
-		return e.complexity.Version.ProjectID(childComplexity), true
+		return e.complexity.Version.ProjectId(childComplexity), true
 
 	case "Version.updatedAt":
 		if e.complexity.Version.UpdatedAt == nil {
@@ -288,7 +283,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	&ast.Source{Name: "schema/project.graphqls", Input: `type Project {
     id: Int!
-    version: Version
+    versions: [Version]
     createdAt: String!
     updatedAt: String!
 }
@@ -554,7 +549,7 @@ func (ec *executionContext) _Project_id(ctx context.Context, field graphql.Colle
 	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Project_version(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
+func (ec *executionContext) _Project_versions(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -571,7 +566,7 @@ func (ec *executionContext) _Project_version(ctx context.Context, field graphql.
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Project().Version(rctx, obj)
+		return ec.resolvers.Project().Versions(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -580,9 +575,9 @@ func (ec *executionContext) _Project_version(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Version)
+	res := resTmp.([]*model.Version)
 	fc.Result = res
-	return ec.marshalOVersion2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx, field.Selections, res)
+	return ec.marshalOVersion2ᚕᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Project_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
@@ -883,13 +878,13 @@ func (ec *executionContext) _Version_projectId(ctx context.Context, field graphq
 		Object:   "Version",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Version().ProjectID(rctx, obj)
+		return obj.ProjectId, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -898,9 +893,9 @@ func (ec *executionContext) _Version_projectId(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint64(ctx, field.Selections, res)
+	return ec.marshalOInt2int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Version_informationId(ctx context.Context, field graphql.CollectedField, obj *model.Version) (ret graphql.Marshaler) {
@@ -914,13 +909,13 @@ func (ec *executionContext) _Version_informationId(ctx context.Context, field gr
 		Object:   "Version",
 		Field:    field,
 		Args:     nil,
-		IsMethod: true,
+		IsMethod: false,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Version().InformationID(rctx, obj)
+		return obj.InformationId, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2162,7 +2157,7 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "version":
+		case "versions":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -2170,7 +2165,7 @@ func (ec *executionContext) _Project(ctx context.Context, sel ast.SelectionSet, 
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Project_version(ctx, field, obj)
+				res = ec._Project_versions(ctx, field, obj)
 				return res
 			})
 		case "createdAt":
@@ -2280,42 +2275,24 @@ func (ec *executionContext) _Version(ctx context.Context, sel ast.SelectionSet, 
 		case "id":
 			out.Values[i] = ec._Version_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "projectId":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Version_projectId(ctx, field, obj)
-				return res
-			})
+			out.Values[i] = ec._Version_projectId(ctx, field, obj)
 		case "informationId":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Version_informationId(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			})
+			out.Values[i] = ec._Version_informationId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createdAt":
 			out.Values[i] = ec._Version_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "updatedAt":
 			out.Values[i] = ec._Version_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -2951,21 +2928,6 @@ func (ec *executionContext) marshalOInt2int64(ctx context.Context, sel ast.Selec
 	return graphql.MarshalInt64(v)
 }
 
-func (ec *executionContext) unmarshalOInt2ᚖint64(ctx context.Context, v interface{}) (*int64, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalOInt2int64(ctx, v)
-	return &res, err
-}
-
-func (ec *executionContext) marshalOInt2ᚖint64(ctx context.Context, sel ast.SelectionSet, v *int64) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec.marshalOInt2int64(ctx, sel, *v)
-}
-
 func (ec *executionContext) marshalOProject2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐProject(ctx context.Context, sel ast.SelectionSet, v model.Project) graphql.Marshaler {
 	return ec._Project(ctx, sel, &v)
 }
@@ -3002,6 +2964,46 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 
 func (ec *executionContext) marshalOVersion2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx context.Context, sel ast.SelectionSet, v model.Version) graphql.Marshaler {
 	return ec._Version(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOVersion2ᚕᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx context.Context, sel ast.SelectionSet, v []*model.Version) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOVersion2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
 }
 
 func (ec *executionContext) marshalOVersion2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx context.Context, sel ast.SelectionSet, v *model.Version) graphql.Marshaler {

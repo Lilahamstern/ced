@@ -45,6 +45,39 @@ func (v Version) Save() (Version, error) {
 	return v, nil
 }
 
+func GetVersionByProjectId(id int64) []Version {
+	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE projectid = $1"
+	stmt, err := DB.Prepare(query)
+	log.Println(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	var versions []Version
+
+	rows, err := stmt.Query(id)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		var version Version
+		err := rows.Scan(&version.ID, &version.ProjectId, &version.InformationId, &version.CreatedAt, &version.UpdatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+		versions = append(versions, version)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return versions
+}
+
 func GetVersionById(id string) (Version, error) {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
 	stmt, err := DB.Prepare(query)
