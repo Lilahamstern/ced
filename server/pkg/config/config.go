@@ -11,13 +11,16 @@ import (
 
 // config struct for config generaiton
 type config struct {
-	Port    int
-	DbHost  string
-	DbPort  int
-	DbName  string
-	DbUser  string
-	DbPass  string
-	DbFlags string
+	Port      int
+	DbHost    string
+	DbPort    int
+	DbName    string
+	DbUser    string
+	DbPass    string
+	DbFlags   string
+	RedisAddr string
+	RedisPass string
+	RedisDb   int
 }
 
 // LoadConfig will load config if it exists otherwise it will generate config based on config struct.
@@ -33,13 +36,16 @@ func LoadConfig() {
 // loadDefaultValues will set default values to config struct
 func loadDefaultValues() config {
 	return config{
-		Port:    8080,
-		DbHost:  "localhost",
-		DbPort:  5432,
-		DbName:  "postgres",
-		DbUser:  "postgres",
-		DbPass:  "postgres",
-		DbFlags: "sslmode=disable",
+		Port:      8080,
+		DbHost:    "localhost",
+		DbPort:    5432,
+		DbName:    "postgres",
+		DbUser:    "postgres",
+		DbPass:    "postgres",
+		DbFlags:   "sslmode=disable",
+		RedisAddr: "localhost:6370",
+		RedisPass: "",
+		RedisDb:   0,
 	}
 }
 

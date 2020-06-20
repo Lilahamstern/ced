@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/go-redis/redis"
 	"log"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -15,8 +17,12 @@ type Cache struct {
 const aqpPrefix = "apq:"
 
 func NewCache() *Cache {
+	db, _ := strconv.Atoi(os.Getenv("redisdb"))
+
 	client := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr:     os.Getenv("redisaddr"),
+		Password: os.Getenv("redispass"),
+		DB:       db,
 	})
 
 	err := client.Ping().Err()
@@ -26,6 +32,7 @@ func NewCache() *Cache {
 
 	ttl := 24 * time.Hour
 
+	log.Println("Connected to redis db...")
 	return &Cache{client: client, ttl: ttl}
 }
 
