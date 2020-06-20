@@ -1,21 +1,21 @@
-# Calculator Enviorment Database (CED)
+# Calculator Environment Database (CED)
 
-CED is my Highschool exam work to [WSP](https://wsp.com), that are a consulting company.
-The is development with [WSP](https://wsp.com) and their needs to the new climate declration the sweidsh goverment have added for the construction industry.
+CED is my High school exam work to [WSP](https://wsp.com), that are a consulting company.
+The is development with [WSP](https://wsp.com) and their needs to the new climate declaration the Swedish government have added for the construction industry.
 
 ## Getting Started
 
 Follow steps below to get started!
 
 - Clone the [repo](https://github.com/Lilahamstern/ced)
-- Edit Server.gRPC/appsettings.json to fit your need.
+- Edit `.env` file to fir your needs
 - Go back to the root folder and run `docker-compose up -d`
 
 ### Prerequisites
 
 - [Docker](https://www.docker.com/)
-- [.NET-Core 3.0 or above](https://dotnet.microsoft.com/download)
-- [Postgres](https://www.microsoft.com/sv-se/sql-server/sql-server-downloads) if you dont docker
+- [Golang 1.14.4](https://golang.org)
+- [Git](https://git-scm.com)
 
 ### Installing
 
@@ -28,15 +28,15 @@ Open folder or sln in preferd editor/IDE of choice.
 ```
 
 ```
-Edit DataLibrary config.json to your needs
+Edit .env file to fit your needs
 ```
 
 ```
 Run docker-compose up -d
 ```
 
-To access the application, open `localhost:8080` (default) if you havent changed
-To create projects and update you need to create your own gRPC client, at the moment. Will maybe change it at a later point.
+To access the web application, open `localhost:8080` (default) if you haven't changed
+You can access the server via graphql playground on `localhost:{your_port}/graphql`
 
 ## Deployment
 
@@ -44,10 +44,12 @@ To create projects and update you need to create your own gRPC client, at the mo
 
 ## Built With
 
-- [VueJS](https://vuejs.org/) - The web is written in Blazor
-- [.NET-Core](https://dotnet.microsoft.com/download) - Base framework
+- [VueJS](https://vuejs.org/) - Web framework
+- [Golang](https://golang.org) - Language used on the backend
+- [gqlgen](https://github.com/99designs/gqlgen) - Graphql library used on backend
 - [Docker](https://www.docker.com/) - Used to run development containers and publish docker images
-- [gRPC](https://grpc.io/) - gRPC
+- [GrapQL](https://graphql.org) - API handler
+- [PostgreSQL](https://www.postgresql.org) - Database
 
 ## Contributing
 
@@ -55,7 +57,7 @@ To create projects and update you need to create your own gRPC client, at the mo
 
 ## Authors
 
-- **Leo Rönnebro** - _Initial work_ - [Github](https://github.com/lilahamstern) [Twitch](https://twitch.tv/lilahamstern)
+- **Leo Rönnebro** - _Initial work_ - [Github](https://github.com/lilahamstern) - [Twitch](https://twitch.tv/lilahamstern)
 
 ## License
 
@@ -63,6 +65,4 @@ This project is licensed under the GNU General Public License v3.0 License - see
 
 ## Acknowledgments
 
-- Plan and create a bigger application.
-- Database design
-- and much more
+### WIP
