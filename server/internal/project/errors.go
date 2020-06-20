@@ -11,9 +11,9 @@ func (s *AlreadyExists) Error() string {
 }
 
 type NotFound struct {
-	id int64
+	Id int64
 }
 
 func (s *NotFound) Error() string {
-	return fmt.Sprintf("project not found with id: %v", s.id)
+	return fmt.Sprintf("project not found with id: %v", s.Id)
 }

@@ -41,7 +41,7 @@ func Get(id int64) (*model.Project, error) {
 	project, err := database.GetProject(id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, &NotFound{id: id}
+			return nil, &NotFound{Id: id}
 		}
 		return nil, &errors.InternalServerError{}
 	}

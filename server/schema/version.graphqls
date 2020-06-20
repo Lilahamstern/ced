@@ -1,11 +1,13 @@
 type Version {
     id: ID!
+    projectId: Int,
+    informationId: ID!
     createdAt: String!
     updatedAt: String!
 }
 
 input createVersionInput {
-    projectId: ID!
+    projectId: Int!
     informationId: ID!
 }
 

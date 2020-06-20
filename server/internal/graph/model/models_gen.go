@@ -7,6 +7,6 @@ type CreatProjectInput struct {
 }
 
 type CreateVersionInput struct {
-	ProjectID     string `json:"projectId"`
+	ProjectID     int64  `json:"projectId"`
 	InformationID string `json:"informationId"`
 }

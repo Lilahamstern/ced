@@ -15,16 +15,16 @@ type Project struct {
 }
 
 // ToGraphModel will map Project to Graphql model of project and return it as pointer
-func (project Project) ToGraphModel() *model.Project {
+func (p Project) ToGraphModel() *model.Project {
 	return &model.Project{
-		ID:        project.ID,
-		CreatedAt: project.CreatedAt.String(),
-		UpdatedAt: project.UpdatedAt.String(),
+		ID:        p.ID,
+		CreatedAt: p.CreatedAt.String(),
+		UpdatedAt: p.UpdatedAt.String(),
 	}
 }
 
 // Save will save project to db, if project.ID isn't unique error will be returned
-func (project Project) Save() (Project, error) {
+func (p Project) Save() (Project, error) {
 	query := "INSERT INTO projects(id) VALUES ($1) RETURNING id, createdat, updatedat"
 
 	stmt, err := DB.Prepare(query)
@@ -34,15 +34,15 @@ func (project Project) Save() (Project, error) {
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(project.ID).Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
+	err = stmt.QueryRow(p.ID).Scan(&p.ID, &p.CreatedAt, &p.UpdatedAt)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return project, nil
+	return p, nil
 }
 
-func (project Project) Exists() bool {
+func (p Project) Exists() bool {
 	query := "SELECT EXISTS(SELECT 1 FROM projects p WHERE p.id=$1)"
 	stmt, err := DB.Prepare(query)
 	if err != nil {
@@ -52,12 +52,20 @@ func (project Project) Exists() bool {
 	defer stmt.Close()
 
 	var exists bool
-	err = stmt.QueryRow(project.ID).Scan(&exists)
+	err = stmt.QueryRow(p.ID).Scan(&exists)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return exists
+}
+
+func ProjectExistsById(id int64) bool {
+	project := Project{
+		ID: id,
+	}
+
+	return project.Exists()
 }
 
 // GetAll will fetch all projects from database
