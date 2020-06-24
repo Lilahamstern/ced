@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/ced/server/internal/graph/generated"
-	"github.com/lilahamstern/ced/server/internal/pkg/db/redis/redis"
+	redis2 "github.com/lilahamstern/ced/server/internal/pkg/db/redis"
 	"github.com/lilahamstern/ced/server/internal/resolver"
 	"time"
 )
@@ -42,11 +42,11 @@ func GraphQLServer(es graphql.ExecutableSchema) *handler.Server {
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{})
 
-	srv.SetQueryCache(redis.NewCache())
+	srv.SetQueryCache(redis2.NewCache())
 
 	srv.Use(extension.Introspection{})
 	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: redis.NewCache(),
+		Cache: redis2.NewCache(),
 	})
 
 	return srv
