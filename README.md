@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/lilahamstern/ced)](https://goreportcard.com/report/github.com/lilahamstern/ced)
+
 # Calculator Environment Database (CED)
 
 CED is my High school exam work to [WSP](https://wsp.com), that are a consulting company.
