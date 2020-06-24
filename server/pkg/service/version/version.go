@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"github.com/google/uuid"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"github.com/lilahamstern/ced/server/internal/pkg/errors"
-	"github.com/lilahamstern/ced/server/internal/project"
+	"github.com/lilahamstern/ced/server/internal/pkg/repository"
+	"github.com/lilahamstern/ced/server/pkg/service/project"
 	"log"
 )
 
@@ -18,16 +18,16 @@ func Save(input *model.CreateVersionInput) (*model.Version, error) {
 		return nil, &errors.InternalServerError{}
 	}
 
-	version := database.Version{
+	version := repository.Version{
 		ProjectId:     input.ProjectID,
 		InformationId: parsedInfoId,
 	}
 
-	if !database.ProjectExistsById(input.ProjectID) {
+	if !repository.ProjectExistsById(input.ProjectID) {
 		return nil, &project.NotFound{Id: input.ProjectID}
 	}
 
-	version, err = version.Save()
+	err = version.Save()
 	if err != nil {
 		log.Println(err)
 		return nil, &errors.InternalServerError{}
@@ -37,18 +37,31 @@ func Save(input *model.CreateVersionInput) (*model.Version, error) {
 }
 
 func GetByProjectId(id int64) ([]*model.Version, error) {
-	var versions []*model.Version
-	dbVersions := database.GetVersionByProjectId(id)
-
-	for _, version := range dbVersions {
-		versions = append(versions, version.ToGraphModel())
+	var versions []repository.Version
+	err := repository.GetVersionByProjectId(id, &versions)
+	if err != nil {
+		return nil, err
 	}
 
-	return versions, nil
+	var res []*model.Version
+	for _, version := range versions {
+		res = append(res, version.ToGraphModel())
+	}
+
+	return res, nil
 }
 
 func GetById(id string) (*model.Version, error) {
-	version, err := database.GetVersionById(id)
+	parsedId, err := uuid.Parse(id)
+	if err != nil {
+		return nil, err
+	}
+
+	version := repository.Version{
+		ID: parsedId,
+	}
+
+	err = version.GetVersionById()
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, &NotFound{Id: id}

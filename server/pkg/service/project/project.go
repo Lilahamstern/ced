@@ -3,13 +3,13 @@ package project
 import (
 	"database/sql"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"github.com/lilahamstern/ced/server/internal/pkg/errors"
+	"github.com/lilahamstern/ced/server/internal/pkg/repository"
 	"log"
 )
 
 func Save(input *model.CreatProjectInput) (*model.Project, error) {
-	var project = database.Project{
+	var project = repository.Project{
 		ID: input.ID,
 	}
 
@@ -17,7 +17,7 @@ func Save(input *model.CreatProjectInput) (*model.Project, error) {
 		return nil, &AlreadyExists{id: project.ID}
 	}
 
-	project, err := project.Save()
+	err := project.Save()
 	if err != nil {
 		log.Println(err)
 		return nil, &errors.InternalServerError{}
@@ -27,18 +27,24 @@ func Save(input *model.CreatProjectInput) (*model.Project, error) {
 }
 
 func GetAll() ([]*model.Project, error) {
-	var projects []*model.Project
-	dbProjects := database.GetAllProjects()
-
-	for _, project := range dbProjects {
-		projects = append(projects, project.ToGraphModel())
+	var projects []repository.Project
+	err := repository.GetAllProjects(&projects)
+	if err != nil {
+		return nil, err
+	}
+	var res []*model.Project
+	for _, version := range projects {
+		res = append(res, version.ToGraphModel())
 	}
 
-	return projects, nil
+	return res, nil
 }
 
 func Get(id int64) (*model.Project, error) {
-	project, err := database.GetProject(id)
+	project := repository.Project{
+		ID: id,
+	}
+	err := project.GetProject()
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, &NotFound{Id: id}

@@ -7,8 +7,8 @@ import (
 	"context"
 	"github.com/lilahamstern/ced/server/internal/graph/generated"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	"github.com/lilahamstern/ced/server/internal/project"
-	"github.com/lilahamstern/ced/server/internal/version"
+	"github.com/lilahamstern/ced/server/pkg/service/project"
+	"github.com/lilahamstern/ced/server/pkg/service/version"
 )
 
 func (r *mutationResolver) CreateProject(ctx context.Context, input *model.CreatProjectInput) (*model.Project, error) {
