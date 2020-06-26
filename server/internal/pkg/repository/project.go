@@ -1,8 +1,9 @@
-package database
+package repository
 
 import (
 	"database/sql"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
+	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"log"
 	"time"
 )
@@ -24,10 +25,10 @@ func (p Project) ToGraphModel() *model.Project {
 }
 
 // Save will save project to db, if project.ID isn't unique error will be returned
-func (p Project) Save() (Project, error) {
+func (p *Project) Save() error {
 	query := "INSERT INTO projects(id) VALUES ($1) RETURNING id, createdat, updatedat"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,12 +40,12 @@ func (p Project) Save() (Project, error) {
 		log.Fatalln(err)
 	}
 
-	return p, nil
+	return nil
 }
 
 func (p Project) Exists() bool {
 	query := "SELECT EXISTS(SELECT 1 FROM projects p WHERE p.id=$1)"
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,10 +70,10 @@ func ProjectExistsById(id int64) bool {
 }
 
 // GetAll will fetch all projects from database
-func GetAllProjects() []Project {
+func GetAllProjects(projects *[]Project) error {
 	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,42 +85,40 @@ func GetAllProjects() []Project {
 		log.Fatal(err)
 	}
 
-	var projects []Project
 	for rows.Next() {
 		var project Project
 		err := rows.Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
 		if err != nil {
 			log.Fatal(err)
 		}
-		projects = append(projects, project)
+		*projects = append(*projects, project)
 	}
 
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
 	}
 
-	return projects
+	return nil
 }
 
 // Get will query one project from database with provided id
-func GetProject(id int64) (Project, error) {
+func (p *Project) GetProject() error {
 	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p WHERE id = $1"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	var project Project
-	err = stmt.QueryRow(id).Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
+	err = stmt.QueryRow(p.ID).Scan(&p.ID, &p.CreatedAt, &p.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return Project{}, err
+			return err
 		}
 		log.Fatal(err)
 	}
 
-	return project, nil
+	return nil
 }

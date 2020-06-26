@@ -1,9 +1,10 @@
-package database
+package repository
 
 import (
 	"database/sql"
 	"github.com/google/uuid"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
+	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"log"
 	"time"
 )
@@ -27,35 +28,39 @@ func (v Version) ToGraphModel() *model.Version {
 	}
 }
 
-func (v Version) Save() (Version, error) {
+func (v *Version) Save() error {
 	query := "INSERT INTO versions(projectid, informationid) VALUES ($1, $2) RETURNING id, projectid, informationid, createdat, updatedat"
 
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(v.ProjectId, v.InformationId).Scan(&v.ID, &v.ProjectId, &v.InformationId, &v.CreatedAt, &v.UpdatedAt)
+	err = stmt.QueryRow(v.ProjectId, v.InformationId).Scan(
+		&v.ID,
+		&v.ProjectId,
+		&v.InformationId,
+		&v.CreatedAt,
+		&v.UpdatedAt)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	return v, nil
+	return nil
 }
 
-func GetVersionByProjectId(id int64) []Version {
+func GetVersionByProjectId(id int64, versions *[]Version) error {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE projectid = $1"
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	log.Println(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
-
-	var versions []Version
 
 	rows, err := stmt.Query(id)
 	if err != nil {
@@ -68,33 +73,32 @@ func GetVersionByProjectId(id int64) []Version {
 		if err != nil {
 			log.Fatal(err)
 		}
-		versions = append(versions, version)
+		*versions = append(*versions, version)
 	}
 
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
 	}
 
-	return versions
+	return nil
 }
 
-func GetVersionById(id string) (Version, error) {
+func (v *Version) GetVersionById() error {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
-	stmt, err := DB.Prepare(query)
+	stmt, err := database.DB.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	var version Version
-	err = stmt.QueryRow(id).Scan(&version.ID, &version.ProjectId, &version.InformationId, &version.CreatedAt, &version.UpdatedAt)
+	err = stmt.QueryRow(v.ID).Scan(&v.ID, &v.ProjectId, &v.InformationId, &v.CreatedAt, &v.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return Version{}, err
+			return err
 		}
 		log.Fatal(err)
 	}
 
-	return version, nil
+	return nil
 }
