@@ -1,21 +1,20 @@
 package main
 
 import (
-	"fmt"
+	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"github.com/lilahamstern/ced/server/internal/pkg/server"
 	"github.com/lilahamstern/ced/server/pkg/config"
-	"os"
 )
 
 func main() {
 	conf := config.NewConfig()
-	fmt.Println(conf)
-	port := os.Getenv("PORT")
 
-	srv := server.SetupHttpServer(port)
+	dbSession := database.NewDatabaseConnection(conf)
+	dbSession.Migrate()
+	conf.AddDbSession(dbSession)
 
-	srv.CreateConnectionServices()
+	srv := server.NewHttpServer(conf)
+
 	srv.Start()
-
 	srv.SafeShutDown()
 }

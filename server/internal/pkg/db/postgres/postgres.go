@@ -7,22 +7,24 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
+	"github.com/lilahamstern/ced/server/pkg/config"
 	"log"
-	"os"
 	"time"
 )
 
-var DB *sql.DB
+type Session struct {
+	DB *sql.DB
+}
 
 // InitDB will initialize database connection
 // If connection fails reconnection will be tried
-func InitDB() {
+func NewDatabaseConnection(config *config.Config) *Session {
 
 	var db *sql.DB
 	var err error
 	for i := 1; i < 5; i++ {
 		log.Printf("Trying to connect to the database (attempt %d)...\n", i)
-		db, err = sql.Open("postgres", generateDbUrl())
+		db, err = sql.Open("postgres", generateDbUrl(config.Database))
 		if err == nil {
 			break
 		}
@@ -35,23 +37,27 @@ func InitDB() {
 		log.Fatalln("could not connect to database...")
 	}
 
-	DB = db
+	session := &Session{
+		DB: db,
+	}
 
-	PingCheckDB()
+	session.PingCheck()
 	log.Println("Connected to database...")
+
+	return session
 }
 
 // PingCheckDB ping database if that does not succeed error will be thrown.
-func PingCheckDB() {
-	if err := DB.Ping(); err != nil {
+func (s *Session) PingCheck() {
+	if err := s.DB.Ping(); err != nil {
 		log.Fatalf("Failed to ping database: %v", err)
 	}
 }
 
 // Migrate current database migrations to db. If they arent in the database
-func Migrate() {
-	PingCheckDB()
-	driver, err := postgres.WithInstance(DB, &postgres.Config{})
+func (s *Session) Migrate() {
+	s.PingCheck()
+	driver, err := postgres.WithInstance(s.DB, &postgres.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,12 +79,13 @@ func Migrate() {
 
 // generateDbUrl generates database url from environment variables
 // Returns database url as string
-func generateDbUrl() string {
+func generateDbUrl(conf *config.DatabaseConfig) string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s",
-		os.Getenv("dbuser"),
-		os.Getenv("dbpass"),
-		os.Getenv("dbhost"),
-		os.Getenv("dbport"),
-		os.Getenv("dbname"),
-		os.Getenv("dbflags"))
+		conf.User,
+		conf.Pass,
+		conf.Host,
+		conf.Port,
+		conf.Name,
+		conf.Flags,
+	)
 }

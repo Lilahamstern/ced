@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/joho/godotenv"
+	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"log"
 	"os"
 	"strconv"
@@ -9,59 +10,64 @@ import (
 
 // Config struct for general config
 type Config struct {
-	Port     int64
-	database *DatabaseConfig
-	redis    *RedisConfig
+	Port     string
+	DB       *database.Session
+	Database *DatabaseConfig
+	Redis    *RedisConfig
 }
 
 // DatabaseConfig to store conn config
 type DatabaseConfig struct {
-	port  int64
-	host  string
-	name  string
-	user  string
-	pass  string
-	flags string
+	Port  int64
+	Host  string
+	Name  string
+	User  string
+	Pass  string
+	Flags string
 }
 
 // RedisConfig to store conn config
 type RedisConfig struct {
-	addr string
-	pass string
-	db   int64
+	Addr string
+	Pass string
+	Db   int64
 }
 
 // NewConfig
 func NewConfig() *Config {
 
 	if err := godotenv.Load(); err != nil {
-		GenerateConfig(Config{})
+		log.Fatalf("Could not load config: %s", err)
 	}
 
 	log.Println("Config loaded...")
 	return &Config{
-		Port:     getEnvInt("port"),
-		database: newDatabaseConfig(),
-		redis:    newRedisConfig(),
+		Port:     getEnv("port"),
+		Database: newDatabaseConfig(),
+		Redis:    newRedisConfig(),
 	}
+}
+
+func (c *Config) AddDbSession(db *database.Session) {
+	c.DB = db
 }
 
 func newDatabaseConfig() *DatabaseConfig {
 	return &DatabaseConfig{
-		port:  getEnvInt("dbport"),
-		host:  getEnv("dbhost"),
-		name:  getEnv("dbname"),
-		user:  getEnv("dbuser"),
-		pass:  getEnv("dbpass"),
-		flags: getEnv("dbflag"),
+		Port:  getEnvInt("dbport"),
+		Host:  getEnv("dbhost"),
+		Name:  getEnv("dbname"),
+		User:  getEnv("dbuser"),
+		Pass:  getEnv("dbpass"),
+		Flags: getEnv("dbflag"),
 	}
 }
 
 func newRedisConfig() *RedisConfig {
 	return &RedisConfig{
-		addr: getEnv("redisaddr"),
-		pass: getEnv("redispass"),
-		db:   getEnvInt("redisdb"),
+		Addr: getEnv("redisaddr"),
+		Pass: getEnv("redispass"),
+		Db:   getEnvInt("redisdb"),
 	}
 }
 
