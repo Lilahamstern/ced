@@ -2,40 +2,27 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/lilahamstern/ced/server/internal/graph/model"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
+	"github.com/lilahamstern/ced/server/pkg/model"
 	"log"
-	"time"
 )
 
-// Project struct of database model
-type Project struct {
-	ID        int64     `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-// ToGraphModel will map Project to Graphql model of project and return it as pointer
-func (p Project) ToGraphModel() *model.Project {
-	return &model.Project{
-		ID:        p.ID,
-		CreatedAt: p.CreatedAt.String(),
-		UpdatedAt: p.UpdatedAt.String(),
-	}
+// ProjectRepository struct of database model
+type ProjectRepository struct {
+	db *sql.DB
 }
 
 // Save will save project to db, if project.ID isn't unique error will be returned
-func (p *Project) Save() error {
+func (repo ProjectRepository) Save(project *model.Project) error {
 	query := "INSERT INTO projects(id) VALUES ($1) RETURNING id, createdat, updatedat"
 
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(p.ID).Scan(&p.ID, &p.CreatedAt, &p.UpdatedAt)
+	err = stmt.QueryRow(project.ID).Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -43,9 +30,9 @@ func (p *Project) Save() error {
 	return nil
 }
 
-func (p Project) Exists() bool {
+func (repo ProjectRepository) ExistsById(id int64) bool {
 	query := "SELECT EXISTS(SELECT 1 FROM projects p WHERE p.id=$1)"
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,7 +40,7 @@ func (p Project) Exists() bool {
 	defer stmt.Close()
 
 	var exists bool
-	err = stmt.QueryRow(p.ID).Scan(&exists)
+	err = stmt.QueryRow(id).Scan(&exists)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,19 +48,11 @@ func (p Project) Exists() bool {
 	return exists
 }
 
-func ProjectExistsById(id int64) bool {
-	project := Project{
-		ID: id,
-	}
-
-	return project.Exists()
-}
-
 // GetAll will fetch all projects from database
-func GetAllProjects(projects *[]Project) error {
+func (repo ProjectRepository) GetAllProjects(projects *[]model.Project) error {
 	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p"
 
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,7 +65,7 @@ func GetAllProjects(projects *[]Project) error {
 	}
 
 	for rows.Next() {
-		var project Project
+		var project model.Project
 		err := rows.Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
 		if err != nil {
 			log.Fatal(err)
@@ -102,17 +81,17 @@ func GetAllProjects(projects *[]Project) error {
 }
 
 // Get will query one project from database with provided id
-func (p *Project) GetProject() error {
-	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p WHERE id = $1"
+func (repo ProjectRepository) GetProject(project *model.Project) error {
+	query := "SELECT p.createdat, p.updatedat FROM projects p WHERE id = $1"
 
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(p.ID).Scan(&p.ID, &p.CreatedAt, &p.UpdatedAt)
+	err = stmt.QueryRow(project.ID).Scan(&project.CreatedAt, &project.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return err
@@ -121,4 +100,11 @@ func (p *Project) GetProject() error {
 	}
 
 	return nil
+}
+
+// NewProjectRepository
+func NewProjectRepository(db *sql.DB) *ProjectRepository {
+	return &ProjectRepository{
+		db: db,
+	}
 }

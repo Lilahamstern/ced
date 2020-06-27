@@ -2,48 +2,30 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/google/uuid"
-	"github.com/lilahamstern/ced/server/internal/graph/model"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
+	"github.com/lilahamstern/ced/server/pkg/model"
 	"log"
-	"time"
 )
 
-// Version model for database
-type Version struct {
-	ID            uuid.UUID `json:"id"`
-	ProjectId     int64     `json:"project_id"`
-	InformationId uuid.UUID `json:"information_id"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
+type VersionRepository struct {
+	db *sql.DB
 }
 
-func (v Version) ToGraphModel() *model.Version {
-	return &model.Version{
-		ID:            v.ID.String(),
-		ProjectId:     v.ProjectId,
-		InformationId: v.InformationId.String(),
-		CreatedAt:     v.CreatedAt.String(),
-		UpdatedAt:     v.UpdatedAt.String(),
-	}
-}
-
-func (v *Version) Save() error {
+func (repo VersionRepository) Save(version *model.Version) error {
 	query := "INSERT INTO versions(projectid, informationid) VALUES ($1, $2) RETURNING id, projectid, informationid, createdat, updatedat"
 
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(v.ProjectId, v.InformationId).Scan(
-		&v.ID,
-		&v.ProjectId,
-		&v.InformationId,
-		&v.CreatedAt,
-		&v.UpdatedAt)
+	err = stmt.QueryRow(version.ProjectId, version.InformationId).Scan(
+		&version.ID,
+		&version.ProjectId,
+		&version.InformationId,
+		&version.CreatedAt,
+		&version.UpdatedAt)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -52,9 +34,9 @@ func (v *Version) Save() error {
 	return nil
 }
 
-func GetVersionByProjectId(id int64, versions *[]Version) error {
+func (repo VersionRepository) GetVersionByProjectId(id int64, versions *[]model.Version) error {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE projectid = $1"
-	stmt, err := database.DB.Prepare(query)
+	stmt, err := repo.db.Prepare(query)
 	log.Println(query)
 	if err != nil {
 		log.Fatal(err)
@@ -68,7 +50,7 @@ func GetVersionByProjectId(id int64, versions *[]Version) error {
 	}
 
 	for rows.Next() {
-		var version Version
+		var version model.Version
 		err := rows.Scan(&version.ID, &version.ProjectId, &version.InformationId, &version.CreatedAt, &version.UpdatedAt)
 		if err != nil {
 			log.Fatal(err)
@@ -83,16 +65,22 @@ func GetVersionByProjectId(id int64, versions *[]Version) error {
 	return nil
 }
 
-func (v *Version) GetVersionById() error {
-	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
-	stmt, err := database.DB.Prepare(query)
+func (repo VersionRepository) GetVersionById(version model.Version) error {
+	query := "SELECT projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
+	stmt, err := repo.db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(v.ID).Scan(&v.ID, &v.ProjectId, &v.InformationId, &v.CreatedAt, &v.UpdatedAt)
+	err = stmt.QueryRow(version.ID).Scan(
+		&version.ID,
+		&version.ProjectId,
+		&version.InformationId,
+		&version.CreatedAt,
+		&version.UpdatedAt)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return err
@@ -101,4 +89,10 @@ func (v *Version) GetVersionById() error {
 	}
 
 	return nil
+}
+
+func NewVersionRepository(db *sql.DB) *VersionRepository {
+	return &VersionRepository{
+		db: db,
+	}
 }
