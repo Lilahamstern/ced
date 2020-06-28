@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/lilahamstern/ced/server/pkg/model"
+	"github.com/lilahamstern/ced/server/pkg/domain"
 	"log"
 )
 
@@ -12,7 +12,7 @@ type ProjectRepository struct {
 }
 
 // Save will save project to db, if project.ID isn't unique error will be returned
-func (repo ProjectRepository) Save(project *model.Project) error {
+func (repo ProjectRepository) Save(project *domain.Project) error {
 	query := "INSERT INTO projects(id) VALUES ($1) RETURNING id, createdat, updatedat"
 
 	stmt, err := repo.db.Prepare(query)
@@ -49,7 +49,7 @@ func (repo ProjectRepository) ExistsById(id int64) bool {
 }
 
 // GetAll will fetch all projects from database
-func (repo ProjectRepository) GetAllProjects(projects *[]model.Project) error {
+func (repo ProjectRepository) GetAllProjects(projects *[]domain.Project) error {
 	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p"
 
 	stmt, err := repo.db.Prepare(query)
@@ -65,7 +65,7 @@ func (repo ProjectRepository) GetAllProjects(projects *[]model.Project) error {
 	}
 
 	for rows.Next() {
-		var project model.Project
+		var project domain.Project
 		err := rows.Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt)
 		if err != nil {
 			log.Fatal(err)
@@ -81,7 +81,7 @@ func (repo ProjectRepository) GetAllProjects(projects *[]model.Project) error {
 }
 
 // Get will query one project from database with provided id
-func (repo ProjectRepository) GetProject(project *model.Project) error {
+func (repo ProjectRepository) GetProject(project *domain.Project) error {
 	query := "SELECT p.createdat, p.updatedat FROM projects p WHERE id = $1"
 
 	stmt, err := repo.db.Prepare(query)
