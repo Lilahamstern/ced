@@ -5,15 +5,13 @@ package resolver
 
 import (
 	"context"
-
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	"github.com/lilahamstern/ced/server/pkg/service/version"
 )
 
 func (r *mutationResolver) CreateVersion(ctx context.Context, input *model.CreateVersionInput) (*model.Version, error) {
-	return version.Save(input)
+	return r.VersionService.Save(input)
 }
 
 func (r *queryResolver) Version(ctx context.Context, id string) (*model.Version, error) {
-	return version.GetById(id)
+	return r.VersionService.GetById(id)
 }
