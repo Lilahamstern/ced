@@ -1,6 +1,8 @@
 
-test:
-	cd server && go test -coverprofile cp.out ./...
+test-unit:
+	cd server && go test -v -short -coverprofile cp.out ./...
+
+test-unit-coverage: test-unit
 	cd server && go tool cover -html=cp.out
 
 stores-up: db-up apq-up
