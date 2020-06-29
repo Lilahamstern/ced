@@ -11,12 +11,18 @@ import (
 	"strconv"
 )
 
-type VersionService struct {
+type VersionService interface {
+	Save(input *model.CreateVersionInput) (*model.Version, error)
+	GetByProjectId(id int64) ([]*model.Version, error)
+	GetById(id string) (*model.Version, error)
+}
+
+type versionService struct {
 	VersionRepository *repository.VersionRepository
 	ProjectRepository *repository.ProjectRepository
 }
 
-func (s VersionService) Save(input *model.CreateVersionInput) (*model.Version, error) {
+func (s versionService) Save(input *model.CreateVersionInput) (*model.Version, error) {
 	parsedInfoId, err := uuid.Parse(input.InformationID)
 
 	if err != nil {
@@ -42,7 +48,7 @@ func (s VersionService) Save(input *model.CreateVersionInput) (*model.Version, e
 	return version.ToGraphModel(), nil
 }
 
-func (s VersionService) GetByProjectId(id int64) ([]*model.Version, error) {
+func (s versionService) GetByProjectId(id int64) ([]*model.Version, error) {
 	var versions []domain.Version
 	err := s.VersionRepository.GetVersionByProjectId(id, &versions)
 	if err != nil {
@@ -57,7 +63,7 @@ func (s VersionService) GetByProjectId(id int64) ([]*model.Version, error) {
 	return res, nil
 }
 
-func (s VersionService) GetById(id string) (*model.Version, error) {
+func (s versionService) GetById(id string) (*model.Version, error) {
 	parsedId, err := uuid.Parse(id)
 	if err != nil {
 		return nil, err
@@ -78,8 +84,9 @@ func (s VersionService) GetById(id string) (*model.Version, error) {
 	return version.ToGraphModel(), nil
 }
 
-func NewVersionService(versionRepository *repository.VersionRepository, projectRepository *repository.ProjectRepository) *VersionService {
-	return &VersionService{
+func NewVersionService(versionRepository *repository.VersionRepository,
+	projectRepository *repository.ProjectRepository) VersionService {
+	return &versionService{
 		versionRepository,
 		projectRepository,
 	}

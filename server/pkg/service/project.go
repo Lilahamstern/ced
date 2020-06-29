@@ -9,11 +9,17 @@ import (
 	"log"
 )
 
-type ProjectService struct {
+type ProjectService interface {
+	Save(input *model.CreatProjectInput) (*model.Project, error)
+	GetAll() ([]*model.Project, error)
+	Get(id int64) (*model.Project, error)
+}
+
+type projectService struct {
 	ProjectRepository *repository.ProjectRepository
 }
 
-func (s ProjectService) Save(input *model.CreatProjectInput) (*model.Project, error) {
+func (s projectService) Save(input *model.CreatProjectInput) (*model.Project, error) {
 	var project = domain.Project{
 		ID: input.ID,
 	}
@@ -31,7 +37,7 @@ func (s ProjectService) Save(input *model.CreatProjectInput) (*model.Project, er
 	return project.ToGraphModel(), nil
 }
 
-func (s ProjectService) GetAll() ([]*model.Project, error) {
+func (s projectService) GetAll() ([]*model.Project, error) {
 	var projects []domain.Project
 	err := s.ProjectRepository.GetAllProjects(&projects)
 	if err != nil {
@@ -45,7 +51,7 @@ func (s ProjectService) GetAll() ([]*model.Project, error) {
 	return res, nil
 }
 
-func (s ProjectService) Get(id int64) (*model.Project, error) {
+func (s projectService) Get(id int64) (*model.Project, error) {
 	project := domain.Project{
 		ID: id,
 	}
@@ -60,8 +66,8 @@ func (s ProjectService) Get(id int64) (*model.Project, error) {
 	return project.ToGraphModel(), nil
 }
 
-func NewProjectService(projectRepository *repository.ProjectRepository) *ProjectService {
-	return &ProjectService{
+func NewProjectService(projectRepository *repository.ProjectRepository) ProjectService {
+	return &projectService{
 		projectRepository,
 	}
 }
