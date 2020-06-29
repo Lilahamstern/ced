@@ -75,7 +75,6 @@ func (repo VersionRepository) GetVersionById(version domain.Version) error {
 	defer stmt.Close()
 
 	err = stmt.QueryRow(version.ID).Scan(
-		&version.ID,
 		&version.ProjectId,
 		&version.InformationId,
 		&version.CreatedAt,
