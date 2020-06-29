@@ -2,8 +2,11 @@ package main
 
 import (
 	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
+	"github.com/lilahamstern/ced/server/internal/pkg/repository"
 	"github.com/lilahamstern/ced/server/internal/pkg/server"
+	"github.com/lilahamstern/ced/server/internal/resolver"
 	"github.com/lilahamstern/ced/server/pkg/config"
+	"github.com/lilahamstern/ced/server/pkg/service"
 )
 
 func main() {
@@ -11,10 +14,20 @@ func main() {
 
 	dbSession := database.NewDatabaseConnection(conf)
 	dbSession.Migrate()
-	conf.AddDbSession(dbSession)
 
 	srv := server.NewHttpServer(conf)
 
+	registerResolvers(dbSession)
+
 	srv.Start()
 	srv.SafeShutDown()
+}
+
+func registerResolvers(db *database.Session) {
+	projectRepository := repository.NewProjectRepository(db.DB)
+	versionRepository := repository.NewVersionRepository(db.DB)
+	projectService := service.NewProjectService(projectRepository)
+	versionService := service.NewVersionService(versionRepository, projectRepository)
+
+	resolver.NewResolver(projectService, versionService)
 }
