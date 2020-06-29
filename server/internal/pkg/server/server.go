@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"github.com/lilahamstern/ced/server/internal/pkg/server/handler"
+	"github.com/lilahamstern/ced/server/pkg/config"
 	"log"
 	"net/http"
 	"os"
@@ -19,7 +19,7 @@ type Server struct {
 	port string
 }
 
-func SetupHttpServer(port string) *Server {
+func NewHttpServer(conf *config.Config) *Server {
 	router := gin.New()
 
 	router.Use(cors.Default())
@@ -30,7 +30,7 @@ func SetupHttpServer(port string) *Server {
 	router.GET("/", handler.PlaygroundHandler())
 
 	srv := &http.Server{
-		Addr:           ":" + port,
+		Addr:           ":" + conf.Port,
 		Handler:        router,
 		ReadTimeout:    60 * time.Second,
 		WriteTimeout:   60 * time.Second,
@@ -39,13 +39,8 @@ func SetupHttpServer(port string) *Server {
 
 	return &Server{
 		srv,
-		port,
+		conf.Port,
 	}
-}
-
-func (s *Server) CreateConnectionServices() {
-	database.InitDB()
-	database.Migrate()
 }
 
 func (s *Server) Start() {
