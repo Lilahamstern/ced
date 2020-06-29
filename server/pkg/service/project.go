@@ -16,7 +16,7 @@ type ProjectService interface {
 }
 
 type projectService struct {
-	ProjectRepository *repository.ProjectRepository
+	ProjectRepository repository.ProjectRepository
 }
 
 func (s projectService) Save(input *model.CreatProjectInput) (*model.Project, error) {
@@ -66,7 +66,7 @@ func (s projectService) Get(id int64) (*model.Project, error) {
 	return project.ToGraphModel(), nil
 }
 
-func NewProjectService(projectRepository *repository.ProjectRepository) ProjectService {
+func NewProjectService(projectRepository repository.ProjectRepository) ProjectService {
 	return &projectService{
 		projectRepository,
 	}

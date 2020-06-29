@@ -6,11 +6,17 @@ import (
 	"log"
 )
 
-type VersionRepository struct {
+type VersionRepository interface {
+	Save(version *domain.Version) error
+	GetVersionByProjectId(id int64, versions *[]domain.Version) error
+	GetVersionById(version domain.Version) error
+}
+
+type versionRepository struct {
 	db *sql.DB
 }
 
-func (repo VersionRepository) Save(version *domain.Version) error {
+func (repo versionRepository) Save(version *domain.Version) error {
 	query := "INSERT INTO versions(projectid, informationid) VALUES ($1, $2) RETURNING id, projectid, informationid, createdat, updatedat"
 
 	stmt, err := repo.db.Prepare(query)
@@ -34,7 +40,7 @@ func (repo VersionRepository) Save(version *domain.Version) error {
 	return nil
 }
 
-func (repo VersionRepository) GetVersionByProjectId(id int64, versions *[]domain.Version) error {
+func (repo versionRepository) GetVersionByProjectId(id int64, versions *[]domain.Version) error {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE projectid = $1"
 	stmt, err := repo.db.Prepare(query)
 	log.Println(query)
@@ -65,7 +71,7 @@ func (repo VersionRepository) GetVersionByProjectId(id int64, versions *[]domain
 	return nil
 }
 
-func (repo VersionRepository) GetVersionById(version domain.Version) error {
+func (repo versionRepository) GetVersionById(version domain.Version) error {
 	query := "SELECT projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -90,8 +96,8 @@ func (repo VersionRepository) GetVersionById(version domain.Version) error {
 	return nil
 }
 
-func NewVersionRepository(db *sql.DB) *VersionRepository {
-	return &VersionRepository{
+func NewVersionRepository(db *sql.DB) VersionRepository {
+	return &versionRepository{
 		db: db,
 	}
 }

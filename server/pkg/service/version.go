@@ -18,8 +18,8 @@ type VersionService interface {
 }
 
 type versionService struct {
-	VersionRepository *repository.VersionRepository
-	ProjectRepository *repository.ProjectRepository
+	VersionRepository repository.VersionRepository
+	ProjectRepository repository.ProjectRepository
 }
 
 func (s versionService) Save(input *model.CreateVersionInput) (*model.Version, error) {
@@ -84,8 +84,8 @@ func (s versionService) GetById(id string) (*model.Version, error) {
 	return version.ToGraphModel(), nil
 }
 
-func NewVersionService(versionRepository *repository.VersionRepository,
-	projectRepository *repository.ProjectRepository) VersionService {
+func NewVersionService(versionRepository repository.VersionRepository,
+	projectRepository repository.ProjectRepository) VersionService {
 	return &versionService{
 		versionRepository,
 		projectRepository,
