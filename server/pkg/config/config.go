@@ -1,8 +1,8 @@
 package config
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
 	"log"
 	"os"
 	"strconv"
@@ -11,7 +11,6 @@ import (
 // Config struct for general config
 type Config struct {
 	Port     string
-	DB       *database.Session
 	Database *DatabaseConfig
 	Redis    *RedisConfig
 }
@@ -48,8 +47,17 @@ func NewConfig() *Config {
 	}
 }
 
-func (c *Config) AddDbSession(db *database.Session) {
-	c.DB = db
+// generateDbUrl generates database url from environment variables
+// Returns database url as string
+func (c Config) GenerateDbUrl() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%v/%s?%s",
+		c.Database.User,
+		c.Database.Pass,
+		c.Database.Host,
+		c.Database.Port,
+		c.Database.Name,
+		c.Database.Flags,
+	)
 }
 
 func newDatabaseConfig() *DatabaseConfig {
@@ -59,7 +67,7 @@ func newDatabaseConfig() *DatabaseConfig {
 		Name:  getEnv("dbname"),
 		User:  getEnv("dbuser"),
 		Pass:  getEnv("dbpass"),
-		Flags: getEnv("dbflag"),
+		Flags: getEnv("dbflags"),
 	}
 }
 

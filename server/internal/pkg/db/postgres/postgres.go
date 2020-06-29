@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -20,11 +19,13 @@ type Session struct {
 // If connection fails reconnection will be tried
 func NewDatabaseConnection(config *config.Config) *Session {
 
+	conn := config.GenerateDbUrl()
 	var db *sql.DB
 	var err error
 	for i := 1; i < 5; i++ {
 		log.Printf("Trying to connect to the database (attempt %d)...\n", i)
-		db, err = sql.Open("postgres", generateDbUrl(config.Database))
+
+		db, err = sql.Open("postgres", conn)
 		if err == nil {
 			break
 		}
@@ -75,17 +76,4 @@ func (s *Session) Migrate() {
 		log.Fatalf("Failed to migrate db: %s", err)
 	}
 	log.Println("Migrated database...")
-}
-
-// generateDbUrl generates database url from environment variables
-// Returns database url as string
-func generateDbUrl(conf *config.DatabaseConfig) string {
-	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?%s",
-		conf.User,
-		conf.Pass,
-		conf.Host,
-		conf.Port,
-		conf.Name,
-		conf.Flags,
-	)
 }
