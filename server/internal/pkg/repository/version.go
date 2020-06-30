@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"github.com/google/uuid"
 	"github.com/lilahamstern/ced/server/pkg/domain"
 	"log"
 )
@@ -10,10 +11,48 @@ type VersionRepository interface {
 	Save(version *domain.Version) error
 	GetVersionByProjectId(id int64, versions *[]domain.Version) error
 	GetVersionById(version domain.Version) error
+	ExistsById(id uuid.UUID) bool
+	Delete(id uuid.UUID) (bool, error)
 }
 
 type versionRepository struct {
 	db *sql.DB
+}
+
+func (repo versionRepository) Delete(id uuid.UUID) (bool, error) {
+	query := "DELETE FROM versions WHERE id = $1"
+	stmt, err := repo.db.Prepare(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (repo versionRepository) ExistsById(id uuid.UUID) bool {
+	query := "SELECT EXISTS(SELECT 1 FROM versions v WHERE v.id=$1)"
+	stmt, err := repo.db.Prepare(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	var exists bool
+	err = stmt.QueryRow(id).Scan(&exists)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return exists
 }
 
 func (repo versionRepository) Save(version *domain.Version) error {

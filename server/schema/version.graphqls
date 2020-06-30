@@ -11,10 +11,15 @@ input createVersionInput {
     informationId: ID!
 }
 
+input deleteVersionInput {
+    id: ID!
+}
+
 extend type Query {
     version(id: ID!): Version!
 }
 
 extend type Mutation {
     createVersion(input: createVersionInput): Version!
+    deleteVersion(input: deleteVersionInput): Boolean!
 }

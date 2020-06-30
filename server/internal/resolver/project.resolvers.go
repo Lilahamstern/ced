@@ -5,11 +5,16 @@ package resolver
 
 import (
 	"context"
+
 	"github.com/lilahamstern/ced/server/internal/graph/model"
 )
 
-func (r *mutationResolver) CreateProject(ctx context.Context, input *model.CreatProjectInput) (*model.Project, error) {
+func (r *mutationResolver) CreateProject(ctx context.Context, input *model.CreateProjectInput) (*model.Project, error) {
 	return r.ProjectService.Save(input)
+}
+
+func (r *mutationResolver) DeleteProject(ctx context.Context, input *model.DeleteProjectInput) (bool, error) {
+	return r.ProjectService.Delete(input)
 }
 
 func (r *projectResolver) Versions(ctx context.Context, obj *model.Project) ([]*model.Version, error) {

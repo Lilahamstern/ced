@@ -15,6 +15,7 @@ type VersionService interface {
 	Save(input *model.CreateVersionInput) (*model.Version, error)
 	GetByProjectId(id int64) ([]*model.Version, error)
 	GetById(id string) (*model.Version, error)
+	Delete(input *model.DeleteVersionInput) (bool, error)
 }
 
 type versionService struct {
@@ -22,8 +23,28 @@ type versionService struct {
 	ProjectRepository repository.ProjectRepository
 }
 
+func (s versionService) Delete(input *model.DeleteVersionInput) (bool, error) {
+	UUID, err := uuid.Parse(input.ID)
+	if err != nil {
+		log.Fatal(err)
+		return false, &InternalServerError{}
+	}
+
+	exists := s.VersionRepository.ExistsById(UUID)
+	if !exists {
+		return false, &VersionNotFound{ID: UUID.String()}
+	}
+
+	deleted, err := s.VersionRepository.Delete(UUID)
+	if err != nil {
+		return false, &InternalServerError{}
+	}
+
+	return deleted, nil
+}
+
 func (s versionService) Save(input *model.CreateVersionInput) (*model.Version, error) {
-	parsedInfoId, err := uuid.Parse(input.InformationID)
+	UUID, err := uuid.Parse(input.InformationID)
 
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +53,7 @@ func (s versionService) Save(input *model.CreateVersionInput) (*model.Version, e
 
 	version := domain.Version{
 		ProjectId:     input.ProjectID,
-		InformationId: parsedInfoId,
+		InformationId: UUID,
 	}
 
 	if !s.ProjectRepository.ExistsById(input.ProjectID) {

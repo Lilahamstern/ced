@@ -45,8 +45,10 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		CreateProject func(childComplexity int, input *model.CreatProjectInput) int
+		CreateProject func(childComplexity int, input *model.CreateProjectInput) int
 		CreateVersion func(childComplexity int, input *model.CreateVersionInput) int
+		DeleteProject func(childComplexity int, input *model.DeleteProjectInput) int
+		DeleteVersion func(childComplexity int, input *model.DeleteVersionInput) int
 	}
 
 	Project struct {
@@ -72,8 +74,10 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateProject(ctx context.Context, input *model.CreatProjectInput) (*model.Project, error)
+	CreateProject(ctx context.Context, input *model.CreateProjectInput) (*model.Project, error)
+	DeleteProject(ctx context.Context, input *model.DeleteProjectInput) (bool, error)
 	CreateVersion(ctx context.Context, input *model.CreateVersionInput) (*model.Version, error)
+	DeleteVersion(ctx context.Context, input *model.DeleteVersionInput) (bool, error)
 }
 type ProjectResolver interface {
 	Versions(ctx context.Context, obj *model.Project) ([]*model.Version, error)
@@ -109,7 +113,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateProject(childComplexity, args["input"].(*model.CreatProjectInput)), true
+		return e.complexity.Mutation.CreateProject(childComplexity, args["input"].(*model.CreateProjectInput)), true
 
 	case "Mutation.createVersion":
 		if e.complexity.Mutation.CreateVersion == nil {
@@ -122,6 +126,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.CreateVersion(childComplexity, args["input"].(*model.CreateVersionInput)), true
+
+	case "Mutation.deleteProject":
+		if e.complexity.Mutation.DeleteProject == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteProject_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteProject(childComplexity, args["input"].(*model.DeleteProjectInput)), true
+
+	case "Mutation.deleteVersion":
+		if e.complexity.Mutation.DeleteVersion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteVersion_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteVersion(childComplexity, args["input"].(*model.DeleteVersionInput)), true
 
 	case "Project.createdAt":
 		if e.complexity.Project.CreatedAt == nil {
@@ -288,7 +316,11 @@ var sources = []*ast.Source{
     updatedAt: String!
 }
 
-input creatProjectInput {
+input createProjectInput {
+    id: Int!
+}
+
+input deleteProjectInput {
     id: Int!
 }
 
@@ -298,7 +330,8 @@ type Query {
 }
 
 type Mutation {
-    createProject(input: creatProjectInput): Project!
+    createProject(input: createProjectInput): Project!
+    deleteProject(input: deleteProjectInput): Boolean!
 }`, BuiltIn: false},
 	&ast.Source{Name: "schema/version.graphqls", Input: `type Version {
     id: ID!
@@ -313,12 +346,17 @@ input createVersionInput {
     informationId: ID!
 }
 
+input deleteVersionInput {
+    id: ID!
+}
+
 extend type Query {
     version(id: ID!): Version!
 }
 
 extend type Mutation {
     createVersion(input: createVersionInput): Version!
+    deleteVersion(input: deleteVersionInput): Boolean!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -330,9 +368,9 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 func (ec *executionContext) field_Mutation_createProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.CreatProjectInput
+	var arg0 *model.CreateProjectInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalOcreatProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreatProjectInput(ctx, tmp)
+		arg0, err = ec.unmarshalOcreateProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateProjectInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -347,6 +385,34 @@ func (ec *executionContext) field_Mutation_createVersion_args(ctx context.Contex
 	var arg0 *model.CreateVersionInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalOcreateVersionInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteProject_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.DeleteProjectInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOdeleteProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteVersion_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.DeleteVersionInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOdeleteVersionInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -457,7 +523,7 @@ func (ec *executionContext) _Mutation_createProject(ctx context.Context, field g
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateProject(rctx, args["input"].(*model.CreatProjectInput))
+		return ec.resolvers.Mutation().CreateProject(rctx, args["input"].(*model.CreateProjectInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -472,6 +538,47 @@ func (ec *executionContext) _Mutation_createProject(ctx context.Context, field g
 	res := resTmp.(*model.Project)
 	fc.Result = res
 	return ec.marshalNProject2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐProject(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deleteProject(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteProject_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteProject(rctx, args["input"].(*model.DeleteProjectInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createVersion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -513,6 +620,47 @@ func (ec *executionContext) _Mutation_createVersion(ctx context.Context, field g
 	res := resTmp.(*model.Version)
 	fc.Result = res
 	return ec.marshalNVersion2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersion(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deleteVersion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteVersion_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteVersion(rctx, args["input"].(*model.DeleteVersionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Project_id(ctx context.Context, field graphql.CollectedField, obj *model.Project) (ret graphql.Marshaler) {
@@ -2055,8 +2203,8 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputcreatProjectInput(ctx context.Context, obj interface{}) (model.CreatProjectInput, error) {
-	var it model.CreatProjectInput
+func (ec *executionContext) unmarshalInputcreateProjectInput(ctx context.Context, obj interface{}) (model.CreateProjectInput, error) {
+	var it model.CreateProjectInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -2097,6 +2245,42 @@ func (ec *executionContext) unmarshalInputcreateVersionInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputdeleteProjectInput(ctx context.Context, obj interface{}) (model.DeleteProjectInput, error) {
+	var it model.DeleteProjectInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputdeleteVersionInput(ctx context.Context, obj interface{}) (model.DeleteVersionInput, error) {
+	var it model.DeleteVersionInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -2125,8 +2309,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "deleteProject":
+			out.Values[i] = ec._Mutation_deleteProject(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createVersion":
 			out.Values[i] = ec._Mutation_createVersion(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "deleteVersion":
+			out.Values[i] = ec._Mutation_deleteVersion(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3195,15 +3389,15 @@ func (ec *executionContext) marshalO__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return ec.___Type(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOcreatProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreatProjectInput(ctx context.Context, v interface{}) (model.CreatProjectInput, error) {
-	return ec.unmarshalInputcreatProjectInput(ctx, v)
+func (ec *executionContext) unmarshalOcreateProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateProjectInput(ctx context.Context, v interface{}) (model.CreateProjectInput, error) {
+	return ec.unmarshalInputcreateProjectInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOcreatProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreatProjectInput(ctx context.Context, v interface{}) (*model.CreatProjectInput, error) {
+func (ec *executionContext) unmarshalOcreateProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateProjectInput(ctx context.Context, v interface{}) (*model.CreateProjectInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOcreatProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreatProjectInput(ctx, v)
+	res, err := ec.unmarshalOcreateProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateProjectInput(ctx, v)
 	return &res, err
 }
 
@@ -3216,6 +3410,30 @@ func (ec *executionContext) unmarshalOcreateVersionInput2ᚖgithubᚗcomᚋlilah
 		return nil, nil
 	}
 	res, err := ec.unmarshalOcreateVersionInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOdeleteProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx context.Context, v interface{}) (model.DeleteProjectInput, error) {
+	return ec.unmarshalInputdeleteProjectInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOdeleteProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx context.Context, v interface{}) (*model.DeleteProjectInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOdeleteProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOdeleteVersionInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInput(ctx context.Context, v interface{}) (model.DeleteVersionInput, error) {
+	return ec.unmarshalInputdeleteVersionInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOdeleteVersionInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInput(ctx context.Context, v interface{}) (*model.DeleteVersionInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOdeleteVersionInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInput(ctx, v)
 	return &res, err
 }
 

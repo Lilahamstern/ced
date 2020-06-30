@@ -11,6 +11,7 @@ type ProjectRepository interface {
 	ExistsById(id int64) bool
 	GetAllProjects(projects *[]domain.Project) error
 	GetProject(project *domain.Project) error
+	Delete(id int64) (bool, error)
 }
 
 // projectRepository struct of database model
@@ -35,6 +36,24 @@ func (repo projectRepository) Save(project *domain.Project) error {
 	}
 
 	return nil
+}
+
+func (repo projectRepository) Delete(id int64) (bool, error) {
+	query := "DELETE FROM projects WHERE id = $1"
+	stmt, err := repo.db.Prepare(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (repo projectRepository) ExistsById(id int64) bool {

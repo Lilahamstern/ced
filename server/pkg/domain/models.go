@@ -13,7 +13,7 @@ type Project struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// ToGraphModel will map ProjectRepository to Graphql model of project and return it as pointer
+// ToGraphModel will map projectRepository to Graphql model of project and return it as pointer
 func (p Project) ToGraphModel() *model.Project {
 	return &model.Project{
 		ID:        p.ID,
