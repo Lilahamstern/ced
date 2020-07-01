@@ -5,6 +5,7 @@ package resolver
 
 import (
 	"context"
+
 	"github.com/lilahamstern/ced/server/internal/graph/model"
 )
 

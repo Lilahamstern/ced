@@ -40,3 +40,29 @@ func (v Version) ToGraphModel() *model.Version {
 		UpdatedAt:     v.UpdatedAt.String(),
 	}
 }
+
+type VersionInformation struct {
+	ID          uuid.UUID `json:"id"`
+	OrderID     string    `json:"orderId"`
+	Title       string    `json:"title"`
+	Description *string   `json:"description"`
+	Manager     string    `json:"manager"`
+	Client      string    `json:"client"`
+	Sector      string    `json:"sector"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+}
+
+func (v VersionInformation) ToGraphModel() *model.VersionInformation {
+	return &model.VersionInformation{
+		ID:          v.ID.String(),
+		OrderID:     v.OrderID,
+		Title:       v.Title,
+		Description: v.Description,
+		Manager:     v.Manager,
+		Client:      v.Client,
+		Sector:      v.Sector,
+		CreatedAt:   v.CreatedAt.String(),
+		UpdatedAt:   v.UpdatedAt.String(),
+	}
+}

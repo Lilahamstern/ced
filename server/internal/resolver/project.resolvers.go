@@ -6,6 +6,7 @@ package resolver
 import (
 	"context"
 
+	"github.com/lilahamstern/ced/server/internal/graph/generated"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
 )
 
@@ -28,3 +29,16 @@ func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) 
 func (r *queryResolver) Project(ctx context.Context, id int64) (*model.Project, error) {
 	return r.ProjectService.Get(id)
 }
+
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{resolver} }
+
+// Project returns generated.ProjectResolver implementation.
+func (r *Resolver) Project() generated.ProjectResolver { return &projectResolver{resolver} }
+
+// Query returns generated.QueryResolver implementation.
+func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{resolver} }
+
+type mutationResolver struct{ *Resolver }
+type projectResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

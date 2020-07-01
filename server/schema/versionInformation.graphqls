@@ -1,0 +1,29 @@
+type VersionInformation {
+    id: ID!
+    orderId: ID!
+    title: String!
+    description: String
+    manager: String!
+    client: String!
+    sector: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+input createVersionInformationInput {
+    orderId: ID!
+    title: String!
+    description: String
+    manager: String!
+    client: String!
+    sector: String!
+}
+
+input deleteVersionInformationInput {
+    id: ID!
+}
+
+extend type Mutation {
+    createVersionInformation(input: createVersionInformationInput): VersionInformation!
+    deleteVersionInformation(input: deleteVersionInformationInput): Boolean!
+}

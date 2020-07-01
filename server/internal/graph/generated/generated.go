@@ -45,10 +45,12 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		CreateProject func(childComplexity int, input *model.CreateProjectInput) int
-		CreateVersion func(childComplexity int, input *model.CreateVersionInput) int
-		DeleteProject func(childComplexity int, input *model.DeleteProjectInput) int
-		DeleteVersion func(childComplexity int, input *model.DeleteVersionInput) int
+		CreateProject            func(childComplexity int, input *model.CreateProjectInput) int
+		CreateVersion            func(childComplexity int, input *model.CreateVersionInput) int
+		CreateVersionInformation func(childComplexity int, input *model.CreateVersionInformationInput) int
+		DeleteProject            func(childComplexity int, input *model.DeleteProjectInput) int
+		DeleteVersion            func(childComplexity int, input *model.DeleteVersionInput) int
+		DeleteVersionInformation func(childComplexity int, input *model.DeleteVersionInformationInput) int
 	}
 
 	Project struct {
@@ -71,6 +73,18 @@ type ComplexityRoot struct {
 		ProjectId     func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 	}
+
+	VersionInformation struct {
+		Client      func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Manager     func(childComplexity int) int
+		OrderID     func(childComplexity int) int
+		Sector      func(childComplexity int) int
+		Title       func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+	}
 }
 
 type MutationResolver interface {
@@ -78,6 +92,8 @@ type MutationResolver interface {
 	DeleteProject(ctx context.Context, input *model.DeleteProjectInput) (bool, error)
 	CreateVersion(ctx context.Context, input *model.CreateVersionInput) (*model.Version, error)
 	DeleteVersion(ctx context.Context, input *model.DeleteVersionInput) (bool, error)
+	CreateVersionInformation(ctx context.Context, input *model.CreateVersionInformationInput) (*model.VersionInformation, error)
+	DeleteVersionInformation(ctx context.Context, input *model.DeleteVersionInformationInput) (bool, error)
 }
 type ProjectResolver interface {
 	Versions(ctx context.Context, obj *model.Project) ([]*model.Version, error)
@@ -127,6 +143,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateVersion(childComplexity, args["input"].(*model.CreateVersionInput)), true
 
+	case "Mutation.createVersionInformation":
+		if e.complexity.Mutation.CreateVersionInformation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createVersionInformation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateVersionInformation(childComplexity, args["input"].(*model.CreateVersionInformationInput)), true
+
 	case "Mutation.deleteProject":
 		if e.complexity.Mutation.DeleteProject == nil {
 			break
@@ -150,6 +178,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteVersion(childComplexity, args["input"].(*model.DeleteVersionInput)), true
+
+	case "Mutation.deleteVersionInformation":
+		if e.complexity.Mutation.DeleteVersionInformation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteVersionInformation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteVersionInformation(childComplexity, args["input"].(*model.DeleteVersionInformationInput)), true
 
 	case "Project.createdAt":
 		if e.complexity.Project.CreatedAt == nil {
@@ -244,6 +284,69 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Version.UpdatedAt(childComplexity), true
+
+	case "VersionInformation.client":
+		if e.complexity.VersionInformation.Client == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.Client(childComplexity), true
+
+	case "VersionInformation.createdAt":
+		if e.complexity.VersionInformation.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.CreatedAt(childComplexity), true
+
+	case "VersionInformation.description":
+		if e.complexity.VersionInformation.Description == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.Description(childComplexity), true
+
+	case "VersionInformation.id":
+		if e.complexity.VersionInformation.ID == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.ID(childComplexity), true
+
+	case "VersionInformation.manager":
+		if e.complexity.VersionInformation.Manager == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.Manager(childComplexity), true
+
+	case "VersionInformation.orderId":
+		if e.complexity.VersionInformation.OrderID == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.OrderID(childComplexity), true
+
+	case "VersionInformation.sector":
+		if e.complexity.VersionInformation.Sector == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.Sector(childComplexity), true
+
+	case "VersionInformation.title":
+		if e.complexity.VersionInformation.Title == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.Title(childComplexity), true
+
+	case "VersionInformation.updatedAt":
+		if e.complexity.VersionInformation.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.VersionInformation.UpdatedAt(childComplexity), true
 
 	}
 	return 0, false
@@ -358,6 +461,35 @@ extend type Mutation {
     createVersion(input: createVersionInput): Version!
     deleteVersion(input: deleteVersionInput): Boolean!
 }`, BuiltIn: false},
+	&ast.Source{Name: "schema/versionInformation.graphqls", Input: `type VersionInformation {
+    id: ID!
+    orderId: ID!
+    title: String!
+    description: String
+    manager: String!
+    client: String!
+    sector: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+input createVersionInformationInput {
+    orderId: ID!
+    title: String!
+    description: String
+    manager: String!
+    client: String!
+    sector: String!
+}
+
+input deleteVersionInformationInput {
+    id: ID!
+}
+
+extend type Mutation {
+    createVersionInformation(input: createVersionInformationInput): VersionInformation!
+    deleteVersionInformation(input: deleteVersionInformationInput): Boolean!
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -371,6 +503,20 @@ func (ec *executionContext) field_Mutation_createProject_args(ctx context.Contex
 	var arg0 *model.CreateProjectInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalOcreateProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateProjectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createVersionInformation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.CreateVersionInformationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOcreateVersionInformationInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInformationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -399,6 +545,20 @@ func (ec *executionContext) field_Mutation_deleteProject_args(ctx context.Contex
 	var arg0 *model.DeleteProjectInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalOdeleteProjectInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteVersionInformation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.DeleteVersionInformationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalOdeleteVersionInformationInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInformationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -647,6 +807,88 @@ func (ec *executionContext) _Mutation_deleteVersion(ctx context.Context, field g
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().DeleteVersion(rctx, args["input"].(*model.DeleteVersionInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_createVersionInformation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_createVersionInformation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateVersionInformation(rctx, args["input"].(*model.CreateVersionInformationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.VersionInformation)
+	fc.Result = res
+	return ec.marshalNVersionInformation2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersionInformation(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deleteVersionInformation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteVersionInformation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteVersionInformation(rctx, args["input"].(*model.DeleteVersionInformationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1123,6 +1365,309 @@ func (ec *executionContext) _Version_updatedAt(ctx context.Context, field graphq
 	}()
 	fc := &graphql.FieldContext{
 		Object:   "Version",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_id(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_orderId(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OrderID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_title(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Title, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_description(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_manager(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Manager, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_client(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Client, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_sector(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Sector, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _VersionInformation_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.VersionInformation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "VersionInformation",
 		Field:    field,
 		Args:     nil,
 		IsMethod: false,
@@ -2221,6 +2766,54 @@ func (ec *executionContext) unmarshalInputcreateProjectInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputcreateVersionInformationInput(ctx context.Context, obj interface{}) (model.CreateVersionInformationInput, error) {
+	var it model.CreateVersionInformationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "orderId":
+			var err error
+			it.OrderID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "title":
+			var err error
+			it.Title, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "description":
+			var err error
+			it.Description, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "manager":
+			var err error
+			it.Manager, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "client":
+			var err error
+			it.Client, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sector":
+			var err error
+			it.Sector, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputcreateVersionInput(ctx context.Context, obj interface{}) (model.CreateVersionInput, error) {
 	var it model.CreateVersionInput
 	var asMap = obj.(map[string]interface{})
@@ -2254,6 +2847,24 @@ func (ec *executionContext) unmarshalInputdeleteProjectInput(ctx context.Context
 		case "id":
 			var err error
 			it.ID, err = ec.unmarshalNInt2int64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputdeleteVersionInformationInput(ctx context.Context, obj interface{}) (model.DeleteVersionInformationInput, error) {
+	var it model.DeleteVersionInformationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2321,6 +2932,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "deleteVersion":
 			out.Values[i] = ec._Mutation_deleteVersion(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "createVersionInformation":
+			out.Values[i] = ec._Mutation_createVersionInformation(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "deleteVersionInformation":
+			out.Values[i] = ec._Mutation_deleteVersionInformation(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -2485,6 +3106,70 @@ func (ec *executionContext) _Version(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedAt":
 			out.Values[i] = ec._Version_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var versionInformationImplementors = []string{"VersionInformation"}
+
+func (ec *executionContext) _VersionInformation(ctx context.Context, sel ast.SelectionSet, obj *model.VersionInformation) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, versionInformationImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("VersionInformation")
+		case "id":
+			out.Values[i] = ec._VersionInformation_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "orderId":
+			out.Values[i] = ec._VersionInformation_orderId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "title":
+			out.Values[i] = ec._VersionInformation_title(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "description":
+			out.Values[i] = ec._VersionInformation_description(ctx, field, obj)
+		case "manager":
+			out.Values[i] = ec._VersionInformation_manager(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "client":
+			out.Values[i] = ec._VersionInformation_client(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "sector":
+			out.Values[i] = ec._VersionInformation_sector(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._VersionInformation_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._VersionInformation_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -2863,6 +3548,20 @@ func (ec *executionContext) marshalNVersion2ᚖgithubᚗcomᚋlilahamsternᚋced
 		return graphql.Null
 	}
 	return ec._Version(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNVersionInformation2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersionInformation(ctx context.Context, sel ast.SelectionSet, v model.VersionInformation) graphql.Marshaler {
+	return ec._VersionInformation(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNVersionInformation2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐVersionInformation(ctx context.Context, sel ast.SelectionSet, v *model.VersionInformation) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._VersionInformation(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -3401,6 +4100,18 @@ func (ec *executionContext) unmarshalOcreateProjectInput2ᚖgithubᚗcomᚋlilah
 	return &res, err
 }
 
+func (ec *executionContext) unmarshalOcreateVersionInformationInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInformationInput(ctx context.Context, v interface{}) (model.CreateVersionInformationInput, error) {
+	return ec.unmarshalInputcreateVersionInformationInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOcreateVersionInformationInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInformationInput(ctx context.Context, v interface{}) (*model.CreateVersionInformationInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOcreateVersionInformationInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInformationInput(ctx, v)
+	return &res, err
+}
+
 func (ec *executionContext) unmarshalOcreateVersionInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐCreateVersionInput(ctx context.Context, v interface{}) (model.CreateVersionInput, error) {
 	return ec.unmarshalInputcreateVersionInput(ctx, v)
 }
@@ -3422,6 +4133,18 @@ func (ec *executionContext) unmarshalOdeleteProjectInput2ᚖgithubᚗcomᚋlilah
 		return nil, nil
 	}
 	res, err := ec.unmarshalOdeleteProjectInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteProjectInput(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) unmarshalOdeleteVersionInformationInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInformationInput(ctx context.Context, v interface{}) (model.DeleteVersionInformationInput, error) {
+	return ec.unmarshalInputdeleteVersionInformationInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOdeleteVersionInformationInput2ᚖgithubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInformationInput(ctx context.Context, v interface{}) (*model.DeleteVersionInformationInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOdeleteVersionInformationInput2githubᚗcomᚋlilahamsternᚋcedᚋserverᚋinternalᚋgraphᚋmodelᚐDeleteVersionInformationInput(ctx, v)
 	return &res, err
 }
 

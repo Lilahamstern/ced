@@ -11,6 +11,10 @@ import (
 type mockProjectRepository struct {
 }
 
+func (m *mockProjectRepository) Delete(id int64) (bool, error) {
+	panic("implement me")
+}
+
 func (m *mockProjectRepository) ExistsById(id int64) bool {
 	if id == 421 {
 		return true
@@ -41,7 +45,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestProjectService_Save_Success(t *testing.T) {
-	project := &model.CreatProjectInput{
+	project := &model.CreateProjectInput{
 		ID: 47271,
 	}
 
@@ -53,7 +57,7 @@ func TestProjectService_Save_Success(t *testing.T) {
 }
 
 func TestProjectService_Save_Exists(t *testing.T) {
-	project := &model.CreatProjectInput{
+	project := &model.CreateProjectInput{
 		ID: 421,
 	}
 

@@ -26,8 +26,11 @@ func main() {
 func registerResolvers(db *database.Session) {
 	projectRepository := repository.NewProjectRepository(db.DB)
 	versionRepository := repository.NewVersionRepository(db.DB)
+	versionInfoRepository := repository.NewVersionInformationRepository(db.DB)
+
 	projectService := service.NewProjectService(projectRepository)
 	versionService := service.NewVersionService(versionRepository, projectRepository)
+	versionInformationService := service.NewVersionInformationService(versionInfoRepository)
 
-	resolver.NewResolver(projectService, versionService)
+	resolver.NewResolver(projectService, versionService, versionInformationService)
 }

@@ -1,7 +1,6 @@
 package resolver
 
 import (
-	"github.com/lilahamstern/ced/server/internal/graph/generated"
 	"github.com/lilahamstern/ced/server/pkg/service"
 )
 
@@ -10,26 +9,15 @@ import (
 var resolver *Resolver
 
 type Resolver struct {
-	ProjectService service.ProjectService
-	VersionService service.VersionService
+	ProjectService            service.ProjectService
+	VersionService            service.VersionService
+	VersionInformationService service.VersionInformationService
 }
 
-func NewResolver(projectService service.ProjectService, versionService service.VersionService) {
+func NewResolver(projectService service.ProjectService, versionService service.VersionService, versionInformationService service.VersionInformationService) {
 	resolver = &Resolver{
 		projectService,
 		versionService,
+		versionInformationService,
 	}
 }
-
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{resolver} }
-
-// Project returns generated.ProjectResolver implementation.
-func (r *Resolver) Project() generated.ProjectResolver { return &projectResolver{resolver} }
-
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{resolver} }
-
-type mutationResolver struct{ *Resolver }
-type projectResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
