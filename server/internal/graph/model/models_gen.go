@@ -2,8 +2,44 @@
 
 package model
 
+type Project struct {
+	ID        int64    `json:"id"`
+	Version   *Version `json:"version"`
+	CreatedAt string   `json:"createdAt"`
+	UpdatedAt string   `json:"updatedAt"`
+}
+
+type Version struct {
+	ID            string `json:"id"`
+	ProjectId     int64  `json:"projectId"`
+	InformationId string `json:"informationId"`
+	CreatedAt     string `json:"createdAt"`
+	UpdatedAt     string `json:"updatedAt"`
+}
+
+type VersionInformation struct {
+	ID          string  `json:"id"`
+	OrderID     string  `json:"orderId"`
+	Title       string  `json:"title"`
+	Description *string `json:"description"`
+	Manager     string  `json:"manager"`
+	Client      string  `json:"client"`
+	Sector      string  `json:"sector"`
+	CreatedAt   string  `json:"createdAt"`
+	UpdatedAt   string  `json:"updatedAt"`
+}
+
 type CreateProjectInput struct {
 	ID int64 `json:"id"`
+}
+
+type CreateVersionInformationInput struct {
+	OrderID     string  `json:"orderId"`
+	Title       string  `json:"title"`
+	Description *string `json:"description"`
+	Manager     string  `json:"manager"`
+	Client      string  `json:"client"`
+	Sector      string  `json:"sector"`
 }
 
 type CreateVersionInput struct {
@@ -13,6 +49,10 @@ type CreateVersionInput struct {
 
 type DeleteProjectInput struct {
 	ID int64 `json:"id"`
+}
+
+type DeleteVersionInformationInput struct {
+	ID string `json:"id"`
 }
 
 type DeleteVersionInput struct {
