@@ -1,28 +1,19 @@
 <template>
-  <div id="app" class="">
-    <router-view class="h-screen bg-gray-800 container mx-auto text-white" />
-  </div>
+    <div id="app" class="bg-gray-900 w-full h-screen">
+        <Nav/>
+        <div class="p-12">
+            <router-view/>
+        </div>
+    </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
+<script>
+    import Nav from "@/components/Nav";
+
+    export default {
+        components: {Nav}
+    }
+</script>
