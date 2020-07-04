@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-gray-800 p-3 rounded">
+    <div class="container bg-gray-800 rounded pb-3">
         <ProjectList></ProjectList>
-        <ProjectListController :page-size="pageSize" :size-options="sizeOptions" class="mt-3"/>
+        <ProjectListController :page-size="pageSize" :size-options="sizeOptions" class="mt-3 p-3"/>
     </div>
 </template>
 
