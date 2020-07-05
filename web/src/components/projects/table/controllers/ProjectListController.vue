@@ -39,6 +39,6 @@
 
 <style scoped type="text/css">
     .btn {
-        @apply font-semibold inline-block px-4 py-2 bg-gray-900 text-white font-semibold tracking-wider uppercase rounded-lg text-sm
+        @apply font-semibold inline-block px-4 py-2 bg-gray-900 text-white font-semibold tracking-wider uppercase rounded-lg text-xs
     }
 </style>

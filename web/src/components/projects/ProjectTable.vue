@@ -1,7 +1,7 @@
 <template>
-    <div class="container bg-gray-800 rounded pb-3">
+    <div class="container bg-gray-800 rounded-lg pt-2 border-2 border-gray-600 w-full min-w-full hidden md:block">
         <ProjectList></ProjectList>
-        <ProjectListController :page-size="pageSize" :size-options="sizeOptions" class="mt-3 p-3"/>
+        <ProjectListController :page-size="pageSize" :size-options="sizeOptions" class=" p-6 shadow-t"/>
     </div>
 </template>
 
@@ -22,4 +22,7 @@
 
 <style scoped>
 
+    .top {
+
+    }
 </style>
