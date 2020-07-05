@@ -1,7 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// Font awesome
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
+
+// Tailwind
 import './assets/css/tailwind.css'
+
+// Custom
 import router from './router'
 
 Vue.config.productionTip = false
