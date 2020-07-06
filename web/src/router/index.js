@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Projects from '../views/Projects.vue'
+import Project from "@/views/Project";
 
 Vue.use(VueRouter)
 
@@ -11,8 +12,20 @@ Vue.use(VueRouter)
     component: Projects,
     meta: {
       breadCrumb: "Projects"
-    }
+    },
+    children: [
+      {
+        path: 'project/:id',
+        name: "Project",
+        component: Project
+      }
+    ]
   },
+    {
+      path: '/project/:id',
+      name: 'Project',
+      component: Project
+    },
   {
     path: '/about',
     name: 'About',
