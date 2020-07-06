@@ -5,8 +5,8 @@
             <Search/>
         </div>
 <!--        Table  -->
-        <div class="mt-6 mx-auto md:flex md:flex-wrap md:justify-between md:px-12">
-            <ProjectCard v-for="n in 4" :key="n" class="mt-5 mx-auto md:mx-14 xl:mx-16"/>
+        <div class="mt-6 mx-auto">
+            <ProjectCard v-for="n in 4" :key="n" class="mt-5 mx-auto"/>
         </div>
 <!--        Controllers-->
     </div>
