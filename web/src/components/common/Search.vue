@@ -1,5 +1,5 @@
 <template>
-    <div class="relative text-white max-w-xs w-full">
+    <div class="relative text-white max-w-xxs md:max-w-xs w-full">
         <label>
             <input class="bg-gray-700 p-2 pl-6 pr-6 shadow-md rounded-full border-0 w-full outline-none" type="search" placeholder="Search...">
         </label>
