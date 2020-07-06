@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-800 shadow shadow-t rounded max-w-md md:max-w-2xl lg:max-w-4xl w-full">
+    <div class="bg-gray-800 shadow shadow-t rounded max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl w-full">
         <div class="flex pl-4 py-4 items-center h-32 md:h-24">
             <div class="w-full text-gray-600 relative">
                 <div class="card-row">
@@ -8,15 +8,10 @@
                 <div class="card-row mt-10">
                     <p class="info"><span class="label">Title:</span> {{project.title}}</p>
                     <p class="info"><span class="label">Sector:</span> {{project.sector}}</p>
-                </div>
-                <div class="card-row">
                     <p class="info"><span class="label">Manager:</span> {{project.manager}}</p>
                     <p class="info"><span class="label">Client:</span> {{project.client}}</p>
-                    <p class="info" v-if="windowWidth >= 768"><span class="label">Co2-ekv/m2:</span> {{project.co2}}</p>
-                </div>
-                <div class="card-row hidden" v-if="windowWidth < 768">
                     <p class="info"><span class="label">Co2-ekv/m2:</span> {{project.co2}}</p>
-                </div>
+                 </div>
 
                 <div class="tooltip" v-if="tooltipHover">
                     <div class="bg-gray-900 opacity-75 text-white text-xs rounded py-1 px-3 right-0 bottom-full truncate">
@@ -45,6 +40,9 @@
             return {
                 tooltipHover: false,
                 windowWidth: window.innerWidth,
+                breakpoints: {
+                  md: 768,
+                },
                 project: {
                     id: 'b7e414b8-f7c6-413a-a248-f1c04fbe85c0',
                     orderId: 3828192,
@@ -76,7 +74,7 @@
 <style scoped type="text/css">
 
     .card-row {
-        @apply flex items-center justify-start mt-1
+        @apply flex items-center flex-wrap justify-start mt-1
     }
 
     .hover-slide:hover {
@@ -92,19 +90,23 @@
         @apply absolute w-3/5 right-0 -mt-5 mr-5 max-w-xxs
     }
 
+    .info {
+        @apply mt-1
+    }
+
     @media (max-width: 768px) {
         .info {
             @apply text-sm w-1/2 truncate text-gray-500
         }
     }
 
-    @media (max-width: 1024px) and (min-width: 768px) {
+    @media (min-width: 768px) {
         .info {
             @apply text-sm w-1/3 truncate text-gray-500
         }
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1280px) {
         .info {
             @apply text-sm w-1/4 truncate text-gray-500
         }
