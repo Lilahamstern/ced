@@ -9,9 +9,12 @@
             <ProjectListController :card-view="cardView" @change-list-style="changeList"/>
         </div>
 <!--        Table  -->
-        <div class="mt-6 mx-auto">
+        <div class="mt-6">
             <div v-if="windowWidth < 768 || cardView">
                 <ProjectCard v-for="n in 4" :key="n" class="mt-5 mx-auto"/>
+            </div>
+            <div class="flex justify-center" v-else>
+                <ProjectsTable/>
             </div>
         </div>
     </div>
@@ -21,12 +24,13 @@
     import Search from "@/components/common/Search";
     import ProjectCard from "@/components/project/ProjectCard";
     import ProjectListController from "@/components/project/ProjectListController";
+    import ProjectsTable from "@/components/project/ProjectsTable";
     export default {
         name: 'Home',
-        components: {ProjectListController, ProjectCard, Search},
+        components: {ProjectsTable, ProjectListController, ProjectCard, Search},
         data() {
             return {
-                cardView: true,
+                cardView: false,
                 windowWidth: window.innerWidth,
             }
         },
