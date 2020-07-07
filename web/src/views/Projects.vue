@@ -5,12 +5,12 @@
             <Search/>
         </div>
 <!--        Controllers -->
-        <div class="mt-6 hidden md:flex md:justify-center">
+        <div class="mt-6 hidden lg:flex lg:justify-center">
             <ProjectListController :card-view="cardView" @change-list-style="changeList"/>
         </div>
 <!--        Table  -->
         <div class="mt-6">
-            <div v-if="windowWidth < 768 || cardView">
+            <div v-if="windowWidth < 1024 || cardView">
                 <ProjectCard v-for="n in 4" :key="n" class="mt-5 mx-auto"/>
             </div>
             <div class="flex justify-center" v-else>
