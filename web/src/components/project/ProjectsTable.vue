@@ -1,29 +1,29 @@
 <template>
-    <div>
-        <table class="table-auto">
-            <thead>
-            <tr class="text-sm">
-                <th class="px-4 py-2"><i class="far fa-clock"></i></th>
-                <th class="px-4 py-2">Order ID</th>
-                <th class="px-4 py-2">Title</th>
-                <th class="px-4 py-2">Sector</th>
-                <th class="px-4 py-2">Client</th>
-                <th class="px-4 py-2">Manager</th>
-                <th class="px-4 py-2">Co2-ekv/m2</th>
-                <th class="px-4 py-2">Database ID</th>
-            </tr>
+    <div class="bg-gray-800 w-full max-w-6xl">
+        <table class="table-fixed border-collapse text-white w-full">
+            <thead class="border-b-2 bg-gray-700 flex w-full">
+                <tr class="text-sm flex w-full justify-start text-center">
+                    <th class="table-head w-1/12"><i class="far fa-clock"></i></th>
+                    <th class="table-head w-1/12">Project</th>
+                    <th class="table-head w-1/6">Title</th>
+                    <th class="table-head w-1/5">Sector</th>
+                    <th class="table-head w-1/6">Client</th>
+                    <th class="table-head w-1/5">Manager</th>
+                    <th class="table-head w-1/12 truncate">Co2-ekv/m2</th>
+                    <th class="w-1/12"></th>
+                </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td class="border px-4 py-2 truncate">2d ago</td>
-                <td class="border px-4 py-2 truncate">1828186</td>
-                <td class="border px-4 py-2 truncate">Testing</td>
-                <td class="border px-4 py-2 truncate">Halso och Sjukvard</td>
-                <td class="border px-4 py-2 truncate">John Doe</td>
-                <td class="border px-4 py-2 truncate">Sveden</td>
-                <td class="border px-4 py-2 truncate">291</td>
-                <td class="border px-4 py-2 truncate">b7e414b8-f7c6-413a-a248-f1c04fbe85c0</td>
-            </tr>
+            <tbody class="flex flex-col items-center w-full">
+                <tr class="flex w-full">
+                    <td class="table-text w-1/12">2d ago</td>
+                    <td class="table-text w-1/12">1828186</td>
+                    <td class="table-text w-1/6">Testing</td>
+                    <td class="table-text w-1/5">Halso och Sjukvard</td>
+                    <td class="table-text w-1/6">Sveden</td>
+                    <td class="table-text w-1/5">John Doe</td>
+                    <td class="table-text w-1/12">291</td>
+                    <td class="table-text w-1/12"><i class="fas fa-info-circle"/></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -35,6 +35,12 @@
     }
 </script>
 
-<style scoped>
+<style scoped type="text/css">
+    .table-text {
+        @apply truncate text-sm font-semibold p-2 text-center
+    }
 
+    .table-head {
+        @apply py-2
+    }
 </style>
