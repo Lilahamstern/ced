@@ -23,7 +23,7 @@
                     <p class="text-base mr-3"><i class="fas fa-info-circle"></i></p>
                 </div>
                 <div class="absolute right-0 top-0">
-                    <small class="text-sm"><span class="pr-1"><i class="far fa-clock"></i></span>2d ago</small>
+                    <small class="text-sm"><span class="pr-1"><i class="far fa-clock"></i></span>{{project.updatedAt}}d ago</small>
                 </div>
             </div>
             <div class="flex items-center text-lg text-gray-500 hover:text-gray-600 hover-slide rounded-r h-full pl-1 pr-2 ml-1 cursor-pointer mx-auto" @click="gotoAbout">
@@ -36,6 +36,9 @@
 <script>
     export default {
         name: "ProjectCard",
+        props: {
+            project: Object
+        },
         data() {
             return {
                 tooltipHover: false,
@@ -43,15 +46,6 @@
                 breakpoints: {
                   md: 768,
                 },
-                project: {
-                    id: 'b7e414b8-f7c6-413a-a248-f1c04fbe85c0',
-                    orderId: 3828192,
-                    title: 'Testing',
-                    sector: 'Halso och Sjukvard',
-                    manager: 'John Doe',
-                    client: 'Sveden',
-                    co2: 291,
-                }
             }
         },
         methods: {
