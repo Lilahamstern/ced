@@ -1,7 +1,7 @@
 <template>
     <div class="relative text-white max-w-xxs md:max-w-xs w-full">
         <label>
-            <input class="bg-gray-700 p-2 pl-6 pr-6 shadow-md rounded-full border-0 w-full outline-none" type="search" placeholder="Search...">
+            <input class="bg-gray-700 p-2 pl-6 pr-6 shadow-md rounded-full border-0 w-full outline-none input" type="search" placeholder="Search...">
         </label>
         <button type="submit" class="absolute right-0 top-0 mt-3 mr-6">
             <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
@@ -17,6 +17,8 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped type="text/css">
+    .input:focus {
+        box-shadow: 0 0 0 2px #FFFFFF;
+    }
 </style>
