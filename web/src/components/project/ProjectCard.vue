@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-800 shadow shadow-t rounded max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl w-full">
-        <div class="flex pl-4 py-4 items-center h-32 md:h-24">
+        <div class="flex pl-4 items-center h-32 md:h-24">
             <div class="w-full text-gray-600 relative">
                 <div class="card-row">
                     <h2 class="text-gray-400 text-md font-semibold truncate -mt-1">Project: <span class="text-gray-500">{{project.orderId}}</span></h2>

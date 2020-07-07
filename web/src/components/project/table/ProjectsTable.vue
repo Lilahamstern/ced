@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-gray-800 w-full max-w-6xl">
+    <div class="bg-gray-800 w-full max-w-6xl rounded-lg border-2 border-gray-700">
         <table class="table-fixed border-collapse text-white w-full">
-            <thead class="border-b-2 bg-gray-700 flex w-full">
-                <tr class="text-sm flex w-full justify-start text-center">
-                    <th class="table-head w-1/12"><i class="far fa-clock"></i></th>
+            <thead class="bg-gray-700 flex w-full shadow-b rounded-t-lg">
+                <tr class="text-sm flex w-full justify-start text-left">
+                    <th class="table-head w-1/12 text-center"><i class="far fa-clock"></i></th>
                     <th class="table-head w-1/12">Project</th>
                     <th class="table-head w-1/5">Title</th>
                     <th class="table-head w-1/6">Sector</th>

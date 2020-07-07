@@ -1,6 +1,6 @@
 <template>
-    <tr class="flex w-full items-center" :class="{'bg-gray-700' : index % 2 !== 0}">
-        <td class="table-text w-1/12">{{project.updatedAt}}d ago</td>
+    <tr class="flex w-full items-center cursor-pointer hover:bg-gray-900" :class="{'bg-gray-700' : index % 2 !== 0, 'rounded-b-lg': lastChild}">
+        <td class="text-sm font-semibold p-2 pl-5 w-1/12">{{project.updatedAt}}d ago</td>
         <td class="table-text w-1/12">{{project.orderId}}</td>
         <td class="table-text w-1/5">{{project.title}}</td>
         <td class="table-text w-1/6">{{project.sector}}</td>
@@ -25,6 +25,7 @@
         props: {
             project: Object,
             index: Number,
+            lastChild: Boolean,
         },
         data() {
             return {
@@ -36,7 +37,7 @@
 
 <style scoped type="text/css">
     .table-text {
-        @apply truncate text-sm font-semibold p-2 pl-5
+        @apply truncate text-sm font-semibold p-2
     }
 
     .tooltip {
