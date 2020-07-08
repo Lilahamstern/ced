@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody class="flex flex-col items-start w-full relative">
-                <ProjectTableRow v-for="(project, index) in projects" :key="index" :project="project" :index="index"/>
+                <ProjectTableRow v-for="(project, index) in projects" :key="index" :project="project" :index="index" :last-child="index === projects.length -1" />
             </tbody>
         </table>
     </div>
