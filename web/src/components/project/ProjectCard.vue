@@ -18,7 +18,7 @@
                         {{project.id}}
                     </div>
                 </div>
-                <div class="absolute right-0 -mt-5 -mr-3 cursor-pointer "
+                <div class="absolute right-0 -mt-6 -mr-3 cursor-pointer "
                      @mouseenter="tooltipHover = true" @mouseleave="tooltipHover = false">
                     <p class="text-base mr-3"><i class="fas fa-info-circle"></i></p>
                 </div>
@@ -81,7 +81,7 @@
     }
 
     .tooltip {
-        @apply absolute w-3/5 right-0 -mt-5 mr-5 max-w-xxs
+        @apply absolute w-3/5 right-0 -mt-6 mr-5 max-w-xxs
     }
 
     .info {
@@ -102,7 +102,7 @@
 
     @media (min-width: 1280px) {
         .info {
-            @apply text-sm w-1/4 truncate text-gray-500
+            @apply text-sm w-1/5 truncate text-gray-500 mr-5
         }
     }
 </style>
