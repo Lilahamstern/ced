@@ -58,7 +58,6 @@ import {camelize} from '@/lib/utils';
         })
 
         // If the environment supports hot reloading..
-        console.log(module.hot)
         if (module.hot) {
             // Whenever any Vuex module is updated...
             module.hot.accept(requireModule.id, () => {

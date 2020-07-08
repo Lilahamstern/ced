@@ -5,50 +5,46 @@ import Project from "@/views/Project";
 
 Vue.use(VueRouter)
 
-  const routes = [
-  {
-    path: '/',
-    name: 'Projects',
-    component: Projects,
-    meta: {
-      breadCrumb: "Projects"
-    },
-    children: [
-      {
-        path: 'project/:id',
-        name: "Project",
-        component: Project
-      }
-    ]
-  },
+const routes = [
     {
-      path: '/project/:id',
-      name: 'Project',
-      component: Project
-    },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: {
-      breadCrumb: "About"
-    },
-    children: [
-      {
-        path: 'author',
+        path: '/',
+        name: 'Home',
         component: Projects,
         meta: {
-          breadCrumb: 'Author'
+            breadCrumb: "Home"
+        },
+    },
+    {
+        path: '/project/:id',
+        name: 'project',
+        component: Project,
+        meta: {
+            breadCrumb: "Project"
         }
-      }
-    ]
-  }
+    },
+    {
+        path: '/about',
+        name: 'About',
+        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+        meta: {
+            breadCrumb: "About"
+        },
+        children: [
+            {
+                path: 'author',
+                component: Projects,
+                meta: {
+                    breadCrumb: 'Author'
+                }
+            }
+        ]
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
 })
 
 export default router
