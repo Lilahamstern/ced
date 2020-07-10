@@ -15,9 +15,11 @@ type Session struct {
 	DB *sql.DB
 }
 
-// InitDB will initialize database connection
-// If connection fails reconnection will be tried
-func NewDatabaseConnection(config *config.Config) *Session {
+const connectionNotEstablishedError = "Database connection is not establishd: %v"
+
+// NewConnection establish database connection depending on config
+// If connection fails reconnection will be tried maximum of 5 times
+func NewConnection(config *config.Config) *Session {
 
 	conn := config.GenerateDbUrl()
 	var db *sql.DB
@@ -42,22 +44,29 @@ func NewDatabaseConnection(config *config.Config) *Session {
 		DB: db,
 	}
 
-	session.PingCheck()
+	if err := session.PingCheck(); err != nil {
+		log.Fatalf(connectionNotEstablishedError, err)
+	}
+
 	log.Println("Connected to database...")
 
 	return session
 }
 
-// PingCheckDB ping database if that does not succeed error will be thrown.
-func (s *Session) PingCheck() {
+// PingCheck ping database if that does not succeed error will be thrown.
+func (s *Session) PingCheck() error {
 	if err := s.DB.Ping(); err != nil {
-		log.Fatalf("Failed to ping database: %v", err)
+		return err
 	}
+	return nil
 }
 
-// Migrate current database migrations to db. If they arent in the database
+// Migrate current database migrations to db. If they aren't applied
 func (s *Session) Migrate() {
-	s.PingCheck()
+	if err := s.PingCheck(); err != nil {
+		log.Fatalf(connectionNotEstablishedError, err)
+	}
+
 	driver, err := postgres.WithInstance(s.DB, &postgres.Config{})
 	if err != nil {
 		log.Fatal(err)
