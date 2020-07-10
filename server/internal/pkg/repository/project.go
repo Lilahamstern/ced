@@ -20,7 +20,7 @@ type projectRepository struct {
 }
 
 // Save will save project to db, if project.ID isn't unique error will be returned
-func (repo projectRepository) Save(project *domain.Project) error {
+func (repo *projectRepository) Save(project *domain.Project) error {
 	query := "INSERT INTO projects(id) VALUES ($1) RETURNING id, createdat, updatedat"
 
 	stmt, err := repo.db.Prepare(query)
@@ -38,7 +38,7 @@ func (repo projectRepository) Save(project *domain.Project) error {
 	return nil
 }
 
-func (repo projectRepository) Delete(id int64) (bool, error) {
+func (repo *projectRepository) Delete(id int64) (bool, error) {
 	query := "DELETE FROM projects WHERE id = $1"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -56,7 +56,7 @@ func (repo projectRepository) Delete(id int64) (bool, error) {
 	return true, nil
 }
 
-func (repo projectRepository) ExistsById(id int64) bool {
+func (repo *projectRepository) ExistsById(id int64) bool {
 	query := "SELECT EXISTS(SELECT 1 FROM projects p WHERE p.id=$1)"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -75,7 +75,7 @@ func (repo projectRepository) ExistsById(id int64) bool {
 }
 
 // GetAll will fetch all projects from database
-func (repo projectRepository) GetAllProjects(projects *[]domain.Project) error {
+func (repo *projectRepository) GetAllProjects(projects *[]domain.Project) error {
 	query := "SELECT p.id, p.createdat, p.updatedat FROM projects p"
 
 	stmt, err := repo.db.Prepare(query)
@@ -107,7 +107,7 @@ func (repo projectRepository) GetAllProjects(projects *[]domain.Project) error {
 }
 
 // Get will query one project from database with provided id
-func (repo projectRepository) GetProject(project *domain.Project) error {
+func (repo *projectRepository) GetProject(project *domain.Project) error {
 	query := "SELECT p.createdat, p.updatedat FROM projects p WHERE id = $1"
 
 	stmt, err := repo.db.Prepare(query)
@@ -128,8 +128,7 @@ func (repo projectRepository) GetProject(project *domain.Project) error {
 	return nil
 }
 
-// NewProjectRepository
-func NewProjectRepository(db *sql.DB) ProjectRepository {
+func newProject(db *sql.DB) ProjectRepository {
 	return &projectRepository{
 		db: db,
 	}

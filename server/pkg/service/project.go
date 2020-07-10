@@ -81,7 +81,7 @@ func (s projectService) Get(id int64) (*model.Project, error) {
 	return project.ToGraphModel(), nil
 }
 
-func NewProjectService(projectRepository repository.ProjectRepository) ProjectService {
+func newProject(projectRepository repository.ProjectRepository) ProjectService {
 	return &projectService{
 		projectRepository,
 	}

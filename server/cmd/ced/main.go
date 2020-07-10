@@ -12,7 +12,7 @@ import (
 func main() {
 	conf := config.NewConfig()
 
-	dbSession := database.NewDatabaseConnection(conf)
+	dbSession := database.NewConnection(conf)
 	dbSession.Migrate()
 
 	srv := server.NewHttpServer(conf)
@@ -24,13 +24,9 @@ func main() {
 }
 
 func registerResolvers(db *database.Session) {
-	projectRepository := repository.NewProjectRepository(db.DB)
-	versionRepository := repository.NewVersionRepository(db.DB)
-	versionInfoRepository := repository.NewVersionInformationRepository(db.DB)
+	repos := repository.New(db.DB)
 
-	projectService := service.NewProjectService(projectRepository)
-	versionService := service.NewVersionService(versionRepository, projectRepository)
-	versionInformationService := service.NewVersionInformationService(versionInfoRepository)
+	services := service.New(repos)
 
-	resolver.NewResolver(projectService, versionService, versionInformationService)
+	resolver.NewResolver(services)
 }

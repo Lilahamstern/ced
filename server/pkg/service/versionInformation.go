@@ -32,7 +32,7 @@ func (s versionInformationService) Save(input *model.CreateVersionInformationInp
 	return information.ToGraphModel(), err
 }
 
-func NewVersionInformationService(informationRepository repository.VersionInformationRepository) VersionInformationService {
+func newVersionInformation(informationRepository repository.VersionInformationRepository) VersionInformationService {
 	return &versionInformationService{
 		informationRepository,
 	}

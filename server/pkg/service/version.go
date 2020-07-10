@@ -105,7 +105,7 @@ func (s versionService) GetById(id string) (*model.Version, error) {
 	return version.ToGraphModel(), nil
 }
 
-func NewVersionService(versionRepository repository.VersionRepository,
+func newVersion(versionRepository repository.VersionRepository,
 	projectRepository repository.ProjectRepository) VersionService {
 	return &versionService{
 		versionRepository,

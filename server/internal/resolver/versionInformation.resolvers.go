@@ -11,7 +11,7 @@ import (
 )
 
 func (r *mutationResolver) CreateVersionInformation(ctx context.Context, input *model.CreateVersionInformationInput) (*model.VersionInformation, error) {
-	return r.VersionInformationService.Save(input)
+	return r.services.VersionInformation.Save(input)
 }
 
 func (r *mutationResolver) DeleteVersionInformation(ctx context.Context, input *model.DeleteVersionInformationInput) (bool, error) {

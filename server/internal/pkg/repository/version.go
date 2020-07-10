@@ -19,7 +19,7 @@ type versionRepository struct {
 	db *sql.DB
 }
 
-func (repo versionRepository) Delete(id uuid.UUID) (bool, error) {
+func (repo *versionRepository) Delete(id uuid.UUID) (bool, error) {
 	query := "DELETE FROM versions WHERE id = $1"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -37,7 +37,7 @@ func (repo versionRepository) Delete(id uuid.UUID) (bool, error) {
 	return true, nil
 }
 
-func (repo versionRepository) ExistsById(id uuid.UUID) bool {
+func (repo *versionRepository) ExistsById(id uuid.UUID) bool {
 	query := "SELECT EXISTS(SELECT 1 FROM versions v WHERE v.id=$1)"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -55,7 +55,7 @@ func (repo versionRepository) ExistsById(id uuid.UUID) bool {
 	return exists
 }
 
-func (repo versionRepository) Save(version *domain.Version) error {
+func (repo *versionRepository) Save(version *domain.Version) error {
 	query := "INSERT INTO versions(projectid, informationid) VALUES ($1, $2) RETURNING id, projectid, informationid, createdat, updatedat"
 
 	stmt, err := repo.db.Prepare(query)
@@ -79,7 +79,7 @@ func (repo versionRepository) Save(version *domain.Version) error {
 	return nil
 }
 
-func (repo versionRepository) GetVersionByProjectId(id int64, versions *[]domain.Version) error {
+func (repo *versionRepository) GetVersionByProjectId(id int64, versions *[]domain.Version) error {
 	query := "SELECT id, projectid, informationid, createdat, updatedat FROM versions WHERE projectid = $1"
 	stmt, err := repo.db.Prepare(query)
 	log.Println(query)
@@ -110,7 +110,7 @@ func (repo versionRepository) GetVersionByProjectId(id int64, versions *[]domain
 	return nil
 }
 
-func (repo versionRepository) GetVersionById(version domain.Version) error {
+func (repo *versionRepository) GetVersionById(version domain.Version) error {
 	query := "SELECT projectid, informationid, createdat, updatedat FROM versions WHERE id = $1"
 	stmt, err := repo.db.Prepare(query)
 	if err != nil {
@@ -135,7 +135,7 @@ func (repo versionRepository) GetVersionById(version domain.Version) error {
 	return nil
 }
 
-func NewVersionRepository(db *sql.DB) VersionRepository {
+func newVersion(db *sql.DB) VersionRepository {
 	return &versionRepository{
 		db: db,
 	}

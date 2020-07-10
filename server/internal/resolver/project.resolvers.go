@@ -11,23 +11,23 @@ import (
 )
 
 func (r *mutationResolver) CreateProject(ctx context.Context, input *model.CreateProjectInput) (*model.Project, error) {
-	return r.ProjectService.Save(input)
+	return r.services.Project.Save(input)
 }
 
 func (r *mutationResolver) DeleteProject(ctx context.Context, input *model.DeleteProjectInput) (bool, error) {
-	return r.ProjectService.Delete(input)
+	return r.services.Project.Delete(input)
 }
 
 func (r *projectResolver) Versions(ctx context.Context, obj *model.Project) ([]*model.Version, error) {
-	return r.VersionService.GetByProjectId(obj.ID)
+	return r.services.Version.GetByProjectId(obj.ID)
 }
 
 func (r *queryResolver) Projects(ctx context.Context) ([]*model.Project, error) {
-	return r.ProjectService.GetAll()
+	return r.services.Project.GetAll()
 }
 
 func (r *queryResolver) Project(ctx context.Context, id int64) (*model.Project, error) {
-	return r.ProjectService.Get(id)
+	return r.services.Project.Get(id)
 }
 
 // Mutation returns generated.MutationResolver implementation.

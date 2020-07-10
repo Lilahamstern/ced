@@ -9,15 +9,11 @@ import (
 var resolver *Resolver
 
 type Resolver struct {
-	ProjectService            service.ProjectService
-	VersionService            service.VersionService
-	VersionInformationService service.VersionInformationService
+	services *service.Services
 }
 
-func NewResolver(projectService service.ProjectService, versionService service.VersionService, versionInformationService service.VersionInformationService) {
+func NewResolver(services *service.Services) {
 	resolver = &Resolver{
-		projectService,
-		versionService,
-		versionInformationService,
+		services,
 	}
 }
