@@ -40,7 +40,7 @@ var projectServiceTest ProjectService
 
 func TestMain(m *testing.M) {
 	repo := &mockProjectRepository{}
-	projectServiceTest = NewProjectService(repo)
+	projectServiceTest = newProject(repo)
 	m.Run()
 }
 
