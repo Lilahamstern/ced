@@ -14,7 +14,7 @@ import (
 )
 
 func GraphQLHandler() gin.HandlerFunc {
-	h := GraphQLServer(generated.NewExecutableSchema(generated.Config{
+	h := newGraphQLServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &resolver.Resolver{},
 	}))
 
@@ -31,7 +31,7 @@ func PlaygroundHandler() gin.HandlerFunc {
 	}
 }
 
-func GraphQLServer(es graphql.ExecutableSchema) *handler.Server {
+func newGraphQLServer(es graphql.ExecutableSchema) *handler.Server {
 	srv := handler.New(es)
 
 	srv.AddTransport(transport.Websocket{
