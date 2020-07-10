@@ -1,4 +1,4 @@
-package handler
+package server
 
 import (
 	"github.com/99designs/gqlgen/graphql"
@@ -7,13 +7,13 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
+	"github.com/lilahamstern/ced/server/internal/db/redis"
 	"github.com/lilahamstern/ced/server/internal/graph/generated"
-	"github.com/lilahamstern/ced/server/internal/pkg/db/redis"
 	"github.com/lilahamstern/ced/server/internal/resolver"
 	"time"
 )
 
-func GraphQLHandler() gin.HandlerFunc {
+func graphQLHandler() gin.HandlerFunc {
 	h := newGraphQLServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &resolver.Resolver{},
 	}))
@@ -23,7 +23,7 @@ func GraphQLHandler() gin.HandlerFunc {
 	}
 }
 
-func PlaygroundHandler() gin.HandlerFunc {
+func playgroundHandler() gin.HandlerFunc {
 	h := playground.Handler("CED GraphQL", "/query")
 
 	return func(c *gin.Context) {

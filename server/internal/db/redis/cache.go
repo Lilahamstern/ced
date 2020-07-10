@@ -16,6 +16,18 @@ type Cache struct {
 
 const aqpPrefix = "apq:"
 
+func (c *Cache) Add(ctx context.Context, hash string, query interface{}) {
+	c.client.Set(aqpPrefix+hash, query, c.ttl)
+}
+
+func (c *Cache) Get(ctx context.Context, hash string) (interface{}, bool) {
+	s, err := c.client.Get(aqpPrefix + hash).Result()
+	if err != nil {
+		return "", false
+	}
+	return s, true
+}
+
 func NewCache() *Cache {
 	db, _ := strconv.Atoi(os.Getenv("redisdb"))
 
@@ -34,16 +46,4 @@ func NewCache() *Cache {
 
 	log.Println("Connected to redis db...")
 	return &Cache{client: client, ttl: ttl}
-}
-
-func (c *Cache) Add(ctx context.Context, hash string, query interface{}) {
-	c.client.Set(aqpPrefix+hash, query, c.ttl)
-}
-
-func (c *Cache) Get(ctx context.Context, hash string) (interface{}, bool) {
-	s, err := c.client.Get(aqpPrefix + hash).Result()
-	if err != nil {
-		return "", false
-	}
-	return s, true
 }

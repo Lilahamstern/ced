@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/lilahamstern/ced/server/internal/pkg/server/handler"
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"log"
 	"net/http"
@@ -26,8 +25,8 @@ func NewHttpServer(conf *config.Config) *Server {
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
 
-	router.POST("/query", handler.GraphQLHandler())
-	router.GET("/", handler.PlaygroundHandler())
+	router.POST("/query", graphQLHandler())
+	router.GET("/", playgroundHandler())
 
 	srv := &http.Server{
 		Addr:           ":" + conf.Port,
@@ -65,6 +64,6 @@ func (s *Server) SafeShutDown() {
 	defer cancel()
 	s.srv.Shutdown(ctx)
 
-	log.Println("Shutting down server!")
+	log.Println("Shutting down server...")
 	os.Exit(0)
 }
