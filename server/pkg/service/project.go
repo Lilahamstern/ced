@@ -3,7 +3,7 @@ package service
 import (
 	"database/sql"
 	"github.com/lilahamstern/ced/server/internal/graph/model"
-	"github.com/lilahamstern/ced/server/internal/pkg/repository"
+	"github.com/lilahamstern/ced/server/internal/repository"
 	"github.com/lilahamstern/ced/server/pkg/domain"
 	. "github.com/lilahamstern/ced/server/pkg/error"
 	"log"

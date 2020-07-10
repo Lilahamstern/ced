@@ -1,6 +1,6 @@
 package service
 
-import "github.com/lilahamstern/ced/server/internal/pkg/repository"
+import "github.com/lilahamstern/ced/server/internal/repository"
 
 type Services struct {
 	Project            ProjectService

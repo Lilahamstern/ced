@@ -1,10 +1,10 @@
 package main
 
 import (
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
-	"github.com/lilahamstern/ced/server/internal/pkg/repository"
-	"github.com/lilahamstern/ced/server/internal/pkg/server"
+	database "github.com/lilahamstern/ced/server/internal/db/postgres"
+	"github.com/lilahamstern/ced/server/internal/repository"
 	"github.com/lilahamstern/ced/server/internal/resolver"
+	"github.com/lilahamstern/ced/server/internal/server"
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"github.com/lilahamstern/ced/server/pkg/service"
 )
