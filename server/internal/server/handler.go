@@ -1,55 +1,13 @@
 package server
 
 import (
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/extension"
-	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/gin-gonic/gin"
-	"github.com/lilahamstern/ced/server/internal/db/redis"
-	"github.com/lilahamstern/ced/server/internal/graph/generated"
-	"github.com/lilahamstern/ced/server/internal/resolver"
-	"time"
+	"github.com/gofiber/fiber"
+	"github.com/lilahamstern/ced/server/internal/controller"
 )
 
-func graphQLHandler() gin.HandlerFunc {
-	h := newGraphQLServer(generated.NewExecutableSchema(generated.Config{
-		Resolvers: &resolver.Resolver{},
-	}))
-
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
+func registerV1Routes(api *fiber.Group, controller *controller.Controller) {
+	v1 := api.Group("/v1")
+	{
+		v1.Post("/projects", controller.CreateProject)
 	}
-}
-
-func playgroundHandler() gin.HandlerFunc {
-	h := playground.Handler("CED GraphQL", "/query")
-
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	}
-}
-
-func newGraphQLServer(es graphql.ExecutableSchema) *handler.Server {
-	srv := handler.New(es)
-
-	srv.AddTransport(transport.Websocket{
-		KeepAlivePingInterval: 10 * time.Second,
-	})
-	srv.AddTransport(transport.Options{})
-	srv.AddTransport(transport.GET{})
-	srv.AddTransport(transport.POST{})
-	srv.AddTransport(transport.MultipartForm{})
-
-	cache := redis.NewCache()
-
-	srv.SetQueryCache(cache)
-
-	srv.Use(extension.Introspection{})
-	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: cache,
-	})
-
-	return srv
 }

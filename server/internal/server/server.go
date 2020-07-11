@@ -1,12 +1,9 @@
 package server
 
 import (
-	"context"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/lilahamstern/ced/server/pkg/config"
+	"github.com/gofiber/fiber"
+	"github.com/lilahamstern/ced/server/internal/controller"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,40 +11,34 @@ import (
 )
 
 type Server struct {
-	srv  *http.Server
+	app  *fiber.App
 	port string
 }
 
-func NewHttpServer(conf *config.Config) *Server {
-	router := gin.New()
+func New(port string, controller *controller.Controller) *Server {
+	app := fiber.New(&fiber.Settings{
+		ServerHeader:          "CED",
+		StrictRouting:         true,
+		DisableStartupMessage: false,
+		ReadTimeout:           5 * time.Second,
+		WriteTimeout:          5 * time.Second,
+	})
 
-	router.Use(cors.Default())
-	router.Use(gin.Recovery())
-	router.Use(gin.Logger())
+	api := app.Group("/api")
 
-	router.POST("/query", graphQLHandler())
-	router.GET("/", playgroundHandler())
-
-	srv := &http.Server{
-		Addr:           ":" + conf.Port,
-		Handler:        router,
-		ReadTimeout:    60 * time.Second,
-		WriteTimeout:   60 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}
+	registerV1Routes(api, controller)
 
 	return &Server{
-		srv,
-		conf.Port,
+		app,
+		port,
 	}
 }
 
 func (s *Server) Start() {
-
 	go func() {
 		log.Println("Starting server")
 		log.Printf("Server started! Visit http://localhost:%s/ for GrahQL Playground", s.port)
-		if err := s.srv.ListenAndServe(); err != nil {
+		if err := s.app.Listen(s.port); err != nil {
 			log.Fatal(err)
 		}
 	}()
@@ -60,9 +51,9 @@ func (s *Server) SafeShutDown() {
 	// Block until signal is received
 	<-interruptChan
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	s.srv.Shutdown(ctx)
+	if err := s.app.Shutdown(); err != nil {
+		log.Fatal(err)
+	}
 
 	log.Println("Shutting down server...")
 	os.Exit(0)
