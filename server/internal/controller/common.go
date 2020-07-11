@@ -1,23 +1,20 @@
 package controller
 
 import (
-	"encoding/json"
-	"net/http"
+	"github.com/gofiber/fiber"
+	"log"
 )
 
-func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
-	response, err := json.Marshal(payload)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte(err.Error()))
-		return
+func respondJSON(c *fiber.Ctx, status int, payload interface{}) {
+	if err := c.Status(status).JSON(payload); err != nil {
+		log.Fatalln(err)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	_, _ = w.Write(response)
 }
 
-func respondError(w http.ResponseWriter, status int, msg string) {
-	respondJSON(w, status, map[string]string{"error": msg})
+func respondData(c *fiber.Ctx, status int, payload interface{}) {
+	respondJSON(c, status, map[string]interface{}{"data": payload})
+}
+
+func respondError(c *fiber.Ctx, status int, msg string) {
+	respondJSON(c, status, map[string]string{"error": msg})
 }
