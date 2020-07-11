@@ -12,7 +12,6 @@ import (
 type Config struct {
 	Port     string
 	Database *DatabaseConfig
-	Redis    *RedisConfig
 }
 
 // DatabaseConfig to store conn config
@@ -25,15 +24,8 @@ type DatabaseConfig struct {
 	Flags string
 }
 
-// RedisConfig to store conn config
-type RedisConfig struct {
-	Addr string
-	Pass string
-	Db   int64
-}
-
-// NewConfig
-func NewConfig() *Config {
+// New
+func New() *Config {
 
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Could not load config: %s", err)
@@ -43,7 +35,6 @@ func NewConfig() *Config {
 	return &Config{
 		Port:     getEnv("port"),
 		Database: newDatabaseConfig(),
-		Redis:    newRedisConfig(),
 	}
 }
 
@@ -68,14 +59,6 @@ func newDatabaseConfig() *DatabaseConfig {
 		User:  getEnv("dbuser"),
 		Pass:  getEnv("dbpass"),
 		Flags: getEnv("dbflags"),
-	}
-}
-
-func newRedisConfig() *RedisConfig {
-	return &RedisConfig{
-		Addr: getEnv("redisaddr"),
-		Pass: getEnv("redispass"),
-		Db:   getEnvInt("redisdb"),
 	}
 }
 
