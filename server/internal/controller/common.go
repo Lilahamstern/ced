@@ -15,6 +15,6 @@ func respondData(c *fiber.Ctx, status int, payload interface{}) {
 	respondJSON(c, status, map[string]interface{}{"data": payload})
 }
 
-func respondError(c *fiber.Ctx, status int, msg string) {
-	respondJSON(c, status, map[string]string{"error": msg})
+func respondError(c *fiber.Ctx, status int, payload interface{}) {
+	respondJSON(c, status, map[string]interface{}{"errors": payload})
 }
