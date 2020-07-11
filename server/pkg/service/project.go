@@ -2,31 +2,31 @@ package service
 
 import (
 	"database/sql"
-	"github.com/lilahamstern/ced/server/internal/graph/model"
+	"github.com/lilahamstern/ced/server/internal/db/domain"
 	"github.com/lilahamstern/ced/server/internal/repository"
-	"github.com/lilahamstern/ced/server/pkg/domain"
 	. "github.com/lilahamstern/ced/server/pkg/error"
+	"github.com/lilahamstern/ced/server/pkg/model"
 	"log"
 )
 
 type ProjectService interface {
-	Save(input *model.CreateProjectInput) (*model.Project, error)
+	Save(input *model.CreateProject) (*model.Project, error)
 	GetAll() ([]*model.Project, error)
 	Get(id int64) (*model.Project, error)
-	Delete(input *model.DeleteProjectInput) (bool, error)
+	Delete(id int64) (bool, error)
 }
 
 type projectService struct {
 	projectRepository repository.ProjectRepository
 }
 
-func (s projectService) Delete(input *model.DeleteProjectInput) (bool, error) {
-	exists := s.projectRepository.ExistsById(input.ID)
+func (s *projectService) Delete(id int64) (bool, error) {
+	exists := s.projectRepository.ExistsById(id)
 	if !exists {
-		return false, &ProjectNotFound{ID: input.ID}
+		return false, &ProjectNotFound{ID: id}
 	}
 
-	deleted, err := s.projectRepository.Delete(input.ID)
+	deleted, err := s.projectRepository.Delete(id)
 	if err != nil {
 		return false, &InternalServerError{}
 	}
@@ -34,7 +34,7 @@ func (s projectService) Delete(input *model.DeleteProjectInput) (bool, error) {
 	return deleted, nil
 }
 
-func (s projectService) Save(input *model.CreateProjectInput) (*model.Project, error) {
+func (s projectService) Save(input *model.CreateProject) (*model.Project, error) {
 	var project = domain.Project{
 		ID: input.ID,
 	}
@@ -49,7 +49,7 @@ func (s projectService) Save(input *model.CreateProjectInput) (*model.Project, e
 		return nil, &InternalServerError{}
 	}
 
-	return project.ToGraphModel(), nil
+	return project.ToModel(), nil
 }
 
 func (s projectService) GetAll() ([]*model.Project, error) {
@@ -58,9 +58,10 @@ func (s projectService) GetAll() ([]*model.Project, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	var res []*model.Project
-	for _, version := range projects {
-		res = append(res, version.ToGraphModel())
+	for _, project := range projects {
+		res = append(res, project.ToModel())
 	}
 
 	return res, nil
@@ -78,7 +79,7 @@ func (s projectService) Get(id int64) (*model.Project, error) {
 		return nil, &InternalServerError{}
 	}
 
-	return project.ToGraphModel(), nil
+	return project.ToModel(), nil
 }
 
 func newProject(projectRepository repository.ProjectRepository) ProjectService {

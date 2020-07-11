@@ -72,7 +72,7 @@ func (s *Session) Migrate() {
 		log.Fatal(err)
 	}
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://internal/pkg/db/migrations/postgres",
+		"file://internal/db/migrations/postgres",
 		"postgres",
 		driver,
 	)

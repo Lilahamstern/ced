@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/lilahamstern/ced/server/pkg/domain"
+	"github.com/lilahamstern/ced/server/internal/db/domain"
 	"log"
 )
 

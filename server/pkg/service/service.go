@@ -1,18 +1,18 @@
 package service
 
-import "github.com/lilahamstern/ced/server/internal/repository"
+import (
+	"database/sql"
+	"github.com/lilahamstern/ced/server/internal/repository"
+)
 
 type Services struct {
-	Project            ProjectService
-	Version            VersionService
-	VersionInformation VersionInformationService
+	Project ProjectService
 }
 
-func New(repos *repository.Repositories) *Services {
+func New(db *sql.DB) *Services {
+	repos := repository.New(db)
 	services := &Services{
-		Project:            newProject(repos.Project),
-		Version:            newVersion(repos.Version, repos.Project),
-		VersionInformation: newVersionInformation(repos.VersionInformation),
+		Project: newProject(repos.Project),
 	}
 
 	return services
