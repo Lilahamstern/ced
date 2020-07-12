@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/lilahamstern/ced/server/pkg/validation"
 	"github.com/thedevsaddam/govalidator"
 	"net/url"
 )
@@ -36,21 +37,10 @@ func (s *CreateProject) Validate() url.Values {
 		Messages: messages,
 	}
 
-	v := govalidator.New(opts)
-	e := v.ValidateStruct()
+	e := validation.Validate(opts)
 
 	ve := s.Version.Validate()
-	if len(ve) != 0 {
-		for k, v := range ve {
-			for _, vv := range v {
-				e.Add(k, vv)
-			}
-		}
-	}
+	out := validation.MergeErrors(e, ve)
 
-	if len(e) == 0 {
-		return nil
-	}
-
-	return e
+	return out
 }

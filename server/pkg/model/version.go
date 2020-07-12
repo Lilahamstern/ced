@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/lilahamstern/ced/server/pkg/validation"
 	"github.com/thedevsaddam/govalidator"
 	"net/url"
 )
@@ -33,11 +34,7 @@ func (s *CreateVersion) Validate() url.Values {
 		Messages: messages,
 	}
 
-	v := govalidator.New(opts)
-	e := v.ValidateStruct()
-	if len(e) == 0 {
-		return nil
-	}
+	e := validation.Validate(opts)
 
 	return e
 }
