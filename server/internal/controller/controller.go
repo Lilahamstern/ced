@@ -2,16 +2,20 @@ package controller
 
 import (
 	"database/sql"
-	"github.com/lilahamstern/ced/server/pkg/service"
+	"github.com/lilahamstern/ced/server/internal/repository"
+	"github.com/lilahamstern/ced/server/pkg/logger"
 )
 
 type Controller struct {
-	services *service.Services
+	repos *repository.Repositories
+	log   logger.Logger
 }
 
 func New(db *sql.DB) *Controller {
-	services := service.New(db)
+	repos := repository.New(db)
+	log := logger.New()
 	return &Controller{
-		services,
+		repos,
+		log,
 	}
 }
