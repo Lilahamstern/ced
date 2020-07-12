@@ -1,14 +1,17 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+	"github.com/lilahamstern/ced/server/internal/repository/project"
+)
 
 type Repositories struct {
-	Project ProjectRepository
+	Project project.Repository
 }
 
 func New(db *sql.DB) *Repositories {
 	repos := &Repositories{
-		Project: newProject(db),
+		Project: project.NewRepo(db),
 	}
 
 	return repos
