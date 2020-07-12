@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -8,9 +9,10 @@ type (
 	Op string
 
 	Error struct {
-		Kind int
-		Op   Op
-		Err  error
+		kind  int
+		op    Op
+		err   error
+		level logrus.Level
 	}
 )
 
@@ -22,7 +24,11 @@ const (
 )
 
 func (e *Error) Error() string {
-	return ""
+	return e.err.Error()
+}
+
+func (e *Error) Ops() []Op {
+	return Ops(e)
 }
 
 func E(args ...interface{}) *Error {
@@ -30,11 +36,13 @@ func E(args ...interface{}) *Error {
 	for _, arg := range args {
 		switch arg := arg.(type) {
 		case int:
-			e.Kind = arg
+			e.kind = arg
 		case Op:
-			e.Op = arg
+			e.op = arg
 		case error:
-			e.Err = arg
+			e.err = arg
+		case logrus.Level:
+			e.level = arg
 		}
 	}
 	return e
@@ -46,23 +54,31 @@ func Kind(err error) int {
 		return KindInternalServer
 	}
 
-	if e.Kind != 0 {
-		return e.Kind
+	if e.kind != 0 {
+		return e.kind
 	}
 
-	return Kind(e.Err)
+	return Kind(e.err)
 }
 
-func Operations(e error) []Op {
-	err, ok := e.(*Error)
+func Ops(e *Error) []Op {
+	res := []Op{e.op}
+
+	subErr, ok := e.err.(*Error)
 	if !ok {
-		return nil
+		return res
 	}
 
-	res := []Op{err.Op}
+	res = append(res, Ops(subErr)...)
 
-	subErr, ok := e.(*Error)
-
-	res = append(res, Operations(subErr)...)
 	return res
+}
+
+func Level(err error) logrus.Level {
+	e, ok := err.(*Error)
+	if !ok {
+		return 0
+	}
+
+	return e.level
 }
