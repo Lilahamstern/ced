@@ -24,7 +24,7 @@ type (
 
 func (s *CreateProject) Validate() url.Values {
 	rules := govalidator.MapData{
-		"id": []string{"required", "min:9999999"},
+		"id": []string{"required", "min:9999999", "unique:projects"},
 	}
 
 	messages := govalidator.MapData{

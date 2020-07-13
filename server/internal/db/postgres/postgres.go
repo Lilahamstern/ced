@@ -2,12 +2,14 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"github.com/lilahamstern/ced/server/pkg/config"
-	"log"
+	"github.com/lilahamstern/ced/server/pkg/errors"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -85,4 +87,23 @@ func (s *Session) Migrate() {
 		log.Fatalf("Failed to migrate db: %s", err)
 	}
 	log.Println("Migrated database...")
+}
+
+func (s *Session) UniqueRecord(table string, field string, data interface{}) (bool, error) {
+	const op errors.Op = "postgres.uniqueRecord"
+	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s=$1)", table, field)
+
+	stmt, err := s.DB.Prepare(query)
+	if err != nil {
+		return false, errors.E(op, err, log.WarnLevel)
+	}
+	defer stmt.Close()
+
+	var exists bool
+	err = stmt.QueryRow(data).Scan(&exists)
+	if err != nil {
+		return false, errors.E(op, err, log.WarnLevel)
+	}
+
+	return exists, nil
 }
