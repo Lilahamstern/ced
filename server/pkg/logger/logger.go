@@ -15,6 +15,7 @@ func SystemErr(err error) {
 	entry := log.WithFields(log.Fields{
 		"operations": errors.Ops(sysErr),
 		"kind":       errors.Kind(sysErr),
+		"data":       errors.Data(sysErr),
 	})
 
 	switch errors.Level(err) {
