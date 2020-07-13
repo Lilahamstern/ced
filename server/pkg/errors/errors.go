@@ -25,7 +25,10 @@ const (
 )
 
 func (e *Error) Error() string {
-	return e.err.Error()
+	if e.err != nil {
+		return e.Error()
+	}
+	return ""
 }
 
 func (e *Error) Ops() []Op {
