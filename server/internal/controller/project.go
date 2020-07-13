@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/lilahamstern/ced/server/pkg/errors"
+	"github.com/lilahamstern/ced/server/pkg/logger"
 	"github.com/lilahamstern/ced/server/pkg/model"
 	"net/http"
 )
@@ -21,7 +22,7 @@ func (s *Controller) CreateProject(c *fiber.Ctx) {
 
 	exists, err := s.repos.Project.Exists(body.ID)
 	if err != nil {
-		s.log.SystemErr(err)
+		logger.SystemErr(err)
 		respondError(c, errors.Kind(err), "Internal Server Error")
 		return
 	}
@@ -35,7 +36,7 @@ func (s *Controller) CreateProject(c *fiber.Ctx) {
 
 	project, err := s.repos.Project.Save(body)
 	if err != nil {
-		s.log.SystemErr(err)
+		logger.SystemErr(err)
 		respondError(c, errors.Kind(err), "Internal Server Error")
 		return
 	}
