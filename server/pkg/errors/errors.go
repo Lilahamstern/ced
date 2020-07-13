@@ -26,7 +26,7 @@ const (
 
 func (e *Error) Error() string {
 	if e.err != nil {
-		return e.Error()
+		return e.err.Error()
 	}
 	return ""
 }
