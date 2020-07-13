@@ -20,21 +20,6 @@ func (s *Controller) CreateProject(c *fiber.Ctx) {
 		return
 	}
 
-	exists, err := s.repos.Project.Exists(body.ID)
-	if err != nil {
-		e := errors.E(op, errors.KindInternalServer, err)
-		c.Next(e)
-		return
-	}
-
-	if exists {
-		// TODO: Add exist validation to validator
-		msg := fmt.Sprintf("project already exists with id: %v", body.ID)
-		e := errors.E(op, errors.KindAlreadyExists, msg)
-		c.Next(e)
-		return
-	}
-
 	project, err := s.repos.Project.Save(body)
 	if err != nil {
 		e := errors.E(op, errors.KindInternalServer, err)
