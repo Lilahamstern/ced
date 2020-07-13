@@ -2,8 +2,10 @@ package server
 
 import (
 	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/middleware"
 	"github.com/lilahamstern/ced/server/internal/controller"
-	"log"
+	log "github.com/sirupsen/logrus"
+	"io"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,7 +17,7 @@ type Server struct {
 	port string
 }
 
-func New(port string, controller *controller.Controller) *Server {
+func New(port string, controller *controller.Controller, w io.Writer) *Server {
 	app := fiber.New(&fiber.Settings{
 		ServerHeader:          "CED",
 		StrictRouting:         true,
@@ -23,6 +25,13 @@ func New(port string, controller *controller.Controller) *Server {
 		ReadTimeout:           5 * time.Second,
 		WriteTimeout:          5 * time.Second,
 	})
+
+	app.Use(middleware.Recover())
+	app.Use(middleware.Logger(middleware.LoggerConfig{
+		Format:     "${time} - ${ip} - ${method} - ${path}",
+		TimeFormat: "15:04:05",
+		Output:     w,
+	}))
 
 	api := app.Group("/api")
 
@@ -37,7 +46,7 @@ func New(port string, controller *controller.Controller) *Server {
 func (s *Server) Start() {
 	go func() {
 		log.Println("Starting server")
-		log.Printf("Server started! Visit http://localhost:%s/ for GrahQL Playground", s.port)
+		log.Printf("Server started! Visit http://localhost:%s/ for documentation!", s.port)
 		if err := s.app.Listen(s.port); err != nil {
 			log.Fatal(err)
 		}

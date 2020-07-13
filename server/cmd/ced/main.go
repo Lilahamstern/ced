@@ -21,7 +21,7 @@ func main() {
 
 	validation.Register(dbSession)
 	controllers := controller.New(dbSession.DB)
-	srv := server.New(conf.Port, controllers)
+	srv := server.New(conf.Port, controllers, log.Out)
 
 	srv.Start()
 	srv.SafeShutDown()
