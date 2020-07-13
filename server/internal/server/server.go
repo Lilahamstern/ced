@@ -19,6 +19,7 @@ type Server struct {
 
 func New(port string, controller *controller.Controller, w io.Writer) *Server {
 	app := fiber.New(&fiber.Settings{
+		ErrorHandler:          controller.ErrorHandler,
 		ServerHeader:          "CED",
 		StrictRouting:         true,
 		DisableStartupMessage: false,
