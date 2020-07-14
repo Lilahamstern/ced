@@ -6,7 +6,6 @@ import (
 	"github.com/lilahamstern/ced/server/internal/handler"
 	"github.com/lilahamstern/ced/server/internal/router"
 	log "github.com/sirupsen/logrus"
-	"io"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,7 +17,7 @@ type Server struct {
 	port string
 }
 
-func New(port string, routes *router.Router, w io.Writer) *Server {
+func New(port string, routes *router.Router) *Server {
 	app := fiber.New(&fiber.Settings{
 		ErrorHandler:          handler.ErrorHandler,
 		ServerHeader:          "CED",
@@ -30,9 +29,8 @@ func New(port string, routes *router.Router, w io.Writer) *Server {
 
 	app.Use(middleware.Recover())
 	app.Use(middleware.Logger(middleware.LoggerConfig{
-		Format:     "${time} - ${ip} - ${method} - ${path}",
+		Format:     "${time} ${method} ${path} - ${ip} - ${status} - ${latency}\n",
 		TimeFormat: "15:04:05",
-		Output:     w,
 	}))
 
 	routes.RegisterRoutes(app)

@@ -21,7 +21,7 @@ func main() {
 
 	validation.Register(dbSession)
 	routes := router.New(dbSession.DB)
-	srv := server.New(conf.Port, routes, log.Out)
+	srv := server.New(conf.Port, routes)
 
 	srv.Start()
 	srv.SafeShutDown()
