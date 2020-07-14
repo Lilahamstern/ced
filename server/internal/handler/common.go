@@ -1,4 +1,4 @@
-package controller
+package handler
 
 import (
 	"github.com/gofiber/fiber"
@@ -14,24 +14,24 @@ func respondJSON(c *fiber.Ctx, status int, payload interface{}) {
 	}
 }
 
-func respondData(c *fiber.Ctx, status int, payload interface{}) {
+func RespondData(c *fiber.Ctx, status int, payload interface{}) {
 	respondJSON(c, status, map[string]interface{}{"data": payload})
 }
 
+func RespondError(c *fiber.Ctx, status int, payload interface{}) {
+	respondJSON(c, status, map[string]interface{}{"errors": payload})
+}
+
 // ErrorHandler for fiber default error handler
-func (s *Controller) ErrorHandler(c *fiber.Ctx, err error) {
+func ErrorHandler(c *fiber.Ctx, err error) {
 	code := http.StatusInternalServerError
 	msg := "Internal server error"
 
 	e, ok := err.(*errors.Error)
 	if !ok {
-		respondError(c, code, msg)
+		RespondError(c, code, msg)
 	}
 
 	logger.SystemErr(e)
-	respondError(c, errors.Kind(e), e.Data())
-}
-
-func respondError(c *fiber.Ctx, status int, payload interface{}) {
-	respondJSON(c, status, map[string]interface{}{"errors": payload})
+	RespondError(c, errors.Kind(e), e.Data())
 }

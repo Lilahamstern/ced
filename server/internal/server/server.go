@@ -3,7 +3,8 @@ package server
 import (
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/fiber/middleware"
-	"github.com/lilahamstern/ced/server/internal/controller"
+	"github.com/lilahamstern/ced/server/internal/handler"
+	"github.com/lilahamstern/ced/server/internal/router"
 	log "github.com/sirupsen/logrus"
 	"io"
 	"os"
@@ -17,9 +18,9 @@ type Server struct {
 	port string
 }
 
-func New(port string, controller *controller.Controller, w io.Writer) *Server {
+func New(port string, routes *router.Router, w io.Writer) *Server {
 	app := fiber.New(&fiber.Settings{
-		ErrorHandler:          controller.ErrorHandler,
+		ErrorHandler:          handler.ErrorHandler,
 		ServerHeader:          "CED",
 		StrictRouting:         true,
 		DisableStartupMessage: false,
@@ -34,9 +35,7 @@ func New(port string, controller *controller.Controller, w io.Writer) *Server {
 		Output:     w,
 	}))
 
-	api := app.Group("/api")
-
-	registerV1Routes(api, controller)
+	routes.RegisterRoutes(app)
 
 	return &Server{
 		app,
