@@ -28,5 +28,5 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 		return
 	}
 
-	handler.RespondData(c, http.StatusOK, project)
+	handler.RespondData(c, http.StatusOK, project.ToModel())
 }
