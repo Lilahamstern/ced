@@ -13,13 +13,6 @@ type Project struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// NewInformation : Converts CreateProject to Project model of domain
-func NewProject(p model.CreateProject) *Project {
-	return &Project{
-		ID: p.ID,
-	}
-}
-
 // ToModel : will map database model of project to request model of project
 func (p *Project) ToModel() *model.Project {
 	return &model.Project{
