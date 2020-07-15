@@ -1,11 +1,11 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"github.com/lilahamstern/ced/server/pkg/errors"
@@ -14,22 +14,22 @@ import (
 )
 
 type Session struct {
-	DB *sql.DB
+	DB *sqlx.DB
 }
 
-const connectionNotEstablishedError = "Database connection is not establishd: %v"
+const connectionNotEstablishedError = "Database connection is not established: %v"
 
 // NewConnection establish database connection depending on config
 // If connection fails reconnection will be tried maximum of 5 times
 func NewConnection(config *config.Config) *Session {
 
 	conn := config.GenerateDbUrl()
-	var db *sql.DB
+	var db *sqlx.DB
 	var err error
 	for i := 1; i < 5; i++ {
 		log.Printf("Trying to connect to the database (attempt %d)...\n", i)
 
-		db, err = sql.Open("postgres", conn)
+		db, err = sqlx.Connect("postgres", conn)
 		if err == nil {
 			break
 		}
@@ -69,7 +69,7 @@ func (s *Session) Migrate() {
 		log.Fatalf(connectionNotEstablishedError, err)
 	}
 
-	driver, err := postgres.WithInstance(s.DB, &postgres.Config{})
+	driver, err := postgres.WithInstance(s.DB.DB, &postgres.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -92,15 +92,14 @@ func (s *Session) Migrate() {
 func (s *Session) UniqueRecord(table string, field string, data interface{}) (bool, error) {
 	const op errors.Op = "postgres.uniqueRecord"
 	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s=$1)", table, field)
-
-	stmt, err := s.DB.Prepare(query)
+	stmt, err := s.DB.Preparex(query)
+	defer stmt.Close()
 	if err != nil {
 		return false, errors.E(op, err, log.WarnLevel)
 	}
-	defer stmt.Close()
 
 	var exists bool
-	err = stmt.QueryRow(data).Scan(&exists)
+	err = stmt.Get(&exists, data)
 	if err != nil {
 		return false, errors.E(op, err, log.WarnLevel)
 	}

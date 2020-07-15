@@ -21,22 +21,12 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 		return
 	}
 
-	project, err := h.repos.Project.Save(body)
+	err := h.repos.Project.Save(body)
 	if err != nil {
 		e := errors.E(op, errors.KindInternalServer, err)
 		c.Next(e)
 		return
 	}
 
-	version, err := h.repos.Version.Save(project.ID, body.Version)
-	if err != nil {
-		e := errors.E(op, errors.KindInternalServer, err)
-		c.Next(e)
-		return
-	}
-
-	response := project.ToModel()
-	response.Version = version.ToModel()
-
-	handler.RespondData(c, http.StatusOK, response)
+	handler.RespondMessage(c, http.StatusCreated, "Successful creation")
 }

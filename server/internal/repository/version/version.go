@@ -1,7 +1,7 @@
 package version
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"github.com/lilahamstern/ced/server/internal/db/domain"
 	"github.com/lilahamstern/ced/server/pkg/errors"
 	"github.com/lilahamstern/ced/server/pkg/model"
@@ -13,7 +13,7 @@ type Repository interface {
 }
 
 type Repo struct {
-	DB *sql.DB
+	DB *sqlx.DB
 }
 
 func (r Repo) Save(projectId int64, input model.CreateVersion) (*domain.Version, error) {
@@ -35,7 +35,7 @@ func (r Repo) Save(projectId int64, input model.CreateVersion) (*domain.Version,
 	return version, nil
 }
 
-func New(db *sql.DB) Repository {
+func New(db *sqlx.DB) Repository {
 	return &Repo{
 		db,
 	}

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"database/sql"
 	"github.com/gofiber/fiber"
+	"github.com/jmoiron/sqlx"
 	v1 "github.com/lilahamstern/ced/server/internal/handler/v1"
 	"github.com/lilahamstern/ced/server/internal/repository"
 )
@@ -11,7 +11,7 @@ type Router struct {
 	repos *repository.Repositories
 }
 
-func New(db *sql.DB) *Router {
+func New(db *sqlx.DB) *Router {
 	repos := repository.New(db)
 	return &Router{
 		repos,

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 	"github.com/lilahamstern/ced/server/internal/repository/project"
 	"github.com/lilahamstern/ced/server/internal/repository/version"
 )
@@ -11,7 +11,7 @@ type Repositories struct {
 	Version version.Repository
 }
 
-func New(db *sql.DB) *Repositories {
+func New(db *sqlx.DB) *Repositories {
 	repos := &Repositories{
 		project.New(db),
 		version.New(db),

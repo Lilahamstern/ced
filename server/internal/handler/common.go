@@ -14,6 +14,10 @@ func respondJSON(c *fiber.Ctx, status int, payload interface{}) {
 	}
 }
 
+func RespondMessage(c *fiber.Ctx, status int, msg string) {
+	RespondData(c, status, map[string]string{"message": msg})
+}
+
 func RespondData(c *fiber.Ctx, status int, payload interface{}) {
 	respondJSON(c, status, map[string]interface{}{"data": payload})
 }
