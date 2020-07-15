@@ -8,8 +8,16 @@ import (
 // Project : Database model
 type Project struct {
 	ID        int64     `json:"id"`
+	Version   Version   `json:"version"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// NewInformation : Converts CreateProject to Project model of domain
+func NewProject(p model.CreateProject) *Project {
+	return &Project{
+		ID: p.ID,
+	}
 }
 
 // ToModel : will map database model of project to request model of project

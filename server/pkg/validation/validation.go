@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	database "github.com/lilahamstern/ced/server/internal/db/postgres"
+	log "github.com/sirupsen/logrus"
 	"github.com/thedevsaddam/govalidator"
 	"strings"
 )
@@ -22,7 +23,8 @@ func unique(field string, rule string, message string, value interface{}) error 
 
 	exists, err := session.UniqueRecord(f[1], field, value)
 	if err != nil {
-		return err
+		log.Warn(err)
+		return errors.New("Failed to validate unique record.")
 	}
 
 	if exists {

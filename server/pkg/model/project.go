@@ -8,20 +8,22 @@ import (
 
 type (
 	Project struct {
-		ID        int64  `json:"id"`
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
+		ID        int64    `json:"id"`
+		Version   *Version `json:"version,omitempty"`
+		CreatedAt string   `json:"created_at"`
+		UpdatedAt string   `json:"updated_at"`
 	}
 
 	CreateProject struct {
-		ID          int64             `json:"id"`
-		Information CreateInformation `json:"information"`
+		ID      int64         `json:"id"`
+		Version CreateVersion `json:"version"`
 	}
 )
 
+// Validate : Validates CreateInformation struct to match requirements to create record
 func (s *CreateProject) Validate() url.Values {
 	rules := govalidator.MapData{
-		"id": []string{"required", "min:9999999", "unique:projects"},
+		"id": []string{"required", "min:9999999", "unique:project"},
 	}
 
 	messages := govalidator.MapData{
@@ -36,7 +38,7 @@ func (s *CreateProject) Validate() url.Values {
 
 	e := validation.Validate(opts)
 
-	ve := s.Information.Validate()
+	ve := s.Version.Validate()
 	out := validation.MergeErrors(e, ve)
 
 	return out

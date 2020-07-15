@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) CreateProject(c *fiber.Ctx) {
-	const op errors.Op = "controller.createProject"
+	const op errors.Op = "handler.v1.createProject"
 	var body model.CreateProject
 	// Wants to use custom validation for input data, so no error will be handled
 	_ = c.BodyParser(&body)
@@ -28,5 +28,15 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 		return
 	}
 
-	handler.RespondData(c, http.StatusOK, project.ToModel())
+	version, err := h.repos.Version.Save(project.ID, body.Version)
+	if err != nil {
+		e := errors.E(op, errors.KindInternalServer, err)
+		c.Next(e)
+		return
+	}
+
+	response := project.ToModel()
+	response.Version = version.ToModel()
+
+	handler.RespondData(c, http.StatusOK, response)
 }
