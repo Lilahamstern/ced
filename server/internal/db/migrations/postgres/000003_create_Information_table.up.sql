@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS VersionInformation
+CREATE TABLE IF NOT EXISTS Information
 (
     id          UUID        NOT NULL     DEFAULT uuid_generate_v4(),
     orderId     BIGINT      NOT NULL,

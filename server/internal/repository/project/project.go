@@ -18,7 +18,7 @@ type Repo struct {
 
 func (r Repo) Save(input model.CreateProject) (domain.Project, error) {
 	const op errors.Op = "repo.project.save"
-	query := "INSERT INTO projects(id) VALUES ($1) RETURNING createdat, updatedat"
+	query := "INSERT INTO project(id) VALUES ($1) RETURNING createdat, updatedat"
 	stmt, err := r.DB.Prepare(query)
 	if err != nil {
 		return domain.Project{}, errors.E(op, err, errors.KindInternalServer, logrus.WarnLevel)

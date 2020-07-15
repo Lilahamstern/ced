@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS Components
     type      VARCHAR(50)  NOT NULL,
     createdAt TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
     updatedAt TIMESTAMP WITH TIME ZONE DEFAULT current_timestamp,
-    FOREIGN KEY (versionId) REFERENCES Versions (id) ON DELETE CASCADE,
+    FOREIGN KEY (versionId) REFERENCES Version (id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 )
