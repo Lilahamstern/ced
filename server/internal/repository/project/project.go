@@ -35,7 +35,7 @@ func (r Repo) Save(input model.CreateProject) (domain.Project, error) {
 	return project, nil
 }
 
-func NewRepo(db *sql.DB) Repository {
+func New(db *sql.DB) Repository {
 	return &Repo{
 		db,
 	}

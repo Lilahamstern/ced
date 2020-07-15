@@ -8,17 +8,14 @@ import (
 
 type (
 	Project struct {
-		ID        int64 `json:"id"`
-		CreatedAt string
-		UpdatedAt string
+		ID        int64  `json:"id"`
+		CreatedAt string `json:"created_at"`
+		UpdatedAt string `json:"updated_at"`
 	}
 
 	CreateProject struct {
-		ID      int64         `json:"id"`
-		Version CreateVersion `json:"version"`
-	}
-
-	DeleteProject struct {
+		ID          int64             `json:"id"`
+		Information CreateInformation `json:"information"`
 	}
 )
 
@@ -39,7 +36,7 @@ func (s *CreateProject) Validate() url.Values {
 
 	e := validation.Validate(opts)
 
-	ve := s.Version.Validate()
+	ve := s.Information.Validate()
 	out := validation.MergeErrors(e, ve)
 
 	return out
