@@ -27,7 +27,7 @@ func NewConnection(config *config.Config) *Session {
 	var db *sqlx.DB
 	var err error
 	for i := 1; i < 5; i++ {
-		log.Printf("Trying to connect to the database (attempt %d)...\n", i)
+		log.Printf("Trying to connect to the database (attempt %d)", i)
 
 		db, err = sqlx.Connect("postgres", conn)
 		if err == nil {
