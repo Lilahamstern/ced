@@ -3,6 +3,7 @@ package v1
 import (
 	"fmt"
 	"github.com/gofiber/fiber"
+	"github.com/lilahamstern/ced/server/internal/db/domain"
 	"github.com/lilahamstern/ced/server/internal/handler"
 	"github.com/lilahamstern/ced/server/pkg/errors"
 	"github.com/lilahamstern/ced/server/pkg/model"
@@ -29,4 +30,19 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 	}
 
 	handler.RespondMessage(c, http.StatusCreated, "Successful creation")
+}
+
+func (h *Handler) GetProject(c *fiber.Ctx) {
+	const op errors.Op = "handler.v1.getProject"
+
+	projects, err := h.repos.Project.GetAll()
+	if err != nil {
+		e := errors.E(op, errors.KindInternalServer, err)
+		c.Next(e)
+		return
+	}
+
+	res := map[string]interface{}{"projects": domain.ToModel(projects)}
+
+	handler.RespondData(c, http.StatusOK, res)
 }

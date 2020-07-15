@@ -17,7 +17,18 @@ type Project struct {
 func (p *Project) ToModel() *model.Project {
 	return &model.Project{
 		ID:        p.ID,
+		Version:   p.Version.ToModel(),
 		CreatedAt: p.CreatedAt.String(),
 		UpdatedAt: p.UpdatedAt.String(),
 	}
+}
+
+// ToModel : maps slice of domain project to slice of response project model
+func ToModel(projects []Project) []model.Project {
+	var p []model.Project
+	for _, v := range projects {
+		p = append(p, *v.ToModel())
+	}
+
+	return p
 }
