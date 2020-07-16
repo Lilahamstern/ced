@@ -9,12 +9,12 @@ import (
 // Version : Database model
 type Version struct {
 	ID          *uuid.UUID `db:"version_id"`
-	OrderID     *int64     `json:"orderId"`
-	Title       *string    `json:"title"`
-	Description *string    `json:"description"`
-	Manager     *string    `json:"manager"`
-	Client      *string    `json:"client"`
-	Sector      *string    `json:"sector"`
+	OrderID     *int64     `db:"version_order_id"`
+	Title       *string    `db:"version_title"`
+	Description *string    `db:"version_description"`
+	Manager     *string    `db:"version_manager"`
+	Client      *string    `db:"version_client"`
+	Sector      *string    `db:"version_sector"`
 	CreatedAt   *time.Time `db:"version_createdat"`
 	UpdatedAt   *time.Time `db:"version_updatedat"`
 }
