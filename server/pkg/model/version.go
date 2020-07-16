@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/google/uuid"
 	"github.com/lilahamstern/ced/server/pkg/validation"
 	"github.com/thedevsaddam/govalidator"
 	"net/url"
@@ -9,15 +8,15 @@ import (
 
 type (
 	Version struct {
-		ID          uuid.UUID `json:"id"`
-		OrderID     int64     `json:"order_id"`
-		Title       string    `json:"title"`
-		Description string    `json:"desc"`
-		Manager     string    `json:"manager"`
-		Client      string    `json:"client"`
-		Sector      string    `json:"sector"`
-		CreatedAt   string    `json:"created_at"`
-		UpdatedAt   string    `json:"updated_at"`
+		ID          string `json:"id,omitempty"`
+		OrderID     int64  `json:"order_id,omitempty"`
+		Title       string `json:"title,omitempty"`
+		Description string `json:"desc,omitempty"`
+		Manager     string `json:"manager,omitempty"`
+		Client      string `json:"client,omitempty"`
+		Sector      string `json:"sector,omitempty"`
+		CreatedAt   string `json:"created_at,omitempty"`
+		UpdatedAt   string `json:"updated_at,omitempty"`
 	}
 
 	CreateVersion struct {

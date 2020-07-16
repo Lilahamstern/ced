@@ -8,10 +8,10 @@ import (
 
 type (
 	Project struct {
-		ID        int64    `json:"id"`
-		Version   *Version `json:"version,omitempty"`
-		CreatedAt string   `json:"created_at"`
-		UpdatedAt string   `json:"updated_at"`
+		ID        int64   `json:"id"`
+		Version   Version `json:"version"`
+		CreatedAt string  `json:"created_at"`
+		UpdatedAt string  `json:"updated_at"`
 	}
 
 	CreateProject struct {
