@@ -24,7 +24,7 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 
 	err := h.repos.Project.Save(body)
 	if err != nil {
-		e := errors.E(op, errors.KindInternalServer, err)
+		e := errors.E(op, errors.KindInternalServer, err, "Internal server error")
 		c.Next(e)
 		return
 	}
@@ -37,7 +37,7 @@ func (h *Handler) GetProject(c *fiber.Ctx) {
 
 	projects, err := h.repos.Project.GetAll()
 	if err != nil {
-		e := errors.E(op, errors.KindInternalServer, err)
+		e := errors.E(op, errors.KindInternalServer, err, "Internal server error")
 		c.Next(e)
 		return
 	}
