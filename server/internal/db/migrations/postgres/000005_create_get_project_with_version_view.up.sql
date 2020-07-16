@@ -16,5 +16,5 @@ FROM (SELECT v.projectid, MAX(v.updatedat) AS updatedat
       GROUP BY v.projectid
      ) v1
          INNER JOIN version v ON v1.projectid = v.projectid AND v1.updatedat = v.updatedat
-         INNER JOIN project p ON v.projectid = p.id
+         RIGHT JOIN project p ON v.projectid = p.id
 ORDER BY v.updatedat DESC;
