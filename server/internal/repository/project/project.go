@@ -50,40 +50,17 @@ func (r *Repo) GetAll() ([]domain.Project, error) {
 // Save : saves record of project and version to database
 func (r *Repo) Save(input model.CreateProject) error {
 	const op errors.Op = "repo.project.save"
-	tx, err := r.DB.Beginx()
+
+	stmt, err := r.DB.Preparex("CALL createProjectWithVersion($1, $2, $3, $4, $5, $6, $7);")
 	if err != nil {
 		return r.Error(op, err)
 	}
 
-	projectStmt, err := tx.Preparex(`INSERT INTO project(id) VALUES ($1)`)
+	_, err = stmt.Exec(input.ID, input.Version.OrderID, input.Version.Title,
+		input.Version.Description, input.Version.Manager, input.Version.Client, input.Version.Sector)
 	if err != nil {
 		return r.Error(op, err)
 	}
-
-	_, err = projectStmt.Exec(input.ID)
-	if err != nil {
-		return r.Error(op, err)
-	}
-	projectStmt.Close()
-
-	versionStmt, err := tx.Preparex(`INSERT INTO version(projectid, orderid, title, description, manager, client, sector) 
-				VALUES($1, $2, $3, $4, $5, $6, $7)`)
-	if err != nil {
-		return r.Error(op, err)
-	}
-
-	_, err = versionStmt.Exec(input.ID, input.Version.OrderID, input.Version.Title, input.Version.Description,
-		input.Version.Manager, input.Version.Client, input.Version.Sector)
-	if err != nil {
-		return r.Error(op, err)
-	}
-	versionStmt.Close()
-
-	err = tx.Commit()
-	if err != nil {
-		return r.Error(op, err)
-	}
-
 	return nil
 }
 
