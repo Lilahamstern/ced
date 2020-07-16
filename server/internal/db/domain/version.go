@@ -26,6 +26,7 @@ func (i *Version) ToModel() *model.Version {
 			ID: "",
 		}
 	}
+
 	return &model.Version{
 		ID:          i.ID.String(),
 		OrderID:     *i.OrderID,
@@ -36,17 +37,5 @@ func (i *Version) ToModel() *model.Version {
 		Sector:      *i.Sector,
 		CreatedAt:   i.CreatedAt.String(),
 		UpdatedAt:   i.UpdatedAt.String(),
-	}
-}
-
-// NewVersion : Converts CreateVersion to Version model of domain
-func NewVersion(s model.CreateVersion) *Version {
-	return &Version{
-		OrderID:     &s.OrderID,
-		Title:       &s.Title,
-		Description: &s.Description,
-		Manager:     &s.Manager,
-		Client:      &s.Client,
-		Sector:      &s.Sector,
 	}
 }
