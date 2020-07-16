@@ -18,8 +18,8 @@ db-up:
 db-down:
 	docker-compose stop db
 
-apq-down:
-	docker-compose stop redis
+migration:
+	migrate -source file://server/internal/db/migrations/postgres -database ${CED_DB} $(ARGS)
 
 
 
