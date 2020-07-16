@@ -68,11 +68,11 @@ func Data(err error) interface{} {
 		return "Internal server error"
 	}
 
-	if e.data != nil {
-		return e.data
+	if e.data == nil {
+		return "Message not implemented"
 	}
 
-	return Data(e)
+	return e.data
 }
 
 func Kind(err error) int {
