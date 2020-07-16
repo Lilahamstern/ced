@@ -8,15 +8,12 @@ test-unit-coverage: test-unit
 generate-graphql:
 	cd server/internal/resolver && go generate
 
-stores-up: db-up apq-up
+stores-up: db-up
 
-stores-down: db-down apq-down
+stores-down: db-down
 
 db-up:
 	docker-compose up -d db
-
-apq-up:
-	docker-compose up -d redis
 
 db-down:
 	docker-compose stop db
