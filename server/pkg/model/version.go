@@ -20,12 +20,12 @@ type (
 	}
 
 	CreateVersion struct {
-		OrderID     int64  `json:"order_id"`
-		Title       string `json:"title"`
-		Description string `json:"desc"`
-		Manager     string `json:"manager"`
-		Client      string `json:"client"`
-		Sector      string `json:"sector"`
+		OrderID     int64   `json:"order_id"`
+		Title       string  `json:"title"`
+		Description *string `json:"desc"`
+		Manager     string  `json:"manager"`
+		Client      string  `json:"client"`
+		Sector      string  `json:"sector"`
 	}
 )
 
