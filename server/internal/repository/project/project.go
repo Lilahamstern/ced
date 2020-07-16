@@ -34,11 +34,10 @@ func (r *Repo) GetAll() ([]domain.Project, error) {
 	var projects []domain.Project
 	for rows.Next() {
 		var project domain.Project
-		err := rows.Scan(&project.ID, &project.CreatedAt, &project.UpdatedAt,
-			&project.Version.ID, &project.Version.OrderID, &project.Version.Title, &project.Version.Description,
-			&project.Version.Manager, &project.Version.Client, &project.Version.Sector,
-			&project.Version.CreatedAt, &project.Version.UpdatedAt)
+		err := rows.StructScan(&project)
+
 		if err != nil {
+			rows.Close()
 			return nil, r.Error(op, err)
 		}
 
