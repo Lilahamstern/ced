@@ -32,7 +32,7 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 	handler.RespondMessage(c, http.StatusCreated, "Successful creation")
 }
 
-func (h *Handler) GetProject(c *fiber.Ctx) {
+func (h *Handler) GetProjects(c *fiber.Ctx) {
 	const op errors.Op = "handler.v1.getProject"
 
 	projects, err := h.repos.Project.GetAll()

@@ -25,6 +25,10 @@ func (p *Project) ToModel() *model.Project {
 
 // ToModel : maps slice of domain project to slice of response project model
 func ToModel(projects []Project) []model.Project {
+	if projects == nil {
+		return []model.Project{}
+	}
+
 	var p []model.Project
 	for _, v := range projects {
 		p = append(p, *v.ToModel())
