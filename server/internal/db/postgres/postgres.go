@@ -26,7 +26,7 @@ func NewConnection(config *config.Config) *Session {
 	conn := config.GenerateDbUrl()
 	var db *sqlx.DB
 	var err error
-	for i := 1; i < 5; i++ {
+	for i := 1; i < 8; i++ {
 		log.Printf("Trying to connect to the database (attempt %d)", i)
 
 		db, err = sqlx.Connect("postgres", conn)
