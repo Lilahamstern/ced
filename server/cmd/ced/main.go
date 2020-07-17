@@ -16,7 +16,7 @@ func main() {
 
 	conf := config.New()
 
-	dbSession := database.NewConnection(conf)
+	dbSession := database.NewConnection(conf.GenerateDbUrl())
 	dbSession.Migrate()
 
 	validation.Register(dbSession)

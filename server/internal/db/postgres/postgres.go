@@ -7,7 +7,6 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/lilahamstern/ced/server/pkg/config"
 	"github.com/lilahamstern/ced/server/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"time"
@@ -21,15 +20,13 @@ const connectionNotEstablishedError = "Database connection is not established: %
 
 // NewConnection establish database connection depending on config
 // If connection fails reconnection will be tried maximum of 5 times
-func NewConnection(config *config.Config) *Session {
-
-	conn := config.GenerateDbUrl()
+func NewConnection(dsn string) *Session {
 	var db *sqlx.DB
 	var err error
 	for i := 1; i < 8; i++ {
 		log.Printf("Trying to connect to the database (attempt %d)", i)
 
-		db, err = sqlx.Connect("postgres", conn)
+		db, err = sqlx.Connect("postgres", dsn)
 		if err == nil {
 			break
 		}
