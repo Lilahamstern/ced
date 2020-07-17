@@ -33,7 +33,7 @@ func (h *Handler) CreateProject(c *fiber.Ctx) {
 }
 
 func (h *Handler) GetProjects(c *fiber.Ctx) {
-	const op errors.Op = "handler.v1.getProject"
+	const op errors.Op = "handler.v1.getProjects"
 
 	projects, err := h.repos.Project.GetAll()
 	if err != nil {
@@ -45,4 +45,31 @@ func (h *Handler) GetProjects(c *fiber.Ctx) {
 	res := map[string]interface{}{"projects": domain.ToModel(projects)}
 
 	handler.RespondData(c, http.StatusOK, res)
+}
+
+func (h *Handler) GetProject(c *fiber.Ctx) {
+	const op errors.Op = "handler.v1.getProject"
+	id := c.Params("id")
+	project, err := h.repos.Project.Get(id)
+	if err != nil {
+		e := errors.E(op, errors.KindInternalServer, err, "Internal Server error")
+		c.Next(e)
+		return
+	}
+
+	if project.ID == 0 {
+		handler.RespondMessage(c, http.StatusNotFound, fmt.Sprintf("Project with id %s could not be found.", id))
+		return
+	}
+
+	versions, err := h.repos.Version.GetVersionsByProjectId(id)
+	if err != nil {
+		e := errors.E(op, errors.KindInternalServer, err, "Internal Server error")
+		c.Next(e)
+		return
+	}
+
+	project.Versions = versions
+
+	handler.RespondData(c, http.StatusOK, project.ToModel())
 }

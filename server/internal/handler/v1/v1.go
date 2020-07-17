@@ -20,5 +20,6 @@ func (h *Handler) RegisterRoutes(api *fiber.Group) {
 	{
 		v1.Post("/projects", h.CreateProject)
 		v1.Get("/projects", h.GetProjects)
+		v1.Get("/projects/:id", h.GetProject)
 	}
 }

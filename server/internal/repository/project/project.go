@@ -11,10 +11,37 @@ import (
 type Repository interface {
 	Save(input model.CreateProject) error
 	GetAll() ([]domain.Project, error)
+	Get(id string) (*domain.Project, error)
 }
 
 type Repo struct {
 	DB *sqlx.DB
+}
+
+func (r *Repo) Get(id string) (*domain.Project, error) {
+	const op errors.Op = "repo.project.get"
+	query := "SELECT id AS project_id, createdat AS project_createdat, updatedat AS project_updatedAt FROM project WHERE id = $1"
+
+	stmt, err := r.DB.Preparex(query)
+	if err != nil {
+		return nil, r.Error(op, err)
+	}
+
+	rows, err := stmt.Queryx(id)
+	if err != nil {
+		return nil, r.Error(op, err)
+	}
+
+	var project domain.Project
+	for rows.Next() {
+		err := rows.StructScan(&project)
+		if err != nil {
+			rows.Close()
+			return nil, r.Error(op, err)
+		}
+	}
+
+	return &project, nil
 }
 
 func (r *Repo) GetAll() ([]domain.Project, error) {
@@ -25,6 +52,7 @@ func (r *Repo) GetAll() ([]domain.Project, error) {
 	if err != nil {
 		return nil, r.Error(op, err)
 	}
+	defer stmt.Close()
 
 	rows, err := stmt.Queryx()
 	if err != nil {
@@ -55,6 +83,7 @@ func (r *Repo) Save(input model.CreateProject) error {
 	if err != nil {
 		return r.Error(op, err)
 	}
+	defer stmt.Close()
 
 	_, err = stmt.Exec(input.ID, input.Version.OrderID, input.Version.Title,
 		input.Version.Description, input.Version.Manager, input.Version.Client, input.Version.Sector)
