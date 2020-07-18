@@ -1,0 +1,14 @@
+{
+  "port": 8080,
+  "debug": true,
+  "database": {
+    "host": "localhost",
+    "port": "5440",
+    "name": "ced",
+    "user": "admin",
+    "pass": "secret",
+    "flags": "sslmode=disable",
+    "maxConn": 25,
+    "maxIdle": 25
+  }
+}

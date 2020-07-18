@@ -1,33 +1,42 @@
 package main
 
 import (
-	database "github.com/lilahamstern/ced/server/internal/pkg/db/postgres"
-	"github.com/lilahamstern/ced/server/internal/pkg/repository"
-	"github.com/lilahamstern/ced/server/internal/pkg/server"
-	"github.com/lilahamstern/ced/server/internal/resolver"
+	"fmt"
+	"github.com/lilahamstern/ced/server/internal/repository/database"
+	"github.com/lilahamstern/ced/server/internal/server"
 	"github.com/lilahamstern/ced/server/pkg/config"
-	"github.com/lilahamstern/ced/server/pkg/service"
+	"github.com/lilahamstern/ced/server/pkg/validation"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"os"
 )
 
 func main() {
-	conf := config.NewConfig()
+	config.Load()
+	port := viper.GetInt("port")
 
-	dbSession := database.NewDatabaseConnection(conf)
-	dbSession.Migrate()
-
-	srv := server.NewHttpServer(conf)
-
-	registerResolvers(dbSession)
-
-	srv.Start()
-	srv.SafeShutDown()
+	if err := run(port); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
 }
 
-func registerResolvers(db *database.Session) {
-	projectRepository := repository.NewProjectRepository(db.DB)
-	versionRepository := repository.NewVersionRepository(db.DB)
-	projectService := service.NewProjectService(projectRepository)
-	versionService := service.NewVersionService(versionRepository, projectRepository)
+func run(port int) error {
+	log := logrus.New()
+	log.Out = os.Stdout
 
-	resolver.NewResolver(projectService, versionService)
+	db, dbtidy, err := database.SetupDatabase()
+	if err != nil {
+		return errors.Wrap(err, "setup database")
+	}
+	defer dbtidy()
+
+	s := server.NewServer(db)
+
+	validation.RegisterValidation(db)
+
+	s.Start(port)
+	s.SafeShutDown()
+	return nil
 }

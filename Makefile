@@ -5,21 +5,21 @@ test-unit:
 test-unit-coverage: test-unit
 	cd server && go tool cover -html=cp.out
 
-stores-up: db-up apq-up
+generate-graphql:
+	cd server/internal/resolver && go generate
 
-stores-down: db-down apq-down
+stores-up: db-up
+
+stores-down: db-down
 
 db-up:
 	docker-compose up -d db
 
-apq-up:
-	docker-compose up -d redis
-
 db-down:
 	docker-compose stop db
 
-apq-down:
-	docker-compose stop redis
+migration:
+	migrate -source file://server/internal/db/migrations/postgres -database ${CED_DB} $(ARGS)
 
 
 
