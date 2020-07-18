@@ -1,4 +1,4 @@
-package model
+package request
 
 import (
 	"github.com/lilahamstern/ced/server/pkg/validation"
@@ -6,19 +6,10 @@ import (
 	"net/url"
 )
 
-type (
-	Project struct {
-		ID        int64     `json:"id"`
-		Versions  []Version `json:"versions"`
-		CreatedAt string    `json:"created_at"`
-		UpdatedAt string    `json:"updated_at"`
-	}
-
-	CreateProject struct {
-		ID      int64         `json:"id"`
-		Version CreateVersion `json:"version"`
-	}
-)
+type CreateProject struct {
+	ID      int64         `json:"id"`
+	Version CreateVersion `json:"version"`
+}
 
 // Validate : Validates CreateInformation struct to match requirements to create record
 func (s *CreateProject) Validate() url.Values {
@@ -27,7 +18,7 @@ func (s *CreateProject) Validate() url.Values {
 	}
 
 	messages := govalidator.MapData{
-		"id": []string{"min:The id field cannot be less then 8 numbers"},
+		"id": []string{"min:The id field cannot be less then 8 numbers,unique:Project id already exists"},
 	}
 
 	opts := govalidator.Options{
