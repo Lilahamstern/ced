@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"github.com/lilahamstern/ced/server/pkg/model"
+	"github.com/lilahamstern/ced/server/pkg/model/response"
 	"time"
 )
 
@@ -15,10 +15,10 @@ type Project struct {
 }
 
 // ToModel : will map database model of project to request model of project
-func (p *Project) ToModel() *model.Project {
-	versions := []model.Version{}
+func (p *Project) ToModel() *response.Project {
+	versions := []response.Version{}
 	// If len(versions) is greater then 0, map values to versions
-	if len(p.Versions) != 0 {
+	if p.Versions != nil {
 		for _, v := range p.Versions {
 			versions = append(versions, *v.ToModel())
 		}
@@ -28,7 +28,7 @@ func (p *Project) ToModel() *model.Project {
 		versions = append(versions, *p.Version.ToModel())
 	}
 
-	return &model.Project{
+	return &response.Project{
 		ID:        p.ID,
 		Versions:  versions,
 		CreatedAt: p.CreatedAt.String(),
@@ -37,12 +37,12 @@ func (p *Project) ToModel() *model.Project {
 }
 
 // ToModel : maps slice of domain project to slice of response project model
-func ToModel(projects []Project) []model.Project {
+func ToModel(projects []Project) []response.Project {
 	if projects == nil {
-		return []model.Project{}
+		return []response.Project{}
 	}
 
-	var p []model.Project
+	var p []response.Project
 	for _, v := range projects {
 		p = append(p, *v.ToModel())
 	}

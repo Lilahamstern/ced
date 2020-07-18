@@ -2,7 +2,7 @@ package domain
 
 import (
 	"github.com/google/uuid"
-	"github.com/lilahamstern/ced/server/pkg/model"
+	"github.com/lilahamstern/ced/server/pkg/model/response"
 	"time"
 )
 
@@ -20,18 +20,18 @@ type Version struct {
 }
 
 // ToModel : maps database model of Version to request model of Version
-func (i *Version) ToModel() *model.Version {
+func (i *Version) ToModel() *response.Version {
 	if i.ID == nil {
-		return &model.Version{
+		return &response.Version{
 			ID: "",
 		}
 	}
 
-	return &model.Version{
+	return &response.Version{
 		ID:          i.ID.String(),
 		OrderID:     *i.OrderID,
 		Title:       *i.Title,
-		Description: *i.Description,
+		Description: i.Description,
 		Manager:     *i.Manager,
 		Client:      *i.Client,
 		Sector:      *i.Sector,

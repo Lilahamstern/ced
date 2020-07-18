@@ -1,28 +1,28 @@
-package project
+package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/lilahamstern/ced/server/internal/db/domain"
+	"github.com/lilahamstern/ced/server/internal/repository/domain"
 	"github.com/lilahamstern/ced/server/pkg/errors"
-	"github.com/lilahamstern/ced/server/pkg/model"
+	"github.com/lilahamstern/ced/server/pkg/model/request"
 	log "github.com/sirupsen/logrus"
 )
 
-type Repository interface {
-	Save(input model.CreateProject) error
+type ProjectRepository interface {
+	Save(input request.CreateProject) error
 	GetAll() ([]domain.Project, error)
 	Get(id string) (*domain.Project, error)
 }
 
-type Repo struct {
-	DB *sqlx.DB
+type project struct {
+	db *sqlx.DB
 }
 
-func (r *Repo) Get(id string) (*domain.Project, error) {
+func (r *project) Get(id string) (*domain.Project, error) {
 	const op errors.Op = "repo.project.get"
 	query := "SELECT id AS project_id, createdat AS project_createdat, updatedat AS project_updatedAt FROM project WHERE id = $1"
 
-	stmt, err := r.DB.Preparex(query)
+	stmt, err := r.db.Preparex(query)
 	if err != nil {
 		return nil, r.Error(op, err)
 	}
@@ -44,11 +44,11 @@ func (r *Repo) Get(id string) (*domain.Project, error) {
 	return &project, nil
 }
 
-func (r *Repo) GetAll() ([]domain.Project, error) {
+func (r *project) GetAll() ([]domain.Project, error) {
 	const op errors.Op = "repo.project.getAll"
 	query := "SELECT * FROM get_projects_with_latest_version_view"
 
-	stmt, err := r.DB.Preparex(query)
+	stmt, err := r.db.Preparex(query)
 	if err != nil {
 		return nil, r.Error(op, err)
 	}
@@ -76,10 +76,10 @@ func (r *Repo) GetAll() ([]domain.Project, error) {
 }
 
 // Save : saves record of project and version to database
-func (r *Repo) Save(input model.CreateProject) error {
+func (r *project) Save(input request.CreateProject) error {
 	const op errors.Op = "repo.project.save"
 
-	stmt, err := r.DB.Preparex("CALL createProjectWithVersion($1, $2, $3, $4, $5, $6, $7);")
+	stmt, err := r.db.Preparex("CALL createProjectWithVersion($1, $2, $3, $4, $5, $6, $7);")
 	if err != nil {
 		return r.Error(op, err)
 	}
@@ -93,12 +93,6 @@ func (r *Repo) Save(input model.CreateProject) error {
 	return nil
 }
 
-func New(db *sqlx.DB) Repository {
-	return &Repo{
-		db,
-	}
-}
-
-func (r Repo) Error(op errors.Op, err error) error {
-	return errors.E(op, err, errors.KindInternalServer, log.WarnLevel)
+func (r project) Error(op errors.Op, err error) error {
+	return errors.E(op, err, errors.KindError, log.WarnLevel)
 }

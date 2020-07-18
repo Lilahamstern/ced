@@ -9,19 +9,19 @@ type (
 	Op string
 
 	Error struct {
-		kind  int
-		op    Op
-		err   error
-		level logrus.Level
-		data  interface{}
+		op     Op
+		kind   string
+		status int
+		err    error
+		level  logrus.Level
+		data   interface{}
 	}
 )
 
 const (
-	KindNotFound       int = http.StatusNotFound
-	KindInternalServer int = http.StatusInternalServerError
-	KindAlreadyExists  int = http.StatusConflict
-	KindValidation     int = http.StatusBadRequest
+	KindSuccess string = "success"
+	KindFail    string = "fail"
+	KindError   string = "error"
 )
 
 func (e *Error) Error() string {
@@ -35,22 +35,28 @@ func (e *Error) Ops() []Op {
 	return Ops(e)
 }
 
-func (e *Error) Data() interface{} {
-	return Data(e)
+func (e *Error) Kind() string {
+	return Kind(e)
 }
 
-func (e *Error) Kind() int {
-	return Kind(e)
+func (e *Error) Status() int {
+	return Status(e)
+}
+
+func (e *Error) Data() interface{} {
+	return Data(e)
 }
 
 func E(args ...interface{}) *Error {
 	e := &Error{}
 	for _, arg := range args {
 		switch arg := arg.(type) {
-		case int:
+		case string:
 			e.kind = arg
 		case Op:
 			e.op = arg
+		case int:
+			e.status = arg
 		case error:
 			e.err = arg
 		case logrus.Level:
@@ -75,13 +81,13 @@ func Data(err error) interface{} {
 	return e.data
 }
 
-func Kind(err error) int {
+func Kind(err error) string {
 	e, ok := err.(*Error)
 	if !ok {
-		return KindInternalServer
+		return KindError
 	}
 
-	if e.kind != 0 {
+	if e.kind != "" {
 		return e.kind
 	}
 
@@ -99,6 +105,15 @@ func Ops(e *Error) []Op {
 	res = append(res, Ops(subErr)...)
 
 	return res
+}
+
+func Status(err error) int {
+	e, ok := err.(*Error)
+	if !ok {
+		return http.StatusInternalServerError
+	}
+
+	return e.status
 }
 
 func Level(err error) logrus.Level {
