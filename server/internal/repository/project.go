@@ -32,7 +32,7 @@ func (r *project) Get(id string) (*domain.Project, error) {
 		return nil, r.Error(op, err)
 	}
 
-	var project domain.Project
+	var project *domain.Project = nil
 	for rows.Next() {
 		err := rows.StructScan(&project)
 		if err != nil {
@@ -41,7 +41,7 @@ func (r *project) Get(id string) (*domain.Project, error) {
 		}
 	}
 
-	return &project, nil
+	return project, nil
 }
 
 func (r *project) GetAll() ([]domain.Project, error) {

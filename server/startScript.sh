@@ -16,7 +16,8 @@ runServer() {
   killall dlv
   killall server
   log "Run in debug mode"
-  dlv --listen=:40000 --headless=true --log --api-version=2 --accept-multiclient exec /server
+  #dlv debug --headless --log -l 0.0.0.0:2345 --api-version=2 --accept-multiclient exec /server
+  dlv -l 0.0.0.0:2345 --headless --api-version=2 --accept-multiclient exec /server &
 }
 
 rerunServer() {
@@ -27,10 +28,11 @@ rerunServer() {
 
 liveReloading() {
   log "Run liveReloading"
-  inotifywait -e "MODIFY,DELETE,MOVED_TO,MOVED_FROM" -m -r --include '.go$' /server | (
+  inotifywait -e "MODIFY,DELETE,MOVED_TO,MOVED_FROM" -m -r --include '.go$' /go/src/github.com/lilahamstern/ced/server/ | (
     # read changes from inotify, batch results to a second (read -t 1)
     while true; do
       read path action file
+      echo "Test"
       ext=${file: -3}
       if [[ "$ext" == ".go" ]]; then
         echo "$file"

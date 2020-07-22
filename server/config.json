@@ -1,17 +1,14 @@
 {
-  "port": ":8080",
+  "port": ":5000",
   "debug": true,
   "database": {
-    "host": "db",
-    "port": "5432",
+    "host": "localhost",
+    "port": "5440",
     "name": "ced",
     "user": "admin",
     "pass": "secret",
     "flags": "sslmode=disable",
     "maxConn": 25,
     "maxIdle": 25
-  },
-  "sentry": {
-    "dsn": "http://5ba55ecf82fc43d7abcd3b982088c995@localhost:8000/1"
   }
 }

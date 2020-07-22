@@ -21,5 +21,5 @@ CMD if [ ${APP_ENV} = production ]; \
 	else \
 	sh startScript.sh; \
 	fi
-EXPOSE 8080
-EXPOSE 8000 40000
+
+EXPOSE 8000 2345

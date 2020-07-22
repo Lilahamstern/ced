@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -9,7 +11,6 @@ import (
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 type database struct {
@@ -28,7 +29,7 @@ func SetupDatabase() (*sqlx.DB, func(), error) {
 	if err = db.Migrate(); err != nil {
 		return nil, nil, err
 	}
-	log.Println("Migrated database...")
+	log.Println("Migrated database..")
 
 	tidy := func() {
 		if err := db.DB.Close(); err != nil {
@@ -44,14 +45,10 @@ func connect(dsn string) (*database, error) {
 	var err error
 
 	for i := 1; i < 8; i++ {
-		log.Printf("Trying to connect to the database (attempt %d)\n", i)
-
 		db, err = sqlx.Connect("postgres", dsn)
 		if err == nil {
 			break
 		}
-
-		log.Printf("Error: %v\n", err)
 
 		time.Sleep(time.Duration(i*i) * time.Second)
 	}
