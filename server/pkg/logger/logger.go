@@ -6,18 +6,9 @@ import (
 	"os"
 )
 
-func Register() error {
+func Register() {
 	l := log.New()
-	file, err := os.OpenFile("log.log", os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-	l.SetOutput(file)
-	l.SetFormatter(&log.JSONFormatter{})
-
-	return nil
+	l.SetOutput(os.Stdout)
 }
 
 func SystemErr(err error) {

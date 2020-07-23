@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/lilahamstern/ced/server/pkg/logger"
+	"github.com/lilahamstern/ced/server/pkg/logger/sentry"
 	"os"
 
 	"github.com/lilahamstern/ced/server/internal/repository/database"
@@ -22,9 +23,13 @@ func main() {
 }
 
 func run() error {
-	if err := logger.Register(); err != nil {
-		return errors.Wrap(err, "Register logger")
+	logger.Register()
+
+	sentrytidy, err := sentry.Register()
+	if err != nil {
+		return errors.Wrap(err, "Sentry register")
 	}
+	defer sentrytidy()
 
 	db, dbtidy, err := database.SetupDatabase()
 	if err != nil {

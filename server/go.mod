@@ -3,6 +3,7 @@ module github.com/lilahamstern/ced/server
 go 1.14
 
 require (
+	github.com/getsentry/sentry-go v0.7.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.3.0 // indirect
 	github.com/golang-migrate/migrate/v4 v4.11.0
