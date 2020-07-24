@@ -12,6 +12,6 @@
     "maxIdle": 25
   },
   "sentry": {
-    "dsn": "https://e141fafca39e4776be159f592f06fab0@o422459.ingest.sentry.io/5348966"
+    "dsn": "DSN do you get from your sentry instace"
   }
 }
