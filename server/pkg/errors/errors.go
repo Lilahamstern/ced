@@ -6,24 +6,25 @@ import (
 
 type (
 	// Op : Operation string for custom stack traces
-	Op string
+	Op     string
+	Status string
 	// Error : Error struct for custom errors better logging
 	Error struct {
-		op   Op
-		kind string
-		code int
-		err  error
-		data interface{}
+		op     Op
+		status Status
+		code   int
+		err    error
+		data   interface{}
 	}
 )
 
 const (
 	// KindSuccess : Code success
-	KindSuccess string = "success"
+	KindSuccess Status = "success"
 	// KindFail : Code fail
-	KindFail string = "fail"
+	KindFail Status = "fail"
 	// KindError : Code error
-	KindError string = "error"
+	KindError Status = "error"
 )
 
 func (e *Error) Error() string {
@@ -39,9 +40,9 @@ func (e *Error) Ops() []Op {
 	return Ops(e)
 }
 
-// Kind : Get error kind
-func (e *Error) Kind() string {
-	return Kind(e)
+// Status : Get error kind
+func (e *Error) Status() Status {
+	return status(e)
 }
 
 // Code : Get error code
@@ -59,8 +60,8 @@ func E(args ...interface{}) *Error {
 	e := &Error{}
 	for _, arg := range args {
 		switch arg := arg.(type) {
-		case string:
-			e.kind = arg
+		case Status:
+			e.status = arg
 		case Op:
 			e.op = arg
 		case int:
@@ -88,18 +89,17 @@ func Data(err error) interface{} {
 	return Data(e.err)
 }
 
-// Kind : Get error kind
-func Kind(err error) string {
+func status(err error) Status {
 	e, ok := err.(*Error)
 	if !ok {
 		return KindError
 	}
 
-	if e.kind != "" {
-		return e.kind
+	if e.status != "" {
+		return e.status
 	}
 
-	return Kind(e.err)
+	return status(e.err)
 }
 
 // Ops : Get error operations
@@ -124,4 +124,8 @@ func Code(err error) int {
 	}
 
 	return e.code
+}
+
+func (s Status) String() string {
+	return string(s)
 }

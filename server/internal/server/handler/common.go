@@ -2,12 +2,13 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/lilahamstern/ced/server/pkg/errors"
 	"github.com/lilahamstern/ced/server/pkg/model/response"
 )
 
-func RespondJSON(c *gin.Context, status int, kind string, payload interface{}) {
+func RespondJSON(c *gin.Context, code int, status errors.Status, payload interface{}) {
 	res := response.Response{
-		Kind: kind,
+		Status: status.String(),
 	}
 
 	switch payload.(type) {
@@ -19,5 +20,5 @@ func RespondJSON(c *gin.Context, status int, kind string, payload interface{}) {
 		res.Data = payload
 	}
 
-	c.JSON(status, res)
+	c.JSON(code, res)
 }

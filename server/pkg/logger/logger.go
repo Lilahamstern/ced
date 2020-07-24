@@ -24,7 +24,7 @@ func SystemErr(err error) {
 		"status":     e.Code(),
 	})
 
-	switch e.Kind() {
+	switch e.Status() {
 	case errors.KindSuccess:
 		entry.Infof("%s: %v", e.Ops(), err)
 	case errors.KindFail:

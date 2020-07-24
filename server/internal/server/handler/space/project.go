@@ -85,9 +85,11 @@ func (h *Handler) handleProjectGet() gin.HandlerFunc {
 			return
 		}
 
-		if project == nil {
+		if project.ID == 0 {
 			message := fmt.Sprintf("Project with id %s could not be found.", id)
-			handler.RespondJSON(c, http.StatusNotFound, KindFail, message)
+			e := E(op, http.StatusNotFound, KindFail, message)
+			c.Error(e)
+			c.Next()
 			return
 		}
 

@@ -1,13 +1,14 @@
 package server
 
 import (
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/lilahamstern/ced/server/internal/repository"
 	"github.com/lilahamstern/ced/server/internal/server/handler/middleware"
 	"github.com/lilahamstern/ced/server/internal/server/handler/space"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 )
 
 type Server struct {
@@ -26,6 +27,10 @@ func NewServer(db *sqlx.DB) *Server {
 func (s *Server) routes() {
 	s.router.Use(gin.Recovery())
 	s.router.Use(gin.Logger())
+	s.router.Use(sentrygin.New(sentrygin.Options{
+		Repanic: true,
+	}))
+
 	s.router.Use(middleware.ErrorHandler())
 
 	spaceHandler := &space.Handler{
