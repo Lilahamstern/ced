@@ -15,6 +15,7 @@ type Version struct {
 	Manager     *string    `db:"version_manager"`
 	Client      *string    `db:"version_client"`
 	Sector      *string    `db:"version_sector"`
+	Co          int        `db:"version_co"`
 	CreatedAt   *time.Time `db:"version_createdat"`
 	UpdatedAt   *time.Time `db:"version_updatedat"`
 }
@@ -35,6 +36,7 @@ func (i *Version) ToModel() *response.Version {
 		Manager:     *i.Manager,
 		Client:      *i.Client,
 		Sector:      *i.Sector,
+		Co:          i.Co,
 		CreatedAt:   i.CreatedAt.String(),
 		UpdatedAt:   i.UpdatedAt.String(),
 	}
