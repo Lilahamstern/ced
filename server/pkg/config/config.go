@@ -13,9 +13,10 @@ func Load() {
 	viper.SetConfigType("json")
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Error("Config file could not load: %s", err.Error())
+		log.Errorf("Config file could not load: %s", err.Error())
+		return
 	}
-	log.Infof("Config loaded in successfully!")
+	log.Info("Config loaded in successfully!")
 }
 
 // GenerateDsn : generates database dsn from environment variables
