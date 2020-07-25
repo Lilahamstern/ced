@@ -1,66 +1,73 @@
 package errors
 
 import (
-	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 type (
-	Op string
-
+	// Op : Operation string for custom stack traces
+	Op     string
+	Status string
+	// Error : Error struct for custom errors better logging
 	Error struct {
 		op     Op
-		kind   string
-		status int
+		status Status
+		code   int
 		err    error
-		level  logrus.Level
 		data   interface{}
 	}
 )
 
 const (
-	KindSuccess string = "success"
-	KindFail    string = "fail"
-	KindError   string = "error"
+	// KindSuccess : Code success
+	KindSuccess Status = "success"
+	// KindFail : Code fail
+	KindFail Status = "fail"
+	// KindError : Code error
+	KindError Status = "error"
 )
 
 func (e *Error) Error() string {
 	if e.err != nil {
 		return e.err.Error()
 	}
+
 	return ""
 }
 
+// Ops : Get operations in error
 func (e *Error) Ops() []Op {
 	return Ops(e)
 }
 
-func (e *Error) Kind() string {
-	return Kind(e)
+// Status : Get error kind
+func (e *Error) Status() Status {
+	return status(e)
 }
 
-func (e *Error) Status() int {
-	return Status(e)
+// Code : Get error code
+func (e *Error) Code() int {
+	return Code(e)
 }
 
+// Data : Get error data
 func (e *Error) Data() interface{} {
 	return Data(e)
 }
 
+// E : Generate new error
 func E(args ...interface{}) *Error {
 	e := &Error{}
 	for _, arg := range args {
 		switch arg := arg.(type) {
-		case string:
-			e.kind = arg
+		case Status:
+			e.status = arg
 		case Op:
 			e.op = arg
 		case int:
-			e.status = arg
+			e.code = arg
 		case error:
 			e.err = arg
-		case logrus.Level:
-			e.level = arg
 		case interface{}:
 			e.data = arg
 		}
@@ -68,32 +75,34 @@ func E(args ...interface{}) *Error {
 	return e
 }
 
+// Data : Get error data
 func Data(err error) interface{} {
 	e, ok := err.(*Error)
 	if !ok {
 		return "Internal server error"
 	}
 
-	if e.data == nil {
-		return "Message not implemented"
+	if e.data != nil {
+		return e.data
 	}
 
-	return e.data
+	return Data(e.err)
 }
 
-func Kind(err error) string {
+func status(err error) Status {
 	e, ok := err.(*Error)
 	if !ok {
 		return KindError
 	}
 
-	if e.kind != "" {
-		return e.kind
+	if e.status != "" {
+		return e.status
 	}
 
-	return Kind(e.err)
+	return status(e.err)
 }
 
+// Ops : Get error operations
 func Ops(e *Error) []Op {
 	res := []Op{e.op}
 
@@ -107,20 +116,16 @@ func Ops(e *Error) []Op {
 	return res
 }
 
-func Status(err error) int {
+// Code : Get error code
+func Code(err error) int {
 	e, ok := err.(*Error)
 	if !ok {
 		return http.StatusInternalServerError
 	}
 
-	return e.status
+	return e.code
 }
 
-func Level(err error) logrus.Level {
-	e, ok := err.(*Error)
-	if !ok {
-		return 0
-	}
-
-	return e.level
+func (s Status) String() string {
+	return string(s)
 }

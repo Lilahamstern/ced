@@ -1,76 +1,53 @@
 package server
 
 import (
-	"github.com/gofiber/fiber"
-	"github.com/gofiber/fiber/middleware"
+	sentrygin "github.com/getsentry/sentry-go/gin"
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/lilahamstern/ced/server/internal/repository"
-	"github.com/lilahamstern/ced/server/internal/server/handler"
+	"github.com/lilahamstern/ced/server/internal/server/handler/middleware"
 	"github.com/lilahamstern/ced/server/internal/server/handler/space"
 	log "github.com/sirupsen/logrus"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
+	"github.com/spf13/viper"
 )
 
 type Server struct {
-	db  *sqlx.DB
-	app *fiber.App
+	db     *sqlx.DB
+	router *gin.Engine
 }
 
 func NewServer(db *sqlx.DB) *Server {
-	app := fiber.New(&fiber.Settings{
-		ErrorHandler:          handler.ErrorHandler,
-		StrictRouting:         true,
-		DisableStartupMessage: false,
-		ReadTimeout:           5 * time.Second,
-		WriteTimeout:          5 * time.Second,
-	})
-	s := &Server{db, app}
+	r := gin.New()
+	s := &Server{db, r}
 	s.routes()
 
 	return s
 }
 
 func (s *Server) routes() {
-	s.app.Use(middleware.Recover())
-	s.app.Use(middleware.Logger(middleware.LoggerConfig{
-		Format:     "${time} ${method} ${path} - ${ip} - ${status} - ${latency}\n",
-		TimeFormat: "15:04:05",
+	s.router.Use(gin.Recovery())
+	s.router.Use(gin.Logger())
+	s.router.Use(sentrygin.New(sentrygin.Options{
+		Repanic: true,
 	}))
+
+	s.router.Use(middleware.ErrorHandler())
 
 	spaceHandler := &space.Handler{
 		Repos: repository.New(s.db),
 	}
 
-	api := s.app.Group("/api")
-	{
-		spaceHandler.Routes(api.Group("/space"))
-	}
+	api := s.router.Group("/api")
+
+	spaceHandler.Routes(api.Group("/space"))
+
 }
 
-func (s *Server) Start(port int) {
-	go func() {
-		log.Println("Starting server")
-		log.Printf("Server started! Visit http://localhost:%v/ for documentation!", port)
-		if err := s.app.Listen(port); err != nil {
-			log.Fatal(err)
-		}
-	}()
-}
-
-func (s *Server) SafeShutDown() {
-	interruptChan := make(chan os.Signal, 1)
-	signal.Notify(interruptChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-	// Block until signal is received
-	<-interruptChan
-
-	if err := s.app.Shutdown(); err != nil {
-		log.Fatal(err)
+func (s *Server) Start() {
+	port := viper.GetString("port")
+	log.Println("Starting server")
+	log.Printf("Server started! Visit http://localhost:%v/ for documentation!", port)
+	if err := s.router.Run(port); err != nil {
+		log.Fatalln(err)
 	}
-
-	log.Println("Shutting down server...")
-	os.Exit(0)
 }

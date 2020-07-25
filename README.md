@@ -51,6 +51,7 @@ You can access the API on `localhost:{port}/api/space/{endpoints}`
 - [Golang](https://golang.org) - Language used on the backend
 - [Docker](https://www.docker.com/) - Used to run development containers and publish docker images
 - [PostgreSQL](https://www.postgresql.org) - Database
+- [Sentry](https://sentry.io) - External logging and monitoring.
 
 ## Contributing
 

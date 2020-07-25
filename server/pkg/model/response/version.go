@@ -8,6 +8,7 @@ type Version struct {
 	Manager     string  `json:"manager,omitempty"`
 	Client      string  `json:"client,omitempty"`
 	Sector      string  `json:"sector,omitempty"`
+	Co          int     `json:"co"`
 	CreatedAt   string  `json:"created_at,omitempty"`
 	UpdatedAt   string  `json:"updated_at,omitempty"`
 }

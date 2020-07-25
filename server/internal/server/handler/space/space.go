@@ -1,7 +1,7 @@
 package space
 
 import (
-	"github.com/gofiber/fiber"
+	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/ced/server/internal/repository"
 )
 
@@ -9,8 +9,8 @@ type Handler struct {
 	Repos *repository.Repositories
 }
 
-func (h *Handler) Routes(space *fiber.Group) {
-	space.Post("/projects", h.handleProjectCreate())
-	space.Get("/projects", h.handleProjectGetAll())
-	space.Get("/projects/:id", h.handleProjectGet())
+func (h *Handler) Routes(space *gin.RouterGroup) {
+	space.POST("/projects", h.handleProjectCreate())
+	space.GET("/projects", h.handleProjectGetAll())
+	space.GET("/projects/:id", h.handleProjectGet())
 }

@@ -3,30 +3,34 @@ package logger
 import (
 	"github.com/lilahamstern/ced/server/pkg/errors"
 	log "github.com/sirupsen/logrus"
+	"os"
 )
 
+func Register() {
+	l := log.New()
+	l.SetOutput(os.Stdout)
+}
+
 func SystemErr(err error) {
-	sysErr, ok := err.(*errors.Error)
+	e, ok := err.(*errors.Error)
 	if !ok {
 		Error(err)
 		return
 	}
 
 	entry := log.WithFields(log.Fields{
-		"operations": errors.Ops(sysErr),
-		"kind":       errors.Kind(sysErr),
-		"data":       errors.Data(sysErr),
+		"operations": e.Ops(),
+		"data":       e.Data(),
+		"status":     e.Code(),
 	})
 
-	switch errors.Level(err) {
-	case log.WarnLevel:
-		entry.Warnf("%s: %v", sysErr.Ops(), err)
-	case log.InfoLevel:
-		entry.Infof("%s: %v", sysErr.Ops(), err)
-	case log.DebugLevel:
-		entry.Debugf("%s: %v", sysErr.Ops(), err)
+	switch e.Status() {
+	case errors.KindSuccess:
+		entry.Infof("%s: %v", e.Ops(), err)
+	case errors.KindFail:
+		entry.Warnf("%s: %v", e.Ops(), err)
 	default:
-		entry.Errorf("%s: %v", sysErr.Ops(), err)
+		entry.Errorf("%s: %v", e.Ops(), err)
 	}
 }
 

@@ -2,7 +2,7 @@ package space
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber"
+	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/ced/server/internal/repository/domain"
 	"github.com/lilahamstern/ced/server/internal/server/handler"
 	. "github.com/lilahamstern/ced/server/pkg/errors"
@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func (h *Handler) handleProjectCreate() fiber.Handler {
+func (h *Handler) handleProjectCreate() gin.HandlerFunc {
 	const op Op = "handler.space.handleProjectCreate"
 
 	type response struct {
@@ -19,19 +19,21 @@ func (h *Handler) handleProjectCreate() fiber.Handler {
 	}
 
 	var body request.CreateProject
-	return func(c *fiber.Ctx) {
-		_ = c.BodyParser(&body)
+	return func(c *gin.Context) {
+		_ = c.BindJSON(&body)
 
 		if res := body.Validate(); res != nil {
 			e := E(op, http.StatusBadRequest, KindFail, errors.New("validation failed"), res)
-			c.Next(e)
+			c.Error(e)
+			c.Next()
 			return
 		}
 
 		err := h.Repos.Project.Save(body)
 		if err != nil {
-			e := E(op, http.StatusInternalServerError, err, "Internal server error")
-			c.Next(e)
+			e := E(op, err, KindError)
+			c.Error(e)
+			c.Next()
 			return
 		}
 
@@ -42,18 +44,19 @@ func (h *Handler) handleProjectCreate() fiber.Handler {
 	}
 }
 
-func (h *Handler) handleProjectGetAll() fiber.Handler {
+func (h *Handler) handleProjectGetAll() gin.HandlerFunc {
 	const op Op = "handler.space.handleProjectGetAll"
 
 	type Response struct {
 		Projects interface{} `json:"projects"`
 	}
 
-	return func(c *fiber.Ctx) {
+	return func(c *gin.Context) {
 		projects, err := h.Repos.Project.GetAll()
 		if err != nil {
-			e := E(op, err, "Internal server error")
-			c.Next(e)
+			e := E(op, err, KindError)
+			c.Error(e)
+			c.Next()
 			return
 		}
 
@@ -65,32 +68,36 @@ func (h *Handler) handleProjectGetAll() fiber.Handler {
 	}
 }
 
-func (h *Handler) handleProjectGet() fiber.Handler {
+func (h *Handler) handleProjectGet() gin.HandlerFunc {
 	const op Op = "handler.space.handleProjectGet"
 
 	type Response struct {
 		Project interface{} `json:"project"`
 	}
-	return func(c *fiber.Ctx) {
-		id := c.Params("id")
+	return func(c *gin.Context) {
+		id := c.Param("id")
 
 		project, err := h.Repos.Project.Get(id)
 		if err != nil {
-			e := E(op, err, "Internal Server error")
-			c.Next(e)
+			e := E(op, err, KindError)
+			c.Error(e)
+			c.Next()
 			return
 		}
 
-		if project == nil {
+		if project.ID == 0 {
 			message := fmt.Sprintf("Project with id %s could not be found.", id)
-			handler.RespondJSON(c, http.StatusNotFound, KindFail, message)
+			e := E(op, http.StatusNotFound, KindFail, message)
+			c.Error(e)
+			c.Next()
 			return
 		}
 
 		versions, err := h.Repos.Version.GetVersionsByProjectId(id)
 		if err != nil {
-			e := E(op, err, "Internal Server error")
-			c.Next(e)
+			e := E(op, err, KindError)
+			c.Error(e)
+			c.Next()
 		}
 
 		project.Versions = versions
