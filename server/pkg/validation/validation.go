@@ -3,10 +3,11 @@ package validation
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
 	"github.com/thedevsaddam/govalidator"
-	"strings"
 )
 
 var db *sqlx.DB
@@ -36,10 +37,12 @@ func unique(field string, rule string, message string, value interface{}) error 
 	return nil
 }
 
+// RegisterValidation : Database instace
 func RegisterValidation(DB *sqlx.DB) {
 	db = DB
 }
 
+// UniqueRecord : Check if `data` by `field` and `table` does not exists.
 func UniqueRecord(table string, field string, data interface{}) (bool, error) {
 	query := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM %s WHERE %s=$1)", table, field)
 	stmt, err := db.Preparex(query)

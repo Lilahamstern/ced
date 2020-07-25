@@ -1,10 +1,12 @@
 package validation
 
 import (
-	"github.com/thedevsaddam/govalidator"
 	"net/url"
+
+	"github.com/thedevsaddam/govalidator"
 )
 
+// Validate : Validate struct by options.
 func Validate(opts govalidator.Options) url.Values {
 	v := govalidator.New(opts)
 	e := v.ValidateStruct()
@@ -15,6 +17,7 @@ func Validate(opts govalidator.Options) url.Values {
 	return e
 }
 
+// MergeErrors : Takes a list of `url.Values` merge them together when multiple validations occuerr.
 func MergeErrors(values ...url.Values) url.Values {
 	out := url.Values{}
 
