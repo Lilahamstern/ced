@@ -5,9 +5,6 @@ test-unit:
 test-unit-coverage: test-unit
 	cd server && go tool cover -html=cp.out
 
-generate-graphql:
-	cd server/internal/resolver && go generate
-
 stores-up: db-up
 
 stores-down: db-down
@@ -18,7 +15,7 @@ db-up:
 db-down:
 	docker-compose stop db
 
-migration:
+migrate:
 	migrate -source file://server/internal/repository/database/migrations/postgres -database ${CED_DB} $(ARGS)
 
 
