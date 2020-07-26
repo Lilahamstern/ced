@@ -18,5 +18,6 @@ db-down:
 migrate:
 	migrate -source file://server/internal/repository/database/migrations/postgres -database ${CED_DB} $(ARGS)
 
-
+swag-gen:
+	swag i -g ./cmd/ced/main.go -d ./server -o ./server/docs
 

@@ -2,13 +2,14 @@ package space
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/ced/server/internal/repository/domain"
 	"github.com/lilahamstern/ced/server/internal/server/handler"
 	. "github.com/lilahamstern/ced/server/pkg/errors"
 	"github.com/lilahamstern/ced/server/pkg/model/request"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 func (h *Handler) handleProjectCreate() gin.HandlerFunc {
@@ -68,6 +69,12 @@ func (h *Handler) handleProjectGetAll() gin.HandlerFunc {
 	}
 }
 
+// @Summary Fetch singel project by id
+// @Description Fetch singel project by id
+// @Accept  json
+// @Produce  json
+// @Param   id     path    int     true        "Project ID"
+// @Router /space/projects/{id} [get]
 func (h *Handler) handleProjectGet() gin.HandlerFunc {
 	const op Op = "handler.space.handleProjectGet"
 
