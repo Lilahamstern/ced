@@ -5,18 +5,24 @@ import (
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
+
+	// import for migration
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
+
+	// Postgres driver
 	_ "github.com/lib/pq"
 	"github.com/lilahamstern/ced/server/pkg/config"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 type database struct {
 	DB *sqlx.DB
 }
 
+// SetupDatabase : Create connection to database and migrate if flags are apropiate
 func SetupDatabase() (*sqlx.DB, func(), error) {
 	dsn := config.GenerateDsn()
 
@@ -26,8 +32,10 @@ func SetupDatabase() (*sqlx.DB, func(), error) {
 	}
 	log.Println("Connected to database...")
 
-	if err = db.Migrate(); err != nil {
-		return nil, nil, err
+	if viper.GetBool("database.migrate") {
+		if err = db.Migrate(); err != nil {
+			return nil, nil, err
+		}
 	}
 	log.Println("Migrated database..")
 
@@ -70,7 +78,7 @@ func (db *database) Migrate() error {
 		return err
 	}
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://internal/repository/database/migrations/postgres",
+		"file://internal/repository/database/migrations/postgres/",
 		"postgres",
 		driver,
 	)

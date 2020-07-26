@@ -9,7 +9,8 @@
     "pass": "secret",
     "flags": "sslmode=disable",
     "maxConn": 25,
-    "maxIdle": 25
+    "maxIdle": 25,
+    "migrate": false
   },
   "sentry": {
     "dsn": "DSN do you get from your sentry instace"
