@@ -16,7 +16,6 @@ services:
     networks:
       - database
       - server
-      - monitor
 
   web:
     build:
@@ -40,33 +39,17 @@ services:
     ports:
       - '5440:5432'
     volumes:
-      - ./db/pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     networks:
       - database
-      - monitor
-
-  grafana:
-    container_name: ced_grafana
-    image: grafana/grafana:7.1.0
-    environment:
-      - GF_USERS_ALLOW_SIGNUP=false
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    networks:
-      - monitor
-
-volumes:
-  grafana_data:
-    driver: local
 
 networks:
-  monitor:
-    driver: bridge
-
   server:
     driver: bridge
 
   database:
     driver: bridge
+
+volumes: 
+  pgdata: 
+    driver: local
