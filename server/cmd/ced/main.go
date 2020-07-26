@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/lilahamstern/ced/server/pkg/logger"
 	"github.com/lilahamstern/ced/server/pkg/logger/sentry"
-	"os"
 
 	"github.com/lilahamstern/ced/server/internal/repository/database"
 	"github.com/lilahamstern/ced/server/internal/server"
@@ -14,8 +15,6 @@ import (
 )
 
 func main() {
-	config.Load()
-
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
@@ -23,6 +22,11 @@ func main() {
 }
 
 func run() error {
+	err := config.Load()
+	if err != nil {
+		return errors.Wrap(err, "Config load")
+	}
+
 	logger.Register()
 
 	sentrytidy, err := sentry.Register()

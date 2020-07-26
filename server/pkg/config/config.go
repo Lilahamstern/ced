@@ -8,15 +8,16 @@ import (
 )
 
 // Load : Loads config
-func Load() {
+func Load() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
+	viper.AddConfigPath(".//..//..")
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
-		log.Errorf("Config file could not load: %s", err.Error())
-		return
+		return err
 	}
 	log.Info("Config loaded in successfully!")
+	return nil
 }
 
 // GenerateDsn : generates database dsn from environment variables
