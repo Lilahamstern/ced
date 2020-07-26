@@ -14,14 +14,14 @@ import (
 	"github.com/pkg/errors"
 )
 
-// @title Swagger Example API
-// @version 1.0
-// @description This is a sample server Petstore server.
+// @title CED Rest API
+// @version 0.1
+// @description Offical CED Rest API docs.
 // @termsOfService http://swagger.io/terms/
 
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+// @contact.name Author
+// @contact.url http://www.hamsterapps.net
+// @contact.email leo.ronnebro@hamsterapps.net
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html

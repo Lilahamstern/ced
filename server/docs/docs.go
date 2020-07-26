@@ -20,9 +20,9 @@ var doc = `{
         "title": "{{.Title}}",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "name": "Author",
+            "url": "http://www.hamsterapps.net",
+            "email": "leo.ronnebro@hamsterapps.net"
         },
         "license": {
             "name": "Apache 2.0",
@@ -33,61 +33,25 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/testapi/get-string-by-int/{some_id}": {
+        "/space/projects/{id}": {
             "get": {
-                "description": "Add new project to database, with version",
+                "description": "Fetch singel project by id",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Add a new project, with version",
+                "summary": "Fetch singel project by id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Some ID",
-                        "name": "some_id",
+                        "description": "Project ID",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "We need ID!!",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Can not find ID",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "response.Response": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
+                ]
             }
         }
     }
@@ -104,12 +68,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0",
+	Version:     "0.1",
 	Host:        "localhost:5000",
 	BasePath:    "/space",
 	Schemes:     []string{},
-	Title:       "Swagger Example API",
-	Description: "This is a sample server Petstore server.",
+	Title:       "CED Rest API",
+	Description: "Offical CED Rest API docs.",
 }
 
 type s struct{}
