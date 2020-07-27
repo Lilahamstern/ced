@@ -14,7 +14,6 @@ runServer() {
   killall dlv
   killall server
   log "Run in debug mode"
-  #dlv debug --headless --log -l 0.0.0.0:2345 --api-version=2 --accept-multiclient exec /server
   dlv -l 0.0.0.0:2345 --headless --api-version=2 --accept-multiclient exec /server &
 }
 
@@ -65,12 +64,26 @@ initializeFileChangeLogger() {
   tail -f /tmp/filechanges.log &
 }
 
-main() {
-  echo ${APP_ENV}
+dev() {
   initializeFileChangeLogger
   buildServer
   runServer
   liveReloading
+}
+
+prod() {
+  log "Building prod server binary"
+  go build -o /server ./cmd/ced/main.go
+  log "Starting server"
+  /server
+}
+
+main() {
+  if [ "$APP_ENV" == "production" ]; then
+    prod
+  else
+    dev
+  fi
 }
 
 main
