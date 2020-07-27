@@ -11,15 +11,8 @@ RUN go get github.com/go-delve/delve/cmd/dlv
 COPY . /go/src/github.com/lilahamstern/ced/server
 WORKDIR /go/src/github.com/lilahamstern/ced/server
 
-#COPY . ./
+RUN chmod +x startScript.sh
 
-#RUN go get ./
-
-CMD if [ ${APP_ENV} = production ]; \
-	then \
-	/server; \
-	else \
-	sh startScript.sh; \
-	fi
+ENTRYPOINT sh startScript.sh
 
 EXPOSE 8000 2345

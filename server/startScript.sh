@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 log() {
   echo "STARTSCRIPT: $1"
 }
@@ -32,7 +30,6 @@ liveReloading() {
     # read changes from inotify, batch results to a second (read -t 1)
     while true; do
       read path action file
-      echo "Test"
       ext=${file: -3}
       if [[ "$ext" == ".go" ]]; then
         echo "$file"
@@ -64,11 +61,12 @@ liveReloading() {
 }
 
 initializeFileChangeLogger() {
-  echo "" > /tmp/filechanges.log
+  echo "" >/tmp/filechanges.log
   tail -f /tmp/filechanges.log &
 }
 
 main() {
+  echo ${APP_ENV}
   initializeFileChangeLogger
   buildServer
   runServer
