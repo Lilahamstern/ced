@@ -14,6 +14,20 @@ import (
 	"github.com/pkg/errors"
 )
 
+// @title CED Rest API
+// @version 0.1
+// @description Offical CED Rest API docs.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name Author
+// @contact.url http://www.hamsterapps.net
+// @contact.email leo.ronnebro@hamsterapps.net
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:5000
+// @BasePath /space
 func main() {
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
