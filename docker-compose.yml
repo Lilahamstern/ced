@@ -2,22 +2,36 @@ version: "3.5"
 
 services:
   server:
-    container_name: server
     build:
       context: ./server
-      dockerfile: ./build/Dockerfile
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./server/:/go/src/github.com/lilahamstern/ced/server
     ports:
-      - "8080:8000"
+      - "5000:8080"
       - "2345:2345"
-    environment:
-      - port=8000
     security_opt:
       - "seccomp:unconfined"
-    cap_add:
-      - SYS_PTRACE
+    networks:
+      - database
+      - server
+
+  web:
+    build:
+      context: ./web
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./web/src:/web/src
+    ports:
+      - "8080:3000"
+    networks:
+      - server
+
   db:
-    container_name: db
-    image: postgres:12.3
+    container_name: ced_db
+    build: ./db
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
@@ -28,16 +42,14 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - database
-  redis:
-    image: redis
-    container_name: redis_cache
-    ports:
-      - "6379:6379"
-
-volumes:
-  pgdata:
-    driver: local
 
 networks:
+  server:
+    driver: bridge
+
   database:
     driver: bridge
+
+volumes: 
+  pgdata: 
+    driver: local

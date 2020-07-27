@@ -10,7 +10,7 @@ The is development with [WSP](https://wsp.com) and their needs to the new climat
 Follow steps below to get started!
 
 - Clone the [repo](https://github.com/Lilahamstern/ced)
-- Edit `.env` file to fir your needs
+- Edit `config.json` file to fir your needs
 - Go back to the root folder and run `docker-compose up -d`
 
 ### Prerequisites
@@ -30,7 +30,7 @@ Open folder or sln in preferd editor/IDE of choice.
 ```
 
 ```
-Edit .env file to fit your needs
+Edit config.json file to fit your needs
 ```
 
 ```
@@ -38,7 +38,8 @@ Run docker-compose up -d
 ```
 
 To access the web application, open `localhost:8080` (default) if you haven't changed
-You can access the server via graphql playground on `localhost:{your_port}/graphql`
+You can access the API on `localhost:{port}/api/space/{endpoints}`
+* Documentation is working in progress
 
 ## Deployment
 
@@ -48,10 +49,9 @@ You can access the server via graphql playground on `localhost:{your_port}/graph
 
 - [VueJS](https://vuejs.org/) - Web framework
 - [Golang](https://golang.org) - Language used on the backend
-- [gqlgen](https://github.com/99designs/gqlgen) - Graphql library used on backend
 - [Docker](https://www.docker.com/) - Used to run development containers and publish docker images
-- [GrapQL](https://graphql.org) - API handler
 - [PostgreSQL](https://www.postgresql.org) - Database
+- [Sentry](https://sentry.io) - External logging and monitoring.
 
 ## Contributing
 

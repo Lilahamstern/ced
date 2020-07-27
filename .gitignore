@@ -1,2 +1,4 @@
 # General gitignore for project
 .idea/
+db/pgdata
+server/config.json
