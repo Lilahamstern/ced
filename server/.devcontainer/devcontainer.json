@@ -1,7 +1,8 @@
 {
     "name": "Go-Server",
     "dockerComposeFile": [
-        "../../docker-compose.server.yml"
+        "../../build/dev/docker-compose.server.yml",
+        "../../build/dev/docker-compose.db.yml"
     ],
     "service": "server",
     "runArgs": [
@@ -16,12 +17,10 @@
     "forwardPorts": [
         5000
     ],
-    "remoteEnv": {
-        "DB": "postgres://admin:secret@db:5432/ced?sslmode=disable"
-    },
     "workspaceFolder": "/workspace/server",
     "shutdownAction": "none",
     "extensions": [
-        "golang.go"
-    ]
+		"golang.go",
+		"bajdzis.vscode-database"
+	]
 }
