@@ -1,4 +1,23 @@
 {
     "go.useLanguageServer": true,
-    "go.inferGopath": false
+    "go.inferGopath": false,
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#24acd6",
+        "activityBar.activeBorder": "#bf209a",
+        "activityBar.background": "#24acd6",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#bf209a",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "statusBar.background": "#1d89aa",
+        "statusBar.border": "#1d89aa",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#24acd6",
+        "titleBar.activeBackground": "#1d89aa",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.border": "#1d89aa",
+        "titleBar.inactiveBackground": "#1d89aa99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.remoteColor": "#1d89aa"
 }

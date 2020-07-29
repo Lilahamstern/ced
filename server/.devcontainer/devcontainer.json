@@ -1,5 +1,5 @@
 {
-    "name": "Go-Server",
+    "name": "Server",
     "dockerComposeFile": [
         "../../build/dev/docker-compose.server.yml",
         "../../build/dev/docker-compose.db.yml"
@@ -20,7 +20,7 @@
     "workspaceFolder": "/workspace/server",
     "shutdownAction": "none",
     "extensions": [
-		"golang.go",
-		"bajdzis.vscode-database"
-	]
+        "golang.go",
+        "bajdzis.vscode-database"
+    ]
 }
