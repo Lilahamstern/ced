@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+  server:
+    container_name: server_dev
+    build:
+      context: ../../server
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../../server:/workspace/server:cached
+    environment: 
+      - DB=postgres://admin:secret@db:5432/ced?sslmode=disable
+    command: /bin/sh -c "while sleep 1000; do :; done"
