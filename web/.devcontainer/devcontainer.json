@@ -1,5 +1,3 @@
-// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.128.0/containers/javascript-node-14
 {
 	"name": "Web",
 	"dockerComposeFile": [
@@ -14,13 +12,17 @@
 	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"dbaeumer.vscode-eslint"
+		"dbaeumer.vscode-eslint",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+		"octref.vetur"
 	],
 	"forwardPorts": [
 		3000
 	],
 	"workspaceFolder": "/workspace/web",
-	"shutdownAction": "none"
+	"shutdownAction": "none",
+	"postCreateCommand": "npm install",
+	"remoteUser": "node"
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
