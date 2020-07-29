@@ -2,3 +2,5 @@
 .idea/
 db/pgdata
 server/config.json
+
+server/cmd/ced/__debug_bin
