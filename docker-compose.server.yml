@@ -1,0 +1,34 @@
+version: "3"
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ./server:/workspace/server:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    networks: 
+        - database
+
+  db:
+    container_name: ced_db
+    build: ./db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=ced
+    ports:
+      - '5440:5432'
+    volumes:
+      - pgdata-dev:/var/lib/postgresql/data
+    networks:
+      - database
+
+networks:
+  database:
+    driver: bridge
+
+
+volumes: 
+  pgdata-dev: 
+    driver: local

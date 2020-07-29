@@ -4,12 +4,9 @@ services:
   server:
     build:
       context: ./server
-    volumes:
-      - ./server:/app
+      dockerfile: Dockerfile.prod
     ports:
       - "5000:5000"
-    security_opt:
-      - "seccomp:unconfined"
     networks:
       - database
       - server
