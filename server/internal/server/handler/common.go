@@ -6,6 +6,7 @@ import (
 	"github.com/lilahamstern/ced/server/pkg/model/response"
 )
 
+// RespondJSON : Response handler
 func RespondJSON(c *gin.Context, code int, status errors.Status, payload interface{}) {
 	res := response.Response{
 		Status: status.String(),
@@ -14,6 +15,7 @@ func RespondJSON(c *gin.Context, code int, status errors.Status, payload interfa
 	switch payload.(type) {
 	case string:
 		res.Message = payload.(string)
+		res.ID, _ = c.Get("error_id")
 	case error:
 		res.Message = payload.(string)
 	default:
