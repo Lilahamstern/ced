@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  web:
+    container_name: web_dev
+    build:
+      context: ../../web
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../../web:/workspace/web:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
