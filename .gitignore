@@ -4,3 +4,5 @@ db/pgdata
 server/config.json
 
 server/cmd/ced/__debug_bin
+
+web.old/
