@@ -1,73 +1,22 @@
-FROM node:14
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:14
 
 ARG USERNAME=node
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-ARG NPM_GLOBAL=/usr/local/share/npm-global
-ENV PATH=${PATH}:${NPM_GLOBAL}/bin
-ENV NVM_DIR=/usr/local/share/nvm
-# Have nvm create a "current" symlink and add to path to work around https://github.com/microsoft/vscode-remote-release/issues/3224
-ENV NVM_SYMLINK_CURRENT=true 
-ENV PATH=${NVM_DIR}/current/bin:${PATH}
+# Alter node user as needed, install tslint, typescript. eslint is installed by javascript image
+RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
+  groupmod --gid $USER_GID $USERNAME \
+  && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+  && chmod -R $USER_UID:$USER_GID /home/$USERNAME \
+  && chmod -R $USER_UID:root /usr/local/share/nvm /usr/local/share/npm-global; \
+  fi \
+  #
+  # Install tslint, typescript. eslint is installed by javascript image
+  && sudo -u ${USERNAME} npm install -g tslint typescript
 
-# Options for common package install script
-ARG INSTALL_ZSH="true"
-ARG UPGRADE_PACKAGES="true"
-ARG COMMON_SCRIPT_SOURCE="https://raw.githubusercontent.com/microsoft/vscode-dev-containers/v0.128.0/script-library/common-debian.sh"
-ARG COMMON_SCRIPT_SHA="a6bfacc5c9c6c3706adc8788bf70182729767955b7a5509598ac205ce6847e1e"
-
-# Configure apt and install packages
-RUN apt-get update \
-  && export DEBIAN_FRONTEND=noninteractive \
-  #
-  # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
-  && apt-get -y install --no-install-recommends curl ca-certificates 2>&1 \
-  && curl -sSL  ${COMMON_SCRIPT_SOURCE} -o /tmp/common-setup.sh \
-  && ([ "${COMMON_SCRIPT_SHA}" = "dev-mode" ] || (echo "${COMMON_SCRIPT_SHA} */tmp/common-setup.sh" | sha256sum -c -)) \
-  && /bin/bash /tmp/common-setup.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
-  && rm /tmp/common-setup.sh \
-  #
-  # Remove outdated yarn from /opt and install via package 
-  # so it can be easily updated via apt-get upgrade yarn
-  && rm -rf /opt/yarn-* \
-  && rm -f /usr/local/bin/yarn \
-  && rm -f /usr/local/bin/yarnpkg \
-  && apt-get install -y curl apt-transport-https lsb-release \
-  && curl -sS https://dl.yarnpkg.com/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/pubkey.gpg | apt-key add - 2>/dev/null \
-  && echo "deb https://dl.yarnpkg.com/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-  && apt-get update \
-  && apt-get -y install --no-install-recommends yarn \
-  #
-  # Set alternate global install location that both users have rights to access
-  && mkdir -p ${NPM_GLOBAL} \
-  && chown ${USERNAME}:root ${NPM_GLOBAL} \
-  && npm config -g set prefix ${NPM_GLOBAL} \
-  && sudo -u ${USERNAME} npm config -g set prefix ${NPM_GLOBAL} \
-  #
-  # Install NVM to allow installing alternate versions of Node.js as needed
-  && mkdir -p ${NVM_DIR} \
-  && export NODE_VERSION= \
-  && curl -so- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash 2>&1 \
-  && /bin/bash -c "source $NVM_DIR/nvm.sh \
-  && nvm alias default system" 2>&1 \
-  && echo '[ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"  && [ -s "$NVM_DIR/bash_completion" ] && \\. "$NVM_DIR/bash_completion"' \ 
-  | tee -a /home/${USERNAME}/.bashrc /home/${USERNAME}/.zshrc >> /root/.zshrc \
-  && chown ${USER_UID}:${USER_GID} /home/${USERNAME}/.bashrc /home/${USERNAME}/.zshrc \
-  && chown -R ${USER_UID}:root ${NVM_DIR} \
-  #
-  # Handle scenarios where GID/UID is changed
-  && echo "if [ \"\$(stat -c '%U' ${NPM_GLOBAL})\" != \"${USERNAME}\" ]; then sudo chown -R ${USER_UID}:root ${NPM_GLOBAL} ${NVM_DIR}; fi" \
-  | tee -a /root/.bashrc /root/.zshrc /home/${USERNAME}/.bashrc >> /home/${USERNAME}/.zshrc \
-  #
-  # Tactically remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
-  # Can leave in Dockerfile once upstream base image moves to > 7.0.7-28.
-  && apt-get purge -y imagemagick imagemagick-6-common \
-  #
-  # Install eslint globally
-  && sudo -u ${USERNAME} npm install -g eslint tslint typescript \
-  #
-  # Clean up
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/*
+# ** [Optional] Uncomment this section to install additional packages. **
+#
+# RUN apt-get update \
+#     && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
