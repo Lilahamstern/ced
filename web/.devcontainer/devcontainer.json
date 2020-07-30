@@ -14,7 +14,16 @@
 	"extensions": [
 		"dbaeumer.vscode-eslint",
 		"ms-vscode.vscode-typescript-tslint-plugin",
-		"octref.vetur"
+		"octref.vetur",
+		"bradlc.vscode-tailwindcss",
+		"sdras.vue-vscode-snippets",
+		"christian-kohler.npm-intellisense",
+		"zignd.html-css-class-completion",
+		"visualstudioexptteam.vscodeintellicode",
+		"christian-kohler.path-intellisense",
+		"eg2.vscode-npm-script",
+		"wix.vscode-import-cost",
+		"kisstkondoros.vscode-codemetrics"
 	],
 	"forwardPorts": [
 		3000
@@ -22,7 +31,7 @@
 	"workspaceFolder": "/workspace/web",
 	"shutdownAction": "none",
 	"postCreateCommand": "npm install",
-	"remoteUser": "node"
+	"remoteUser": "root"
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
