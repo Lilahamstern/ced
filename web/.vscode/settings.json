@@ -3,12 +3,6 @@
     "javascript",
     "typescript"
   ],
-  "eslint.workingDirectories": [
-    {
-      "directory": "./test-project",
-      "changeProcessCWD": true
-    }
-  ],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#9f40d9",
     "activityBar.activeBorder": "#daa145",
