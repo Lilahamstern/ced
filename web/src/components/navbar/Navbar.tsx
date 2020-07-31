@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 
-export class Navbar extends Component {
+interface IProps {
+}
+
+interface IState {
+}
+
+export class Navbar extends Component<IProps, IState> {
   render() {
     return (
       <Router>
@@ -10,7 +16,7 @@ export class Navbar extends Component {
             <span className="text-3xl font-semibold text-white">CED</span>
           </div>
 
-          <div className="text-left w-full hidden block flex-grow lg:flex lg:items-center lg:w-auto">
+          <div className="w-full hidden flex-grow lg:flex lg:items-center lg:w-auto">
             <div className="text-base lg:flex-grow">
               <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Projects</Link>
             </div>
