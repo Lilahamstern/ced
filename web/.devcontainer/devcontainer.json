@@ -22,7 +22,10 @@
 		"eg2.vscode-npm-script",
 		"wix.vscode-import-cost",
 		"kisstkondoros.vscode-codemetrics",
-		"dsznajder.es7-react-js-snippets"
+		"dsznajder.es7-react-js-snippets",
+		"stylelint.vscode-stylelint",
+		"cpylua.language-postcss",
+		"esbenp.prettier-vscode"
 	],
 	"forwardPorts": [
 		3000
