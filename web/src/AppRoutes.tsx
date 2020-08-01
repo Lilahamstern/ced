@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import React, { FunctionComponent } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import Navbar from './components/navbar/Navbar'
-import Projects from './views/Projects'
+import Navbar from "./components/navbar/Navbar";
+import Home from "./views/Home";
 
 const AppRoutes: FunctionComponent = () => {
   return (
@@ -12,15 +12,15 @@ const AppRoutes: FunctionComponent = () => {
         <Routes />
       </div>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default AppRoutes
+export default AppRoutes;
 
 const Routes: FunctionComponent = () => {
   return (
     <React.Fragment>
-      <Route path="/" exact component={Projects} />
+      <Route path="/" exact component={Home} />
     </React.Fragment>
-  )
-}
+  );
+};
