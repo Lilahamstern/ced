@@ -25,7 +25,8 @@
 		"dsznajder.es7-react-js-snippets",
 		"stylelint.vscode-stylelint",
 		"cpylua.language-postcss",
-		"esbenp.prettier-vscode"
+		"esbenp.prettier-vscode",
+		"rbbit.typescript-hero"
 	],
 	"forwardPorts": [
 		3000
