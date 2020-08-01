@@ -1,5 +1,7 @@
 import React, { Component, FunctionComponent } from "react";
 
+import Tooltip from "../../../tooltip/Tooltip";
+
 import { Projects, Project } from "../../../../stores/types";
 
 interface IProps {
@@ -68,16 +70,9 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
       <td className="table-text w-1/6">{project.Client}</td>
       <td className="table-text w-1/6">{project.Manager}</td>
       <td className="table-text w-1/12">{project.Co}</td>
-      <div className="tooltip" v-if="tooltipHover">
-        <div className="py-1 px-3 right-0 truncate bg-gray-900 text-white text-xs rounded">
-          {project.ID}
-        </div>
-      </div>
-      <div className="absolute right-0 mr-1 cursor-pointer">
-        <p className="text-base mr-3">
-          <i className="fas fa-info-circle"></i>
-        </p>
-      </div>
+      <td className="tooltip-table">
+        <Tooltip projectID={project.ID} />
+      </td>
     </tr>
   );
 };

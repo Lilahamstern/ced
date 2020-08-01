@@ -9,9 +9,6 @@
   @apply font-semibold text-sm text-gray-400;
 }
 
-.tooltip {
-  @apply absolute w-3/5 right-0 -mt-6 mr-5 max-w-xxs;
-}
 .info {
   @apply mt-1;
 }

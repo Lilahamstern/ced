@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Project } from "../../../../../stores/types";
+import Tooltip from "../../../../tooltip/Tooltip";
 
 interface IProps {
   project: Project;
@@ -39,16 +40,8 @@ export class Card extends Component<IProps, IState> {
                   <span className="label">Co2-ekv/m2:</span> {project.Co}
                 </p>
               </div>
-
-              <div className="tooltip">
-                <div className="bg-gray-900 opacity-75 text-white text-xs rounded py-1 px-3 right-0 bottom-full truncate">
-                  {project.ID}
-                </div>
-              </div>
-              <div className="absolute right-0 -mt-6 -mr-3 cursor-pointer ">
-                <p className="text-base mr-3">
-                  <i className="fas fa-info-circle"></i>
-                </p>
+              <div className="tooltip-card">
+                <Tooltip projectID={project.ID} />
               </div>
               <div className="absolute right-0 top-0">
                 <small className="text-sm">

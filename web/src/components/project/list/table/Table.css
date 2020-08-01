@@ -5,6 +5,4 @@
 .table-text {
   @apply truncate text-sm font-semibold p-2;
 }
-.tooltip {
-  @apply absolute w-3/5 right-0 mr-10 max-w-xxs;
-}
+

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Projects } from "../../../../stores/types";
-import Card from "./Card/Card";
+import Card from "./card/Card";
 
 interface IProps {
   projects: Projects;
 }
 
-interface IState {}
+interface IState { }
 
 export class Cards extends Component<IProps, IState> {
   render() {
