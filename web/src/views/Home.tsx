@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { ProjectViewStatus } from "../enums";
 import ProjectSearch from "../components/project/search/Search";
 import Controller from "../components/project/list/controller/Controller";
-import Cards from "../components/project/list/Cards/Cards";
+import Cards from "../components/project/list/cards/Cards";
 import Table from "../components/project/list/table/Table";
 import { Projects } from "../stores/types";
 
@@ -11,6 +11,9 @@ interface IProps {}
 
 interface IState {
   view: ProjectViewStatus;
+  viewport: {
+    width: number;
+  };
   projects: Projects;
 }
 
@@ -19,6 +22,9 @@ export class Home extends Component<IProps, IState> {
     super(props);
     this.state = {
       view: ProjectViewStatus.CARD,
+      viewport: {
+        width: 0,
+      },
       projects: [
         {
           ID: "324df635-ab3b-4601-97fd-d404aefdfa43",
@@ -60,6 +66,17 @@ export class Home extends Component<IProps, IState> {
     };
   }
 
+  updateDimension = () => {
+    this.setState({ viewport: { width: window.innerWidth } });
+  };
+
+  componentDidMount() {
+    window.addEventListener("resize", this.updateDimension);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimension);
+  }
+
   render() {
     return (
       <div>
@@ -70,9 +87,9 @@ export class Home extends Component<IProps, IState> {
           <Controller view={this.state.view} />
         </div>
         <div className="mt-6">
-          {/* <div className="flex justify-center w-full">
-          <Cards projects={this.state.projects} />
-        </div> */}
+          <div className="flex justify-center w-full">
+            <Cards projects={this.state.projects} />
+          </div>
           <div className="flex justify-center rounded-lg">
             <Table projects={this.state.projects} />
           </div>

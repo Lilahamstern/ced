@@ -11,8 +11,6 @@ interface IState {}
 export class Controller extends Component<IProps, IState> {
   render() {
     const { view } = this.props;
-
-    console.log(view === ProjectViewStatus.CARD);
     return (
       <div className="bg-gray-800 text-sm text-gray-500 leading-none border-2 border-gray-800 rounded-full inline-flex">
         <Button
