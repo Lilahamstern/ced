@@ -1,4 +1,5 @@
 import React, { Component, FunctionComponent } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Tooltip from "../../../tooltip/Tooltip";
 
@@ -27,7 +28,7 @@ export class Table extends Component<IProps, IState> {
           <thead className="bg-gray-700 flex w-full shadow-b rounded-t-lg">
             <tr className="text-sm flex w-full justify-start text-left">
               <th className="table-head w-1/12 text-center">
-                <i className="far fa-clock"></i>
+                <FontAwesomeIcon icon={["far", "clock"]} />
               </th>
               <th className="table-head w-1/12">Project</th>
               <th className="table-head w-1/5">Title</th>
@@ -70,8 +71,13 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
       <td className="table-text w-1/6">{project.Client}</td>
       <td className="table-text w-1/6">{project.Manager}</td>
       <td className="table-text w-1/12">{project.Co}</td>
-      <td className="tooltip-table">
-        <Tooltip projectID={project.ID} />
+      <td>
+        <Tooltip
+          tooltipClassName="tooltip-table"
+          iconClassName="tooltip-table-icon"
+        >
+          {project.ID}
+        </Tooltip>
       </td>
     </tr>
   );

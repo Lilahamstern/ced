@@ -6,3 +6,14 @@
   @apply truncate text-sm font-semibold p-2;
 }
 
+.tooltip-table {
+  @apply absolute w-full right-0 -mt-4 mr-10 max-w-xxs;
+}
+
+.tooltip-table-icon {
+  @apply right-0 -mt-3 mr-1;
+}
+
+tr:last-child {
+  @apply rounded-b-lg;
+}

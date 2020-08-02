@@ -28,3 +28,11 @@
     @apply text-sm w-1/5 truncate text-gray-500 mr-5;
   }
 }
+
+.tooltip-card {
+  @apply absolute w-3/5 right-0 -mt-6 mr-6 max-w-xxs;
+}
+
+.tooltip-card-icon {
+  @apply right-0 -mt-6 -mr-3;
+}

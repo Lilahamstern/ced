@@ -1,7 +1,0 @@
-.tooltip-card {
-  @apply absolute w-3/5 right-0 -mt-6 mr-5 max-w-xxs;
-}
-
-.tooltip-table {
-  @apply absolute w-3/5 right-0 mr-10 max-w-xxs;
-}
