@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, FunctionComponent } from "react";
 
 import { ProjectViewStatus } from "../enums";
+import { viewCards, widthLessThen } from "../utils/utils";
 import ProjectSearch from "../components/project/search/Search";
 import Controller from "../components/project/list/controller/Controller";
 import Cards from "../components/project/list/cards/Cards";
@@ -66,6 +67,14 @@ export class Home extends Component<IProps, IState> {
     };
   }
 
+  clickHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    view: ProjectViewStatus
+  ) => {
+    e.preventDefault();
+    this.setState({ view });
+  };
+
   updateDimension = () => {
     this.setState({ viewport: { width: window.innerWidth } });
   };
@@ -84,15 +93,14 @@ export class Home extends Component<IProps, IState> {
           <ProjectSearch />
         </div>
         <div className="mt-6 hidden lg:flex lg:justify-center">
-          <Controller view={this.state.view} />
+          <Controller clickHandler={this.clickHandler} view={this.state.view} />
         </div>
         <div className="mt-6">
-          <div className="flex justify-center w-full">
-            <Cards projects={this.state.projects} />
-          </div>
-          <div className="flex justify-center rounded-lg">
-            <Table projects={this.state.projects} />
-          </div>
+          <ProjectsView
+            width={this.state.viewport.width}
+            view={this.state.view}
+            projects={this.state.projects}
+          />
         </div>
       </div>
     );
@@ -100,3 +108,22 @@ export class Home extends Component<IProps, IState> {
 }
 
 export default Home;
+
+interface IProjectsViewProps {
+  width: number;
+  view: ProjectViewStatus;
+  projects: Projects;
+}
+const ProjectsView: FunctionComponent<IProjectsViewProps> = (
+  props: IProjectsViewProps
+) => {
+  const { width, view, projects } = props;
+  if (!viewCards(view) && !widthLessThen(width, 1024)) {
+    return (
+      <div className="justify-center rounded-lg hidden lg:flex">
+        <Table projects={projects} />
+      </div>
+    );
+  }
+  return <Cards projects={projects} />;
+};
