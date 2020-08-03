@@ -8,7 +8,7 @@ import Cards from "../components/project/list/cards/Cards";
 import Table from "../components/project/list/table/Table";
 import { Projects } from "../stores/types";
 
-interface IProps {}
+interface IProps { }
 
 interface IState {
   view: ProjectViewStatus;
@@ -24,7 +24,7 @@ export class Home extends Component<IProps, IState> {
     this.state = {
       view: ProjectViewStatus.CARD,
       viewport: {
-        width: 0,
+        width: window.innerWidth,
       },
       projects: [
         {
@@ -61,7 +61,7 @@ export class Home extends Component<IProps, IState> {
           Sector: "Healthcare",
           Co: 4919231,
           CreatedAt: "10",
-          UpdatedAt: "1-",
+          UpdatedAt: "10",
         },
       ],
     };
@@ -118,6 +118,7 @@ const ProjectsView: FunctionComponent<IProjectsViewProps> = (
   props: IProjectsViewProps
 ) => {
   const { width, view, projects } = props;
+  console.log(view)
   if (!viewCards(view) && !widthLessThen(width, 1024)) {
     return (
       <div className="justify-center rounded-lg hidden lg:flex">
