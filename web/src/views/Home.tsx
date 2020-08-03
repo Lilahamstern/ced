@@ -6,7 +6,6 @@ import ProjectSearch from "../components/project/search/Search";
 import Controller from "../components/project/list/controller/Controller";
 import Cards from "../components/project/list/cards/Cards";
 import Table from "../components/project/list/table/Table";
-import { Projects } from "../stores/types";
 
 interface IProps { }
 
@@ -14,8 +13,7 @@ interface IState {
   view: ProjectViewStatus;
   viewport: {
     width: number;
-  };
-  projects: Projects;
+  },
 }
 
 export class Home extends Component<IProps, IState> {
@@ -26,45 +24,7 @@ export class Home extends Component<IProps, IState> {
       viewport: {
         width: window.innerWidth,
       },
-      projects: [
-        {
-          ID: "324df635-ab3b-4601-97fd-d404aefdfa43",
-          OrderID: 29192378,
-          Description: "Something for someone",
-          Title: "Equlation building",
-          Manager: "John DOe",
-          Client: "Klara Doe",
-          Sector: "Health",
-          Co: 20192,
-          CreatedAt: "3",
-          UpdatedAt: "3",
-        },
-        {
-          ID: "324df635-ab3b-4601-97fd-d404aefdfa44",
-          OrderID: 59193829,
-          Description: "SOmething is here",
-          Title: "School building",
-          Manager: "Klar Johan Doe",
-          Client: "Vastragotaland",
-          Sector: "School",
-          Co: 985783,
-          CreatedAt: "6",
-          UpdatedAt: "6",
-        },
-        {
-          ID: "324df635-ab3b-4601-97fd-d404aefdfa45",
-          OrderID: 294818223,
-          Description: "Something should be herer that are usefull",
-          Title: "Hospital",
-          Manager: "Glen DOe",
-          Client: "Stockholm",
-          Sector: "Healthcare",
-          Co: 4919231,
-          CreatedAt: "10",
-          UpdatedAt: "10",
-        },
-      ],
-    };
+    }
   }
 
   clickHandler = (
@@ -99,7 +59,6 @@ export class Home extends Component<IProps, IState> {
           <ProjectsView
             width={this.state.viewport.width}
             view={this.state.view}
-            projects={this.state.projects}
           />
         </div>
       </div>
@@ -112,19 +71,17 @@ export default Home;
 interface IProjectsViewProps {
   width: number;
   view: ProjectViewStatus;
-  projects: Projects;
 }
 const ProjectsView: FunctionComponent<IProjectsViewProps> = (
   props: IProjectsViewProps
 ) => {
-  const { width, view, projects } = props;
-  console.log(view)
+  const { width, view } = props;
   if (!viewCards(view) && !widthLessThen(width, 1024)) {
     return (
       <div className="justify-center rounded-lg hidden lg:flex">
-        <Table projects={projects} />
+        <Table/>
       </div>
     );
   }
-  return <Cards projects={projects} />;
+  return <Cards />;
 };

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Projects } from "../../../../stores/types";
 import Card from "./card/Card";
+import { IProject } from "../../../../redux/reducers/ProjectReducer";
+import { connect } from "react-redux";
+import { IAppState } from "../../../../redux/store/store";
 
 interface IProps {
-  projects: Projects;
+  projects: IProject[];
 }
 
-interface IState { }
+interface IState {}
 
 export class Cards extends Component<IProps, IState> {
   render() {
@@ -26,4 +28,10 @@ export class Cards extends Component<IProps, IState> {
   }
 }
 
-export default Cards;
+const mapStateToProps = (store: IAppState) => {
+  return {
+    projects: store.projectState.projects,
+  };
+};
+
+export default connect(mapStateToProps)(Cards);

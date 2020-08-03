@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Tooltip from "../../../tooltip/Tooltip";
 
-import { Projects, Project } from "../../../../stores/types";
+import { IProject } from "../../../../redux/reducers/ProjectReducer";
+import { connect } from "react-redux";
+import { IAppState } from "../../../../redux/store/store";
 
 interface IProps {
-  projects: Projects;
+  projects: IProject[];
 }
 
 interface IState {}
@@ -47,11 +49,17 @@ export class Table extends Component<IProps, IState> {
   }
 }
 
-export default Table;
+const mapStateToProps = (store: IAppState) => {
+  return {
+    projects: store.projectState.projects,
+  };
+};
+
+export default connect(mapStateToProps)(Table);
 
 interface TableRowProps {
   index: number;
-  project: Project;
+  project: IProject;
 }
 
 const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
@@ -63,14 +71,14 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
       }`}
     >
       <td className="text-sm font-semibold p-2 pl-5 w-1/12">
-        {project.UpdatedAt}d ago
+        {project.versions[0].UpdatedAt}d ago
       </td>
-      <td className="table-text w-1/12">{project.OrderID}</td>
-      <td className="table-text w-1/5">{project.Title}</td>
-      <td className="table-text w-1/6">{project.Sector}</td>
-      <td className="table-text w-1/6">{project.Client}</td>
-      <td className="table-text w-1/6">{project.Manager}</td>
-      <td className="table-text w-1/12">{project.Co}</td>
+      <td className="table-text w-1/12">{project.versions[0].OrderID}</td>
+      <td className="table-text w-1/5">{project.versions[0].Title}</td>
+      <td className="table-text w-1/6">{project.versions[0].Sector}</td>
+      <td className="table-text w-1/6">{project.versions[0].Client}</td>
+      <td className="table-text w-1/6">{project.versions[0].Manager}</td>
+      <td className="table-text w-1/12">{project.versions[0].Co}</td>
       <td>
         <Tooltip
           tooltipClassName="tooltip-table"

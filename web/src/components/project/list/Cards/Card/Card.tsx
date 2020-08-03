@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Project } from "../../../../../stores/types";
 import Tooltip from "../../../../tooltip/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IProject } from "../../../../../redux/reducers/ProjectReducer";
 
 interface IProps {
-  project: Project;
+  project: IProject;
   className?: string;
 }
 
@@ -21,24 +21,31 @@ export class Card extends Component<IProps, IState> {
               <div className="card-row">
                 <h2 className="text-gray-400 text-md font-semibold truncate -mt-1">
                   Project:{" "}
-                  <span className="text-gray-500">{project.OrderID}</span>
+                  <span className="text-gray-500">
+                    {project.versions[0].OrderID}
+                  </span>
                 </h2>
               </div>
               <div className="card-row mt-10">
                 <p className="info">
-                  <span className="label">Title:</span> {project.Title}
+                  <span className="label">Title:</span>{" "}
+                  {project.versions[0].Title}
                 </p>
                 <p className="info">
-                  <span className="label">Sector:</span> {project.Sector}
+                  <span className="label">Sector:</span>{" "}
+                  {project.versions[0].Sector}
                 </p>
                 <p className="info">
-                  <span className="label">Manager:</span> {project.Manager}
+                  <span className="label">Manager:</span>{" "}
+                  {project.versions[0].Manager}
                 </p>
                 <p className="info">
-                  <span className="label">Client:</span> {project.Client}
+                  <span className="label">Client:</span>{" "}
+                  {project.versions[0].Client}
                 </p>
                 <p className="info">
-                  <span className="label">Co2-ekv/m2:</span> {project.Co}
+                  <span className="label">Co2-ekv/m2:</span>{" "}
+                  {project.versions[0].Co}
                 </p>
               </div>
               <Tooltip
@@ -52,7 +59,7 @@ export class Card extends Component<IProps, IState> {
                   <span>
                     <i className="far fa-clock"></i>
                   </span>
-                  {project.UpdatedAt}d ago
+                  {project.versions[0].UpdatedAt}d ago
                 </small>
               </div>
             </div>

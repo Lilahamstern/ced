@@ -1,8 +1,8 @@
-export interface Project {
+export interface IVersion {
   ID: string;
   OrderID: number;
   Title: string;
-  Description: string;
+  Description: string | null;
   Manager: string;
   Client: string;
   Sector: string;
@@ -10,5 +10,3 @@ export interface Project {
   CreatedAt: string;
   UpdatedAt: string;
 }
-
-export interface Projects extends Array<Project> {}
