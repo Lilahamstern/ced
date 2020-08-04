@@ -10,3 +10,31 @@ services:
     environment: 
       - DB=postgres://admin:secret@db:5432/ced?sslmode=disable
     command: /bin/sh -c "while sleep 1000; do :; done"
+    networks: 
+      - ced_database
+      - ced_server
+
+  db:
+    container_name: db_dev
+    build: ../../db
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_DB=ced
+    ports:
+      - '5440:5432'
+    volumes:
+      - pgdata-dev:/var/lib/postgresql/data
+    networks: 
+      - ced_database
+
+volumes: 
+  pgdata-dev: 
+    driver: local
+
+
+networks:
+  ced_server:
+    external: true
+  ced_database:
+    driver: bridge

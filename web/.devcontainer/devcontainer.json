@@ -1,38 +1,36 @@
 {
-	"name": "Web",
-	"dockerComposeFile": [
-		"../../build/dev/docker-compose.web.yml",
-		// "../../build/dev/docker-compose.server.yml",
-		// "../../build/dev/docker-compose.db.yml"
-	],
-	"service": "web",
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-		"ms-vscode.vscode-typescript-tslint-plugin",
-		"bradlc.vscode-tailwindcss",
-		"christian-kohler.npm-intellisense",
-		"zignd.html-css-class-completion",
-		"visualstudioexptteam.vscodeintellicode",
-		"christian-kohler.path-intellisense",
-		"eg2.vscode-npm-script",
-		"wix.vscode-import-cost",
-		"kisstkondoros.vscode-codemetrics",
-		"dsznajder.es7-react-js-snippets",
-		"stylelint.vscode-stylelint",
-		"cpylua.language-postcss",
-		"esbenp.prettier-vscode",
-		"rbbit.typescript-hero"
-	],
-	"forwardPorts": [
-		3000
-	],
-	"workspaceFolder": "/workspace/web",
-	"shutdownAction": "none",
-	"postCreateCommand": "yarn install",
-	"remoteUser": "root"
+  "name": "Web",
+  "dockerComposeFile": [
+    "../../build/dev/docker-compose.web.yml",
+  ],
+  "service": "web",
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "bradlc.vscode-tailwindcss",
+    "christian-kohler.npm-intellisense",
+    "zignd.html-css-class-completion",
+    "visualstudioexptteam.vscodeintellicode",
+    "christian-kohler.path-intellisense",
+    "eg2.vscode-npm-script",
+    "wix.vscode-import-cost",
+    "kisstkondoros.vscode-codemetrics",
+    "dsznajder.es7-react-js-snippets",
+    "stylelint.vscode-stylelint",
+    "cpylua.language-postcss",
+    "esbenp.prettier-vscode",
+    "rbbit.typescript-hero"
+  ],
+  "forwardPorts": [
+    3000
+  ],
+  "workspaceFolder": "/workspace/web",
+  "shutdownAction": "none",
+  "postCreateCommand": "yarn install",
+  "remoteUser": "root"
 }

@@ -1,8 +1,7 @@
 {
     "name": "Server",
     "dockerComposeFile": [
-        "../../build/dev/docker-compose.server.yml",
-        "../../build/dev/docker-compose.db.yml"
+        "../../build/dev/docker-compose.server.yml"
     ],
     "service": "server",
     "runArgs": [
