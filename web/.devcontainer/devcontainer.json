@@ -1,8 +1,6 @@
 {
   "name": "Web",
-  "dockerComposeFile": [
-    "../../build/dev/docker-compose.web.yml",
-  ],
+  "dockerComposeFile": ["../../build/dev/docker-compose.web.yml"],
   "service": "web",
   // Set *default* container specific settings.json values on container create.
   "settings": {
@@ -26,11 +24,12 @@
     "esbenp.prettier-vscode",
     "rbbit.typescript-hero"
   ],
-  "forwardPorts": [
-    3000
-  ],
+  "forwardPorts": [3000],
   "workspaceFolder": "/workspace/web",
   "shutdownAction": "none",
   "postCreateCommand": "yarn install",
-  "remoteUser": "root"
+  "remoteUser": "root",
+  "remoteEnv": {
+    "api": "http://server_dev:5000"
+  }
 }
