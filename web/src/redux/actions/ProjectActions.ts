@@ -23,6 +23,26 @@ export const fetchAllProjects: ActionCreator<ThunkAction<
     try {
       const res: IProject[] = [
         {
+          ID: 2919023,
+          versions: [
+            {
+              ID: "324df635-ab3b-4601-97fd-d404aefdfas3",
+              OrderID: 29192342,
+              Description: "Health care hospital",
+              Title: "Hospital building",
+              Manager: "Sara DOe",
+              Client: "Vastra Gotland",
+              Sector: "Health care",
+              Co: 401829,
+              CreatedAt: "5",
+              UpdatedAt: "5",
+            },
+          ],
+          CreatedAt: "10d",
+          UpdatedAt: "10d",
+        },
+
+        {
           ID: 2919,
           versions: [
             {
