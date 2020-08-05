@@ -1,6 +1,7 @@
 import { IProject, IProjectState } from "../reducers/ProjectReducer";
 import { ThunkAction } from "redux-thunk";
 import { ActionCreator, Dispatch } from "redux";
+import { FetchProjects } from "../../service/project/project";
 
 export enum ProjectActionTypes {
   FETCH_ALL = "FETCH_ALL",
@@ -21,6 +22,7 @@ export const fetchAllProjects: ActionCreator<ThunkAction<
 >> = () => {
   return async (dispatch: Dispatch) => {
     try {
+      FetchProjects();
       const res: IProject[] = [
         {
           ID: 2919023,

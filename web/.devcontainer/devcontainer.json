@@ -28,8 +28,5 @@
   "workspaceFolder": "/workspace/web",
   "shutdownAction": "none",
   "postCreateCommand": "yarn install",
-  "remoteUser": "root",
-  "remoteEnv": {
-    "api": "http://server_dev:5000"
-  }
+  "remoteUser": "root"
 }
