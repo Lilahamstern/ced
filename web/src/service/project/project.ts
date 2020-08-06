@@ -1,14 +1,13 @@
 import API from "../index";
 
 export function FetchProjects() {
-  console.log(process.env);
-  console.log(process.env.API_URL);
-  console.log(process.env["API_URL"]);
-  API.get("/space/projects")
+  API.request({ url: "/space/projects", method: "GET" })
     .then((res) => {
+      console.log(res);
       console.log(res.data);
     })
     .catch((error) => {
+      console.log(error);
       console.log(error);
     });
 }
