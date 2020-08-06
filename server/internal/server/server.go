@@ -21,14 +21,19 @@ type Server struct {
 func NewServer(db *sqlx.DB) *Server {
 	r := gin.New()
 	s := &Server{db, r}
+	s.middleware()
 	s.routes()
 
 	return s
 }
 
-func (s *Server) routes() {
+func (s *Server) middleware() {
 	s.router.Use(gin.Recovery())
 	s.router.Use(gin.Logger())
+	s.router.Use(middleware.CORS())
+}
+
+func (s *Server) routes() {
 	s.router.Use(sentrygin.New(sentrygin.Options{
 		Repanic: true,
 	}))
