@@ -3,10 +3,10 @@ import { Reducer } from "react";
 import { ProjectActionTypes, ProjectActions } from "../actions/ProjectActions";
 
 export interface IProject {
-  ID: number;
+  id: number;
   versions: IVersion[];
-  CreatedAt: string;
-  UpdatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface IProjectState {

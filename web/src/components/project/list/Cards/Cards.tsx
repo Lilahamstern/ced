@@ -15,16 +15,20 @@ export class Cards extends Component<IProps, IState> {
     const { projects } = this.props;
     const markup = [];
 
-    for (let project of projects) {
-      markup.push(
-        <Card
-          project={project}
-          className={"flex mt-5 w-full justify-center"}
-          key={project.ID}
-        />
-      );
+    if (projects.length > 0) {
+      for (let project of projects) {
+        markup.push(
+          <Card
+            project={project}
+            className={"flex mt-5 w-full justify-center"}
+            key={project.id}
+          />
+        );
+      }
+      return <div className="w-full">{markup}</div>;
     }
-    return <div className="w-full">{markup}</div>;
+
+    return <div>No projects found</div>;
   }
 }
 

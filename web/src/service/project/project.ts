@@ -1,13 +1,16 @@
 import API from "../index";
+import { IResponse } from "../types";
 
-export function FetchProjects() {
-  API.request({ url: "/space/projects", method: "GET" })
-    .then((res) => {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log(error);
-    });
+export async function FetchProjects(): Promise<IResponse> {
+  return new Promise((resolve, reject) => {
+    API.request({ url: "space/projects", method: "GET" })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          resolve(err.response);
+        }
+      });
+  });
 }
