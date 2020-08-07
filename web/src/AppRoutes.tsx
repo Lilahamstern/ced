@@ -2,7 +2,8 @@ import React, { FunctionComponent } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import Navbar from "./components/navbar/Navbar";
-import Home from "./views/Home";
+import HomeView from "./views/HomeView";
+import ProjectView from "./views/ProjectView";
 
 const AppRoutes: FunctionComponent = () => {
   return (
@@ -20,7 +21,8 @@ export default AppRoutes;
 const Routes: FunctionComponent = () => {
   return (
     <React.Fragment>
-      <Route path="/" exact component={Home} />
+      <Route path="/" exact component={HomeView} />
+      <Route path="/project/:id" exact component={ProjectView} />
     </React.Fragment>
   );
 };
