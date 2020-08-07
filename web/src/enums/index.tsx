@@ -1,4 +1,4 @@
-export enum ProjectViewStatus {
+export enum ProjectViewMode {
   CARD = "card",
   LIST = "list"
 }

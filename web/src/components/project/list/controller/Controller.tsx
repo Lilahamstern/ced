@@ -1,14 +1,14 @@
 import React, { Component, FunctionComponent } from "react";
 
-import { ProjectViewStatus } from "../../../../enums";
+import { ProjectViewMode } from "../../../../enums";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 
 interface IProps {
-  view: ProjectViewStatus;
+  view: ProjectViewMode;
   clickHandler: (
     event: React.MouseEvent<HTMLButtonElement>,
-    view: ProjectViewStatus
+    view: ProjectViewMode
   ) => void;
 }
 
@@ -21,18 +21,18 @@ export class Controller extends Component<IProps, IState> {
       <div className="bg-gray-800 text-sm text-gray-500 leading-none border-2 border-gray-800 rounded-full inline-flex">
         <Button
           onClick={clickHandler}
-          view={ProjectViewStatus.CARD}
+          view={ProjectViewMode.CARD}
           iconName="th-large"
           classes={`btn rounded-l-full focus:outline-none hover:text-gray-100 focus:text-gray-200 ${
-            view === ProjectViewStatus.CARD ? "active" : ""
+            view === ProjectViewMode.CARD ? "active" : ""
           }`}
         />
         <Button
           onClick={clickHandler}
-          view={ProjectViewStatus.LIST}
+          view={ProjectViewMode.LIST}
           iconName="th-list"
           classes={`btn rounded-r-full focus:outline-none hover:text-white focus:text-gray-200 ${
-            view === ProjectViewStatus.LIST ? "active" : ""
+            view === ProjectViewMode.LIST ? "active" : ""
           }`}
         />
       </div>
@@ -44,11 +44,11 @@ export default Controller;
 
 interface ButtonProps {
   classes: string;
-  view: ProjectViewStatus;
+  view: ProjectViewMode;
   iconName: IconName;
   onClick: (
     event: React.MouseEvent<HTMLButtonElement>,
-    view: ProjectViewStatus
+    view: ProjectViewMode
   ) => void;
 }
 

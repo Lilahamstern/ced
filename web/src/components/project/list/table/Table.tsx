@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Tooltip from "../../../tooltip/Tooltip";
@@ -12,34 +12,48 @@ interface IProps {
   projects: IProject[];
 }
 
-interface IState {}
+export const Table: FunctionComponent<IProps> = (props: IProps) => {
+  const { projects } = props;
+  let tableBody: any;
 
-export class Table extends Component<IProps, IState> {
-  render() {
-    const { projects } = this.props;
-
-    return (
-      <div className="bg-gray-800 w-full max-w-6xl rounded-lg border-2 border-gray-700">
-        <table className="table-fixed border-collapse text-white w-full rounded-lg">
-          <thead className="bg-gray-700 flex w-full shadow-b rounded-t-lg">
-            <tr className="text-sm flex w-full justify-start text-left">
-              <th className="table-head w-32 text-center">
-                <FontAwesomeIcon icon={["far", "clock"]} />
-              </th>
-              <th className="table-head w-1/12">Project</th>
-              <th className="table-head w-1/5">Title</th>
-              <th className="table-head w-1/6">Sector</th>
-              <th className="table-head w-1/6">Client</th>
-              <th className="table-head w-1/6">Manager</th>
-              <th className="table-head w-1/12 truncate">Co2-ekv/m2</th>
-            </tr>
-          </thead>
-          <TableBody projects={projects} />
-        </table>
-      </div>
+  if (projects.length > 0) {
+    console.log(11);
+    tableBody = (
+      <tbody className="flex flex-col items-start w-full relative">
+        {projects.map((project, index) => {
+          return <TableRow project={project} index={index} key={project.id} />;
+        })}
+      </tbody>
+    );
+  } else {
+    tableBody = (
+      <tbody className="flex flex-col  items-center w-full relative">
+        No projects found
+      </tbody>
     );
   }
-}
+
+  return (
+    <div className="bg-gray-800 w-full max-w-6xl rounded-lg border-2 border-gray-700">
+      <table className="table-fixed border-collapse text-white w-full rounded-lg">
+        <thead className="bg-gray-700 flex w-full shadow-b rounded-t-lg">
+          <tr className="text-sm flex w-full justify-start text-left">
+            <th className="table-head w-32 text-center">
+              <FontAwesomeIcon icon={["far", "clock"]} />
+            </th>
+            <th className="table-head w-1/12">Project</th>
+            <th className="table-head w-1/5">Title</th>
+            <th className="table-head w-1/6">Sector</th>
+            <th className="table-head w-1/6">Client</th>
+            <th className="table-head w-1/6">Manager</th>
+            <th className="table-head w-1/12 truncate">Co2-ekv/m2</th>
+          </tr>
+        </thead>
+        {tableBody}
+      </table>
+    </div>
+  );
+};
 
 const mapStateToProps = (store: IAppState) => {
   return {
@@ -48,38 +62,6 @@ const mapStateToProps = (store: IAppState) => {
 };
 
 export default connect(mapStateToProps)(Table);
-
-// Table body
-interface TableBodyProps {
-  projects: IProject[];
-}
-
-const TableBody: FunctionComponent<TableBodyProps> = (
-  props: TableBodyProps
-) => {
-  const { projects } = props;
-  const tableRows: Array<any> = [];
-
-  if (projects.length > 0) {
-    projects.forEach((project, index) => {
-      tableRows.push(
-        <TableRow project={project} index={index} key={project.id} />
-      );
-    });
-
-    return (
-      <tbody className="flex flex-col items-start w-full relative">
-        {tableRows}
-      </tbody>
-    );
-  }
-
-  return (
-    <tbody className="flex flex-col  items-center w-full relative">
-      No projects found
-    </tbody>
-  );
-};
 
 // Table row
 interface TableRowProps {

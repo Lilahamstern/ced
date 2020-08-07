@@ -1,38 +1,38 @@
 import React, { Component, FunctionComponent } from "react";
 
-import { ProjectViewStatus } from "../enums";
+import { ProjectViewMode } from "../enums";
 import { viewCards, widthLessThen } from "../utils/utils";
 import ProjectSearch from "../components/project/search/Search";
 import Controller from "../components/project/list/controller/Controller";
 import Cards from "../components/project/list/cards/Cards";
 import Table from "../components/project/list/table/Table";
 
-interface IProps { }
+interface IProps {}
 
 interface IState {
-  view: ProjectViewStatus;
+  viewMode: ProjectViewMode;
   viewport: {
     width: number;
-  },
+  };
 }
 
-export class Home extends Component<IProps, IState> {
+export class HomeView extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      view: ProjectViewStatus.CARD,
+      viewMode: ProjectViewMode.CARD,
       viewport: {
         width: window.innerWidth,
       },
-    }
+    };
   }
 
-  clickHandler = (
+  handleControllerClick = (
     e: React.MouseEvent<HTMLButtonElement>,
-    view: ProjectViewStatus
+    mode: ProjectViewMode
   ) => {
     e.preventDefault();
-    this.setState({ view });
+    this.setState({ viewMode: mode });
   };
 
   updateDimension = () => {
@@ -53,12 +53,15 @@ export class Home extends Component<IProps, IState> {
           <ProjectSearch />
         </div>
         <div className="mt-6 hidden lg:flex lg:justify-center">
-          <Controller clickHandler={this.clickHandler} view={this.state.view} />
+          <Controller
+            clickHandler={this.handleControllerClick}
+            view={this.state.viewMode}
+          />
         </div>
         <div className="mt-6">
           <ProjectsView
             width={this.state.viewport.width}
-            view={this.state.view}
+            view={this.state.viewMode}
           />
         </div>
       </div>
@@ -66,11 +69,11 @@ export class Home extends Component<IProps, IState> {
   }
 }
 
-export default Home;
+export default HomeView;
 
 interface IProjectsViewProps {
   width: number;
-  view: ProjectViewStatus;
+  view: ProjectViewMode;
 }
 const ProjectsView: FunctionComponent<IProjectsViewProps> = (
   props: IProjectsViewProps
@@ -79,7 +82,7 @@ const ProjectsView: FunctionComponent<IProjectsViewProps> = (
   if (!viewCards(view) && !widthLessThen(width, 1024)) {
     return (
       <div className="justify-center rounded-lg hidden lg:flex">
-        <Table/>
+        <Table />
       </div>
     );
   }
