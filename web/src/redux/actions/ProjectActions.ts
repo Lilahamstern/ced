@@ -5,6 +5,7 @@ import { FetchProjects } from "../../service/project/project";
 
 export enum ProjectActionTypes {
   FETCH_ALL = "FETCH_ALL",
+  SELECT = "SELECT",
 }
 
 export interface IProjectFetchAllAction {
@@ -12,7 +13,12 @@ export interface IProjectFetchAllAction {
   projects: IProject[];
 }
 
-export type ProjectActions = IProjectFetchAllAction;
+export interface IProjectSelectAction {
+  type: ProjectActionTypes.SELECT;
+  selected: string;
+}
+
+export type ProjectActions = IProjectFetchAllAction | IProjectSelectAction;
 
 export const fetchAllProjects: ActionCreator<ThunkAction<
   Promise<any>,
@@ -31,5 +37,20 @@ export const fetchAllProjects: ActionCreator<ThunkAction<
     } catch (err) {
       console.log(err);
     }
+  };
+};
+
+export const SelectProject: ActionCreator<ThunkAction<
+  Promise<any>,
+  IProjectState,
+  null,
+  IProjectSelectAction
+>> = (id: string) => {
+  return async (dispatch: Dispatch) => {
+    console.log(id);
+    dispatch({
+      type: ProjectActionTypes.SELECT,
+      selected: id,
+    });
   };
 };

@@ -1,12 +1,19 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, MouseEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Tooltip from "../../../tooltip/Tooltip";
 
-import { IProject } from "../../../../redux/reducers/ProjectReducer";
-import { connect } from "react-redux";
-import { IAppState } from "../../../../redux/store/store";
+import {
+  IProject,
+  IProjectState,
+} from "../../../../redux/reducers/ProjectReducer";
 import { getTimeSince } from "../../../../utils/utils";
+import { connect } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import {
+  IProjectSelectAction,
+  SelectProject,
+} from "../../../../redux/actions/ProjectActions";
 
 interface IProps {
   projects: IProject[];
@@ -17,11 +24,16 @@ export const Table: FunctionComponent<IProps> = (props: IProps) => {
   let tableBody: any;
 
   if (projects.length > 0) {
-    console.log(11);
     tableBody = (
       <tbody className="flex flex-col items-start w-full relative">
         {projects.map((project, index) => {
-          return <TableRow project={project} index={index} key={project.id} />;
+          return (
+            <TableRowContainer
+              project={project}
+              index={index}
+              key={project.id}
+            />
+          );
         })}
       </tbody>
     );
@@ -55,27 +67,28 @@ export const Table: FunctionComponent<IProps> = (props: IProps) => {
   );
 };
 
-const mapStateToProps = (store: IAppState) => {
-  return {
-    projects: store.projectState.projects,
-  };
-};
-
-export default connect(mapStateToProps)(Table);
+export default Table;
 
 // Table row
 interface TableRowProps {
   index: number;
   project: IProject;
+  selectProject: (id: string) => Promise<void>;
 }
 
 const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
-  const { project, index } = props;
+  const { project, index, selectProject } = props;
+
+  const handleClick = (e: MouseEvent<HTMLTableRowElement>) => {
+    e.preventDefault();
+    selectProject(project.id.toString());
+  };
   return (
     <tr
       className={`flex w-full items-center cursor-pointer hover:bg-gray-900 ${
         index % 2 !== 0 ? "bg-gray-700" : ""
       }`}
+      onClick={(e) => handleClick(e)}
     >
       <td className="text-sm font-semibold p-2 pl-5 w-32">
         {getTimeSince(project.versions[0].updated_at)} ago
@@ -97,3 +110,13 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
     </tr>
   );
 };
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
+) => {
+  return {
+    selectProject: (id: string) => dispatch(SelectProject(id)),
+  };
+};
+
+const TableRowContainer = connect(null, mapDispatchToProps)(TableRow);

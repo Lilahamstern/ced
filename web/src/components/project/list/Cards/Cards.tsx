@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Card from "./card/Card";
 import { IProject } from "../../../../redux/reducers/ProjectReducer";
-import { connect } from "react-redux";
-import { IAppState } from "../../../../redux/store/store";
 
 interface IProps {
   projects: IProject[];
@@ -33,10 +31,4 @@ export class Cards extends Component<IProps, IState> {
   }
 }
 
-const mapStateToProps = (store: IAppState) => {
-  return {
-    projects: store.projectState.projects,
-  };
-};
-
-export default connect(mapStateToProps)(Cards);
+export default Cards;

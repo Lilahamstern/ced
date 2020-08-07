@@ -1,18 +1,30 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, MouseEvent } from "react";
 import Tooltip from "../../../../tooltip/Tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IProject } from "../../../../../redux/reducers/ProjectReducer";
+import {
+  IProject,
+  IProjectState,
+} from "../../../../../redux/reducers/ProjectReducer";
 import { getTimeSince } from "../../../../../utils/utils";
+import { ThunkDispatch } from "redux-thunk";
+import {
+  SelectProject,
+  IProjectSelectAction,
+} from "../../../../../redux/actions/ProjectActions";
+import { connect } from "react-redux";
 
 interface IProps {
   project: IProject;
   className?: string;
+  selectProject: (id: string) => Promise<void>;
 }
 
-interface IState {}
-
 export const Card: FunctionComponent<IProps> = (props: IProps) => {
-  const { project, className } = props;
+  const { project, className, selectProject } = props;
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    selectProject(project.id.toString());
+  };
   return (
     <div className={className}>
       <div className="bg-gray-800 shadow-md rounded max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl w-full">
@@ -60,7 +72,10 @@ export const Card: FunctionComponent<IProps> = (props: IProps) => {
               </small>
             </div>
           </div>
-          <div className="flex items-center text-lg text-gray-500 hover:text-gray-600 hover-slide rounded-r h-full pl-2 pr-2 ml-2 cursor-pointer mx-auto">
+          <div
+            className="flex items-center text-lg text-gray-500 hover:text-gray-600 hover-slide rounded-r h-full pl-2 pr-2 ml-2 cursor-pointer mx-auto"
+            onClick={(e) => handleClick(e)}
+          >
             <FontAwesomeIcon icon={["fas", "arrow-right"]} />
           </div>
         </div>
@@ -68,5 +83,12 @@ export const Card: FunctionComponent<IProps> = (props: IProps) => {
     </div>
   );
 };
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
+) => {
+  return {
+    selectProject: (id: string) => dispatch(SelectProject(id)),
+  };
+};
 
-export default Card;
+export default connect(null, mapDispatchToProps)(Card);
