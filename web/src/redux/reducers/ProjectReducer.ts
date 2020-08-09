@@ -11,12 +11,12 @@ export interface IProject {
 
 export interface IProjectState {
   projects: IProject[];
-  selected: string;
+  project: IProject;
 }
 
 const initialProjectState: IProjectState = {
   projects: [],
-  selected: "",
+  project: null,
 };
 
 export const projectReducer: Reducer<IProjectState, ProjectActions> = (
@@ -33,7 +33,7 @@ export const projectReducer: Reducer<IProjectState, ProjectActions> = (
     case ProjectActionTypes.SELECT: {
       return {
         ...state,
-        selected: action.selected,
+        project: action.project,
       };
     }
     default:

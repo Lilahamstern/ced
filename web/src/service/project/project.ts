@@ -14,3 +14,17 @@ export async function FetchProjects(): Promise<IResponse> {
       });
   });
 }
+
+export async function FetchSingelProjectByID(id: string): Promise<IResponse> {
+  return new Promise((resolve, reject) => {
+    API.request({ url: `space/projects/${id}`, method: "GET" })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        if (err.response) {
+          resolve(err.response);
+        }
+      });
+  });
+}

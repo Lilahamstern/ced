@@ -1,11 +1,14 @@
 import { IProject, IProjectState } from "../reducers/ProjectReducer";
 import { ThunkAction } from "redux-thunk";
 import { ActionCreator, Dispatch } from "redux";
-import { FetchProjects } from "../../service/project/project";
+import {
+  FetchProjects,
+  FetchSingelProjectByID,
+} from "../../service/project/project";
 
 export enum ProjectActionTypes {
   FETCH_ALL = "FETCH_ALL",
-  SELECT = "SELECT",
+  SELECT = "SELECT_PROJECT",
 }
 
 export interface IProjectFetchAllAction {
@@ -15,7 +18,7 @@ export interface IProjectFetchAllAction {
 
 export interface IProjectSelectAction {
   type: ProjectActionTypes.SELECT;
-  selected: string;
+  project: IProject;
 }
 
 export type ProjectActions = IProjectFetchAllAction | IProjectSelectAction;
@@ -47,10 +50,15 @@ export const SelectProject: ActionCreator<ThunkAction<
   IProjectSelectAction
 >> = (id: string) => {
   return async (dispatch: Dispatch) => {
-    console.log(id);
-    dispatch({
-      type: ProjectActionTypes.SELECT,
-      selected: id,
-    });
+    try {
+      FetchSingelProjectByID(id).then((res) => {
+        dispatch({
+          type: ProjectActionTypes.SELECT,
+          project: res.data.project,
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 };

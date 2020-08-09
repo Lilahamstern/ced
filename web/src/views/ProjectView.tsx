@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { RouteComponentProps } from "react-router-dom";
-
+import { FetchSingelProjectByID } from "../service/project/project";
+import ProjectInformation from "../components/project/selected/ProjectInformation";
 interface IState {}
 
 interface IProps {
@@ -12,16 +13,14 @@ export class ProjectView extends Component<
 > {
   constructor(props: RouteComponentProps<IProps>) {
     super(props);
-    console.log(props);
   }
-  
-  testss = () => {
-    console.log(this.props);
-  };
+
   render() {
-    const { match } = this.props;
-    this.testss();
-    return <div>{match.params.id}</div>;
+    return (
+      <Fragment>
+        <ProjectInformation id={this.props.match.params.id} />
+      </Fragment>
+    );
   }
 }
 
