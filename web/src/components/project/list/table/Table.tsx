@@ -3,24 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Tooltip from "../../../tooltip/Tooltip";
 
-import {
-  IProject,
-  IProjectState,
-} from "../../../../redux/reducers/ProjectReducer";
+import { IProject } from "../../../../redux/reducers/ProjectReducer";
 import { getTimeSince } from "../../../../utils/utils";
-import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import {
-  IProjectSelectAction,
-  SelectProject,
-} from "../../../../redux/actions/ProjectActions";
 
 interface IProps {
   projects: IProject[];
+  onRowClick: (e: MouseEvent, id: string) => void;
 }
 
 export const Table: FunctionComponent<IProps> = (props: IProps) => {
-  const { projects } = props;
+  const { projects, onRowClick } = props;
   let tableBody: any;
 
   if (projects.length > 0) {
@@ -28,7 +20,8 @@ export const Table: FunctionComponent<IProps> = (props: IProps) => {
       <tbody className="flex flex-col items-start w-full relative">
         {projects.map((project, index) => {
           return (
-            <TableRowContainer
+            <TableRow
+              onClick={(e) => onRowClick(e, project.id.toString())}
               project={project}
               index={index}
               key={project.id}
@@ -73,22 +66,18 @@ export default Table;
 interface TableRowProps {
   index: number;
   project: IProject;
-  selectProject: (id: string) => Promise<void>;
+  onClick: (e: MouseEvent) => void;
 }
 
 const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
-  const { project, index, selectProject } = props;
+  const { project, index, onClick } = props;
 
-  const handleClick = (e: MouseEvent<HTMLTableRowElement>) => {
-    e.preventDefault();
-    selectProject(project.id.toString());
-  };
   return (
     <tr
       className={`flex w-full items-center cursor-pointer hover:bg-gray-900 ${
         index % 2 !== 0 ? "bg-gray-700" : ""
       }`}
-      onClick={(e) => handleClick(e)}
+      onClick={(e) => onClick(e)}
     >
       <td className="text-sm font-semibold p-2 pl-5 w-32">
         {getTimeSince(project.versions[0].updated_at)} ago
@@ -111,12 +100,10 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
   );
 };
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
-) => {
-  return {
-    selectProject: (id: string) => dispatch(SelectProject(id)),
-  };
-};
-
-const TableRowContainer = connect(null, mapDispatchToProps)(TableRow);
+// const mapDispatchToProps = (
+//   dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
+// ) => {
+//   return {
+//     selectProject: (id: string) => dispatch(SelectProject(id)),
+//   };
+// };

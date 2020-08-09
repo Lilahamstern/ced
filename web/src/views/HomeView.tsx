@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from "react";
+import React, { Component, FunctionComponent, MouseEvent } from "react";
 
 import { ProjectViewMode } from "../enums";
 import { viewCards, widthLessThen } from "../utils/utils";
@@ -6,9 +6,15 @@ import ProjectSearch from "../components/project/search/Search";
 import Controller from "../components/project/list/controller/Controller";
 import Cards from "../components/project/list/cards/Cards";
 import Table from "../components/project/list/table/Table";
-import { IProject } from "../redux/reducers/ProjectReducer";
+import { IProject, IProjectState } from "../redux/reducers/ProjectReducer";
 import { connect } from "react-redux";
 import { IAppState } from "../redux/store/store";
+import { ThunkDispatch } from "redux-thunk";
+import {
+  IProjectSelectAction,
+  SelectProject,
+} from "../redux/actions/ProjectActions";
+import { useHistory } from "react-router-dom";
 
 interface IProps {}
 
@@ -78,19 +84,28 @@ interface IProjectsViewProps {
   width: number;
   view: ProjectViewMode;
   projects: IProject[];
+  selectProject: (id: string) => Promise<void>;
 }
 const ProjectsView: FunctionComponent<IProjectsViewProps> = (
   props: IProjectsViewProps
 ) => {
-  const { width, view, projects } = props;
+  const { width, view, projects, selectProject } = props;
+  const history = useHistory();
+
+  const handleSelectProjectClick = (e: MouseEvent, id: string) => {
+    e.preventDefault();
+    selectProject(id);
+    history.push(`/project/${id}`);
+  };
+
   if (!viewCards(view) && !widthLessThen(width, 1024)) {
     return (
       <div className="justify-center rounded-lg hidden lg:flex">
-        <Table projects={projects} />
+        <Table projects={projects} onRowClick={handleSelectProjectClick} />
       </div>
     );
   }
-  return <Cards projects={projects} />;
+  return <Cards projects={projects} onCardClick={handleSelectProjectClick} />;
 };
 
 const mapStateToProps = (store: IAppState) => {
@@ -99,4 +114,15 @@ const mapStateToProps = (store: IAppState) => {
   };
 };
 
-const ProjectsViewContainer = connect(mapStateToProps)(ProjectsView);
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
+) => {
+  return {
+    selectProject: (id: string) => dispatch(SelectProject(id)),
+  };
+};
+
+const ProjectsViewContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProjectsView);
