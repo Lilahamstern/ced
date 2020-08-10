@@ -22,7 +22,7 @@ const Routes: FunctionComponent = () => {
   return (
     <React.Fragment>
       <Route path="/" exact component={HomeView} />
-      <Route path="/project/:id" exact component={ProjectView} />
+      <Route path="/project/:id" component={ProjectView} />
     </React.Fragment>
   );
 };
