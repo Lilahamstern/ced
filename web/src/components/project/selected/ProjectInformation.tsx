@@ -10,6 +10,7 @@ import {
 } from "../../../redux/actions/ProjectActions";
 import { connect } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
+import { getTimeSince } from "../../../utils/utils";
 
 interface IProps {
   id: string;
@@ -25,12 +26,25 @@ class ProjectInformation extends Component<IProps, IState> {
   }
   render() {
     const { project } = this.props;
-    if (project) {
-      return <div>{project.id}</div>;
+    if (!project) {
+      return <div>404</div>;
     }
-    return <div>None</div>;
+    return (
+      <div className="">
+        <div className="flex p-5 bg-red-200">
+          <ul>
+            <li>{project.id}</li>
+            <li>{getTimeSince(project.updated_at)}</li>
+            <li>{project.versions.length}</li>
+            <li>{}</li>
+            <li></li>
+          </ul>
+        </div>
+      </div>
+    );
   }
 }
+
 const mapStateToProps = (store: IAppState) => {
   return {
     project: store.projectState.project,

@@ -35,7 +35,7 @@ func (r *version) GetVersionsByProjectId(id string) ([]domain.Version, error) {
 					   c.versionid
 			    FROM components AS c
 			    GROUP BY c.versionid) AS c1 ON c1.versionid = v.id
-			 WHERE projectid = $1`
+			 WHERE projectid = $1 ORDER BY updatedat DESC;`
 
 	stmt, err := r.db.Preparex(query)
 	if err != nil {
