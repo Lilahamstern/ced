@@ -9,7 +9,7 @@ export function viewCards(status: ProjectViewMode): boolean {
   return status === ProjectViewMode.CARD;
 }
 
-export function getTimeSince(date: string): string {
+export function getTimeSince(date: string, withoutSuffix: boolean): string {
   let unix = Date.parse(date);
-  return moment.utc(unix).fromNow(true);
+  return moment.utc(unix).fromNow(withoutSuffix);
 }

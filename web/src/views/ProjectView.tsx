@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import ProjectInformation from "../components/project/selected/ProjectInformation";
 interface IState {}

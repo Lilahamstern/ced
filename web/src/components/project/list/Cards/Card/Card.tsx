@@ -55,7 +55,7 @@ export const Card: FunctionComponent<IProps> = (props: IProps) => {
                 <span>
                   <i className="far fa-clock"></i>
                 </span>
-                {getTimeSince(project.versions[0].updated_at)} ago
+                {getTimeSince(project.versions[0].updated_at, false)}
               </small>
             </div>
           </div>

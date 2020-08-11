@@ -33,11 +33,13 @@ class ProjectInformation extends Component<IProps, IState> {
       <div className="">
         <div className="flex p-5 bg-red-200">
           <ul>
-            <li>{project.id}</li>
-            <li>{getTimeSince(project.updated_at)}</li>
+            <li>Project ID: {project.id}</li>
+            <li>Created at:{getTimeSince(project.created_at, false)}</li>
+            <li>
+              Last updated at:
+              {getTimeSince(project.versions[0].updated_at, false)}
+            </li>
             <li>{project.versions.length}</li>
-            <li>{}</li>
-            <li></li>
           </ul>
         </div>
       </div>

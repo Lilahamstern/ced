@@ -80,7 +80,7 @@ const TableRow: FunctionComponent<TableRowProps> = (props: TableRowProps) => {
       onClick={(e) => onClick(e)}
     >
       <td className="text-sm font-semibold p-2 pl-5 w-32">
-        {getTimeSince(project.versions[0].updated_at)} ago
+        {getTimeSince(project.versions[0].updated_at, false)}
       </td>
       <td className="table-text w-1/12">{project.id}</td>
       <td className="table-text w-1/5">{project.versions[0].title}</td>
