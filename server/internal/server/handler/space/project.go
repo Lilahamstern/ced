@@ -69,12 +69,6 @@ func (h *Handler) handleProjectGetAll() gin.HandlerFunc {
 	}
 }
 
-// @Summary Fetch singel project by id
-// @Description Fetch singel project by id
-// @Accept  json
-// @Produce  json
-// @Param   id     path    int     true        "Project ID"
-// @Router /space/projects/{id} [get]
 func (h *Handler) handleProjectGet() gin.HandlerFunc {
 	const op Op = "handler.space.handleProjectGet"
 
