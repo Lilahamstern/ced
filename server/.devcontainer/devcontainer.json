@@ -13,13 +13,11 @@
         "terminal.integrated.shell.linux": "/bin/bash",
         "go.gopath": "/go"
     },
-    "forwardPorts": [
-        5000
-    ],
     "workspaceFolder": "/workspace/server",
     "shutdownAction": "none",
     "extensions": [
         "golang.go",
-        "bajdzis.vscode-database"
+        "bajdzis.vscode-database",
+        "mutantdino.resourcemonitor"
     ]
 }

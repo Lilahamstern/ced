@@ -10,6 +10,8 @@ services:
     environment: 
       - DB=postgres://dev:dev@db:5432/ced?sslmode=disable
     command: /bin/sh -c "while sleep 1000; do :; done"
+    ports: 
+      - '5000:5000'
     networks: 
       - ced_database
       - ced_server

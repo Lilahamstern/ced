@@ -23,7 +23,8 @@
 	"cpylua.language-postcss",
 	"esbenp.prettier-vscode",
 	"rbbit.typescript-hero",
-	"jingkaizhao.vscode-redux-devtools"
+	"jingkaizhao.vscode-redux-devtools",
+	"mutantdino.resourcemonitor"
 ],
   "forwardPorts": [3000],
   "workspaceFolder": "/workspace/web",
