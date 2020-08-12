@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import Navbar from "./components/navbar/Navbar";
 import HomeView from "./views/HomeView";
-import ProjectView from "./views/ProjectView";
+import { ProjectViewContainer } from "./views/ProjectView";
 
 const AppRoutes: FunctionComponent = () => {
   return (
@@ -22,7 +22,7 @@ const Routes: FunctionComponent = () => {
   return (
     <React.Fragment>
       <Route path="/" exact component={HomeView} />
-      <Route path="/project/:id" component={ProjectView} />
+      <Route path="/project/:id" component={ProjectViewContainer} />
     </React.Fragment>
   );
 };

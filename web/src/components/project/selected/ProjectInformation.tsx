@@ -1,29 +1,16 @@
 import React, { Component } from "react";
 import { IAppState } from "../../../redux/store/store";
-import {
-  IProject,
-  IProjectState,
-} from "../../../redux/reducers/ProjectReducer";
-import {
-  SelectProject,
-  IProjectSelectAction,
-} from "../../../redux/actions/ProjectActions";
+import { IProject } from "../../../redux/reducers/ProjectReducer";
 import { connect } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
 import { getTimeSince } from "../../../utils/utils";
 
 interface IProps {
-  id: string;
   project: IProject;
-  fetchProject: (id: string) => Promise<void>;
 }
 
 interface IState {}
 
 class ProjectInformation extends Component<IProps, IState> {
-  UNSAFE_componentWillMount() {
-    this.props.fetchProject(this.props.id);
-  }
   render() {
     const { project } = this.props;
     if (!project) {
@@ -31,15 +18,15 @@ class ProjectInformation extends Component<IProps, IState> {
     }
     return (
       <div className="">
-        <div className="flex p-5 bg-red-200">
+        <div className="flex p-5 bg-gray-700 text-white">
           <ul>
             <li>Project ID: {project.id}</li>
-            <li>Created at:{getTimeSince(project.created_at, false)}</li>
+            <li>Created at: {getTimeSince(project.created_at, false)}</li>
             <li>
-              Last updated at:
+              Last updated at:{" "}
               {getTimeSince(project.versions[0].updated_at, false)}
             </li>
-            <li>{project.versions.length}</li>
+            <li>Total projects: {project.versions.length}</li>
           </ul>
         </div>
       </div>
@@ -53,12 +40,4 @@ const mapStateToProps = (store: IAppState) => {
   };
 };
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<IProjectState, null, IProjectSelectAction>
-) => {
-  return {
-    fetchProject: (id: string) => dispatch(SelectProject(id)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectInformation);
+export default connect(mapStateToProps, null)(ProjectInformation);
