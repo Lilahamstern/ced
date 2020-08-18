@@ -11,7 +11,9 @@ type Handler struct {
 }
 
 // Routes : Register space routes
-func (h *Handler) Routes(space *gin.RouterGroup) {
+func (h *Handler) Routes(gin *gin.Engine) {
+	space := gin.Group("/space")
+
 	space.POST("/projects", h.handleProjectCreate())
 	space.GET("/projects", h.handleProjectGetAll())
 	space.GET("/projects/:id", h.handleProjectGet())

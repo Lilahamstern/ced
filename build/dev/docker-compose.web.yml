@@ -13,4 +13,11 @@ services:
     tty: true
     environment: 
       - CHOKIDAR_USEPOLLING=true
+      - API_URL=http://server_dev:5000
     command: /bin/sh -c "while sleep 1000; do :; done"
+    networks: 
+      - ced_server
+
+networks: 
+  ced_server:
+    external: true

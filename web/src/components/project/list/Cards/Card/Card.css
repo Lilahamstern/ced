@@ -1,0 +1,38 @@
+.card-row {
+  @apply flex items-center flex-wrap justify-start mt-1;
+}
+.hover-slide:hover {
+  --bg-opacity: 1;
+  background-color: rgba(40, 51, 68, var(--bg-opacity));
+}
+.label {
+  @apply font-semibold text-sm text-gray-400;
+}
+
+.info {
+  @apply mt-1;
+}
+
+@media (max-width: 768px) {
+  .info {
+    @apply text-sm w-1/2 truncate text-gray-500;
+  }
+}
+@media (min-width: 768px) {
+  .info {
+    @apply text-sm w-1/3 truncate text-gray-500;
+  }
+}
+@media (min-width: 1280px) {
+  .info {
+    @apply text-sm w-1/5 truncate text-gray-500 mr-5;
+  }
+}
+
+.tooltip-card {
+  @apply absolute w-3/5 right-0 -mt-6 mr-6 max-w-xxs;
+}
+
+.tooltip-card-icon {
+  @apply right-0 -mt-6 -mr-3;
+}

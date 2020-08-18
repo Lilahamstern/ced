@@ -1,0 +1,7 @@
+.search-input {
+  @apply bg-gray-700 p-2 pl-6 pr-6 shadow-md rounded-full border-0 w-full outline-none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px #ffffff;
+  }
+}

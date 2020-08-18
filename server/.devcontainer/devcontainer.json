@@ -1,8 +1,7 @@
 {
     "name": "Server",
     "dockerComposeFile": [
-        "../../build/dev/docker-compose.server.yml",
-        "../../build/dev/docker-compose.db.yml"
+        "../../build/dev/docker-compose.server.yml"
     ],
     "service": "server",
     "runArgs": [
@@ -14,13 +13,11 @@
         "terminal.integrated.shell.linux": "/bin/bash",
         "go.gopath": "/go"
     },
-    "forwardPorts": [
-        5000
-    ],
     "workspaceFolder": "/workspace/server",
     "shutdownAction": "none",
     "extensions": [
         "golang.go",
-        "bajdzis.vscode-database"
+        "bajdzis.vscode-database",
+        "mutantdino.resourcemonitor"
     ]
 }

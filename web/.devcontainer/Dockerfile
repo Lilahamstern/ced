@@ -1,13 +1,39 @@
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:14
+ARG VARIANT=14
+FROM node:${VARIANT}
 
+# Options for setup scripts
+ARG INSTALL_ZSH="true"
+ARG UPGRADE_PACKAGES="true"
 ARG USERNAME=node
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
+ENV NVM_DIR=/usr/local/share/nvm
+ENV NVM_SYMLINK_CURRENT=true \ 
+    PATH=${NVM_DIR}/current/bin:${PATH}
 
-RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then \
-  groupmod --gid $USER_GID $USERNAME \
-  && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
-  && chmod -R $USER_UID:$USER_GID /home/$USERNAME \
-  && chmod -R $USER_UID:root /usr/local/share/nvm /usr/local/share/npm-global; \
-  fi 
+# Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
+COPY .devcontainer/library-scripts/*.sh /tmp/library-scripts/
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    # Remove imagemagick due to https://security-tracker.debian.org/tracker/CVE-2019-10131
+    && apt-get purge -y imagemagick imagemagick-6-common \
+    # Install common packages, non-root user
+    && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
+    # Update yarn and install nvm
+    && rm -rf /opt/yarn-* /usr/local/bin/yarn /usr/local/bin/yarnpkg \
+    && /bin/bash /tmp/library-scripts/node-debian.sh "${NVM_DIR}" "none" "${USERNAME}" \
+    # Clean up
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /root/.gnupg /tmp/library-scripts
+
+# Configure global npm install location
+ARG NPM_GLOBAL=/usr/local/share/npm-global
+ENV PATH=${PATH}:${NPM_GLOBAL}/bin
+RUN mkdir -p ${NPM_GLOBAL} \
+    && chown ${USERNAME}:root ${NPM_GLOBAL} \
+    && npm config -g set prefix ${NPM_GLOBAL} \
+    && sudo -u ${USERNAME} npm config -g set prefix ${NPM_GLOBAL} \
+    && echo "if [ \"\$(stat -c '%U' ${NPM_GLOBAL})\" != \"${USERNAME}\" ]; then sudo chown -R ${USER_UID}:root ${NPM_GLOBAL} ${NVM_DIR}; fi" \
+    | tee -a /root/.bashrc /root/.zshrc /home/${USERNAME}/.bashrc >> /home/${USERNAME}/.zshrc
+
+# Install eslint globally
+RUN sudo -u ${USERNAME} npm install -g eslint tslint typescript
