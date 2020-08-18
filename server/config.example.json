@@ -1,18 +1,18 @@
 {
-    "port": ":5000",
-    "debug": true,
-    "database": {
-        "host": "localhost",
-        "port": "5432",
-        "name": "postgres",
-        "user": "postgres",
-        "pass": "postgres",
-        "flags": "sslmode=disable",
-        "maxConn": 25,
-        "maxIdle": 25,
-        "migrate": false
-    },
-    "sentry": {
-        "dsn": "Sentry dsn"
-    }
+  "port": "5000",
+  "debug": true,
+  "database": {
+    "host": "localhost",
+    "port": "5432",
+    "name": "postgres",
+    "user": "postgres",
+    "pass": "postgres",
+    "flags": "sslmode=disable",
+    "maxConn": 25,
+    "maxIdle": 25,
+    "migrate": false
+  },
+  "sentry": {
+    "dsn": "Sentry dsn"
+  }
 }

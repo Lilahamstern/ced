@@ -1,25 +1,12 @@
-FROM golang:1.14.6-alpine
+FROM golang:latest
 
-ARG app_env
-ENV APP_ENV $app_env
-ENV CGO_ENABLED 0
+RUN go get github.com/githubnemo/CompileDaemon
 
-RUN apk update && apk add bash inotify-tools git coreutils
+WORKDIR /app
+COPY go.* ./
+RUN go mod download
 
-RUN go get github.com/go-delve/delve/cmd/dlv
+COPY ./ ./
 
-COPY . /go/src/github.com/lilahamstern/ced/server
-WORKDIR /go/src/github.com/lilahamstern/ced/server
-
-#COPY . ./
-
-#RUN go get ./
-
-CMD if [ ${APP_ENV} = production ]; \
-	then \
-	/server; \
-	else \
-	sh startScript.sh; \
-	fi
-
-EXPOSE 8000 2345
+EXPOSE 5000
+ENTRYPOINT CompileDaemon --build="go build cmd/ced/main.go" --command=./main

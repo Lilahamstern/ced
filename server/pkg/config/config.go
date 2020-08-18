@@ -31,3 +31,7 @@ func GenerateDsn() string {
 		viper.GetString("database.flags"),
 	)
 }
+
+func GetPort() string {
+	return fmt.Sprintf(":%v", viper.GetString("port"))
+}

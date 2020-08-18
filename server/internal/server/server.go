@@ -7,8 +7,8 @@ import (
 	"github.com/lilahamstern/ced/server/internal/repository"
 	"github.com/lilahamstern/ced/server/internal/server/handler/middleware"
 	"github.com/lilahamstern/ced/server/internal/server/handler/space"
+	"github.com/lilahamstern/ced/server/pkg/config"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 type Server struct {
@@ -47,7 +47,7 @@ func (s *Server) routes() {
 }
 
 func (s *Server) Start() {
-	port := viper.GetString("port")
+	port := config.GetPort()
 	log.Println("Starting server")
 	log.Printf("Server started! Visit http://localhost:%v/ for documentation!", port)
 	if err := s.router.Run(port); err != nil {
