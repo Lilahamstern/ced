@@ -1,0 +1,15 @@
+FROM golang:1.14.6-alpine
+
+ENV CGO_ENABLED 0
+ENV GIN_MODE release
+
+RUN apk update && apk add bash git coreutils
+
+WORKDIR /app
+COPY ./ /app
+
+RUN go build -o /server ./cmd/ced/main.go
+
+ENTRYPOINT /server
+
+EXPOSE 5000

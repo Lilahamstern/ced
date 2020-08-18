@@ -1,15 +1,16 @@
 package middleware
 
 import (
-	"fmt"
+	"net/http"
+
 	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 	"github.com/lilahamstern/ced/server/internal/server/handler"
 	"github.com/lilahamstern/ced/server/pkg/errors"
 	"github.com/lilahamstern/ced/server/pkg/logger"
-	"net/http"
 )
 
+// ErrorHandler : Default error handler for routes
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
@@ -29,8 +30,9 @@ func ErrorHandler() gin.HandlerFunc {
 
 			switch e.Status() {
 			case errors.KindError:
-				eId := sentry.CaptureException(e)
-				handler.RespondJSON(c, status, e.Status(), fmt.Sprintf("Internal server error, ID: %s", eId))
+				eID := sentry.CaptureException(e)
+				c.Set("error_id", *eID)
+				handler.RespondJSON(c, status, e.Status(), "internal server error")
 			default:
 				handler.RespondJSON(c, status, e.Status(), e.Data())
 			}
