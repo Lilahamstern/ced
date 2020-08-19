@@ -1,9 +1,10 @@
 package request
 
 import (
+	"net/url"
+
 	"github.com/lilahamstern/ced/server/pkg/validation"
 	"github.com/thedevsaddam/govalidator"
-	"net/url"
 )
 
 type CreateProject struct {
@@ -14,7 +15,7 @@ type CreateProject struct {
 // Validate : Validates CreateInformation struct to match requirements to create record
 func (s *CreateProject) Validate() url.Values {
 	rules := govalidator.MapData{
-		"id": []string{"required", "min:9999999", "unique:project"},
+		"id": []string{"required", "min:8", "unique:project"},
 	}
 
 	messages := govalidator.MapData{

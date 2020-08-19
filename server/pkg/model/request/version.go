@@ -1,9 +1,10 @@
 package request
 
 import (
+	"net/url"
+
 	"github.com/lilahamstern/ced/server/pkg/validation"
 	"github.com/thedevsaddam/govalidator"
-	"net/url"
 )
 
 type CreateVersion struct {

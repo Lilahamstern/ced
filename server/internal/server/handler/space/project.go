@@ -20,8 +20,15 @@ func (h *Handler) handleProjectCreate() gin.HandlerFunc {
 	}
 
 	var body request.CreateProject
+
 	return func(c *gin.Context) {
-		_ = c.BindJSON(&body)
+		err := c.BindJSON(&body)
+		if err != nil {
+			e := E(op, err, KindError)
+			c.Error(e)
+			c.Next()
+			return
+		}
 
 		if res := body.Validate(); res != nil {
 			e := E(op, http.StatusBadRequest, KindFail, errors.New("validation failed"), res)
@@ -30,7 +37,7 @@ func (h *Handler) handleProjectCreate() gin.HandlerFunc {
 			return
 		}
 
-		err := h.Repos.Project.Save(body)
+		err = h.Repos.Project.Save(body)
 		if err != nil {
 			e := E(op, err, KindError)
 			c.Error(e)
