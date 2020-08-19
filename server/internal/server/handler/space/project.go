@@ -19,9 +19,9 @@ func (h *Handler) handleProjectCreate() gin.HandlerFunc {
 		Message string `json:"message"`
 	}
 
-	var body request.CreateProject
-
 	return func(c *gin.Context) {
+		var body request.CreateProject
+
 		err := c.BindJSON(&body)
 		if err != nil {
 			e := E(op, err, KindError)
