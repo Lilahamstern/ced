@@ -6,3 +6,4 @@ server/config.json
 server/cmd/ced/__debug_bin
 
 web/src/styles/main.css
+server/main
