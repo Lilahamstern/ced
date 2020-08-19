@@ -39,7 +39,8 @@ Run docker-compose up -d
 
 To access the web application, open `localhost:8080` (default) if you haven't changed
 You can access the API on `localhost:{port}/api/space/{endpoints}`
-* Documentation is working in progress
+
+- Documentation is working in progress
 
 ## Deployment
 
