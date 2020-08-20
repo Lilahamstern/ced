@@ -101,7 +101,7 @@ func (h *Handler) handleProjectGet() gin.HandlerFunc {
 			return
 		}
 
-		versions, err := h.Repos.Version.GetVersionsByProjectId(id)
+		versions, err := h.Repos.Version.GetVersionsByProjectID(id)
 		if err != nil {
 			e := E(op, err, KindError)
 			c.Error(e)
