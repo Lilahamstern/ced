@@ -1,12 +1,13 @@
 FROM golang:latest
 
-RUN go get github.com/githubnemo/CompileDaemon
-
+RUN go get github.com/githubnemo/CompileDaemon && \
+  go get github.com/go-delve/delve/cmd/dlv  
 WORKDIR /app
 COPY go.* ./
 RUN go mod download
 
 COPY ./ ./
 
-EXPOSE 5000
-ENTRYPOINT CompileDaemon --build="go build cmd/ced/main.go" --command=./main
+EXPOSE 5000 2345
+
+ENTRYPOINT CompileDaemon --build="echo" --command="dlv debug --headless --listen=:2345 --api-version=2 --accept-multiclient cmd/ced/main.go"
