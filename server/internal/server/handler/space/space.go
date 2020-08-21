@@ -18,4 +18,6 @@ func (h *Handler) Routes(gin *gin.Engine) {
 	space.GET("/projects", h.handleProjectGetAll())
 	space.GET("/projects/:id", h.handleProjectGet())
 	space.POST("/projects/:id", h.handleVersionCreate())
+	space.GET("/projects/:id/components", h.handleComponentGet())
+	space.POST("/projects/:id/components", h.handleComponentCreate())
 }

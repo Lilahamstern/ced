@@ -1,8 +1,9 @@
 package domain
 
 import (
-	"github.com/lilahamstern/ced/server/pkg/model/response"
 	"time"
+
+	"github.com/lilahamstern/ced/server/pkg/model/response"
 )
 
 // Project : Database model

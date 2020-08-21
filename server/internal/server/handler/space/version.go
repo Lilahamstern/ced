@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) handleVersionCreate() gin.HandlerFunc {
-	const op Op = "handler.space.handleProjectCreate"
+	const op Op = "handler.space.handleVersionCreate"
 
 	type response struct {
 		Message string `json:"message"`
