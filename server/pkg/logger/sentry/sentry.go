@@ -1,9 +1,10 @@
 package sentry
 
 import (
+	"time"
+
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/viper"
-	"time"
 )
 
 func Register() (func(), error) {

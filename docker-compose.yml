@@ -1,18 +1,18 @@
 version: "3.5"
 services:
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: cosmtrek/air
+    working_dir: "/go/src/github.com/lilahamstern/ced"
+    configs:
+      - ./sercer/.air.toml
     ports:
       - "5000:5000"
-      - "2345:2345"
     security_opt:
       - "seccomp:unconfined"
     tty: true
     stdin_open: true
     volumes:
-      - ./server:/app
+      - ./server:/go/src/github.com/lilahamstern/ced
     networks:
       - ced_database
 
