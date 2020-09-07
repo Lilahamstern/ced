@@ -1,20 +1,20 @@
 version: "3.5"
 services:
-  server:
-    image: cosmtrek/air
-    working_dir: "/go/src/github.com/lilahamstern/ced"
-    configs:
-      - ./sercer/.air.toml
-    ports:
-      - "5000:5000"
-    security_opt:
-      - "seccomp:unconfined"
-    tty: true
-    stdin_open: true
-    volumes:
-      - ./server:/go/src/github.com/lilahamstern/ced
-    networks:
-      - ced_database
+  # server:
+  #   image: cosmtrek/air
+  #   working_dir: "/go/src/github.com/lilahamstern/ced"
+  #   configs:
+  #     - ./sercer/.air.toml
+  #   ports:
+  #     - "5000:5000"
+  #   security_opt:
+  #     - "seccomp:unconfined"
+  #   tty: true
+  #   stdin_open: true
+  #   volumes:
+  #     - ./server:/go/src/github.com/lilahamstern/ced
+  #   networks:
+  #     - ced_database
 
   database:
     build:

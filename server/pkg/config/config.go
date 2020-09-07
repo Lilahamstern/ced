@@ -35,3 +35,5 @@ func GenerateDsn() string {
 func GetPort() string {
 	return fmt.Sprintf(":%v", viper.GetString("port"))
 }
+
+// export CED_DB=postgres://dev:dev@localhost:5440/ced?sslmode=disable
