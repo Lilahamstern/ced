@@ -1,7 +1,6 @@
 init:
 	docker network create -d bridge ced_server
 
-
 test-unit:
 	cd server && go test -v -short -coverprofile cp.out ./...
 
